@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "avian-foundry-384513": {
+      "hosting": {
+        "250kt-cs": [
+          "avian-foundry-384513"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "avian-foundry-384513"
+  }
+}

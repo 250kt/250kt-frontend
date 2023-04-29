@@ -97,6 +97,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "250kt-cs:build:production",
+            "firebaseProject": "avian-foundry-384513",
+            "firebaseHostingSite": "avian-foundry-384513"
+          }
         }
       }
     }
