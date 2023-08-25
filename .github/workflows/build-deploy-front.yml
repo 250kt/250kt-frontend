@@ -1,0 +1,76 @@
+name: Build front end, push to Artifact Registry and deploy in GKE
+
+on:
+  workflow_dispatch:
+
+env:
+  REGION: ${{ vars.REGION }}
+  CLUSTER: ${{ vars.CLUSTER }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    name: Setup, Build, Publish and Deploy
+    environment: dev
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch}}
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          token_format: 'access_token'
+
+      - name: Login to Artifact Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ vars.REGION }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install angular cli
+        run: npm install -g @angular/cli
+
+      - name: Clean install the app
+        run: npm ci
+
+      - name: Build app
+        run: ng build
+
+      - id: docker-push-tagged
+        name: Tag Docker image and push to Artifact Registry
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: |
+            europe-west9-docker.pkg.dev/avian-foundry-384513/docker/gofly-front-end:latest
+
+      - name: Set up GKE credentials
+        uses: google-github-actions/get-gke-credentials@v0
+        with:
+          cluster_name: ${{ vars.CLUSTER }}
+          location: ${{ vars.REGION }}
+
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install gofly-front-end ./deploy -n gofly-dev

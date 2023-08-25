@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gofly-front-end-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gofly-front-end
+  template:
+    metadata:
+      labels:
+        app: gofly-front-end
+    spec:
+      containers:
+        - name: gofly-front-end
+          image: europe-west9-docker.pkg.dev/avian-foundry-384513/docker/gofly-front-end:latest
+          ports:
+            - containerPort: 80
