@@ -10,28 +10,34 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatButtonModule} from "@angular/material/button";
 import {NgOptimizedImage} from "@angular/common";
+import {
+  MapObjectSelectionPanelComponent
+} from "./components/map-object-selection-panel/map-object-selection-panel.component";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     SideNavComponent,
+    MapObjectSelectionPanelComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatSidenavModule,
     MatListModule,
     MatIconModule,
     MatTooltipModule,
     MatButtonModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    MatSlideToggleModule
   ],
   providers: [],
   exports: [
     HeaderComponent,
     FooterComponent,
     SideNavComponent,
+    MapObjectSelectionPanelComponent,
   ]
 })
 export class CoreModule {
