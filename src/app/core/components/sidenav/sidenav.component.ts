@@ -1,4 +1,5 @@
 import {Component} from "@angular/core";
+import {AuthService} from "../../../service/auth.service";
 
 @Component({
   selector: 'app-sidenav',
@@ -6,10 +7,12 @@ import {Component} from "@angular/core";
 })
 export class SideNavComponent {
 
-  isOpen : boolean = false;
+    constructor(
+        public authService: AuthService
+    ) {}
 
-  toggleMenu(){
-    this.isOpen = !this.isOpen;
-  }
+    logout() {
+        this.authService.logout();
+    }
 
 }

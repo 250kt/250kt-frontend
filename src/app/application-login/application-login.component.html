@@ -1,0 +1,29 @@
+<div class="p-16 h-5/6 text-center">
+  <div class="flex flex-row shadow-2xl h-full">
+
+    <div class="basis-2/4 relative">
+      <img src="assets/wallpaper_login.jpg" alt="Landscape" class="w-full h-full">
+    </div>
+
+    <div class="basis-2/4 p-32">
+      <form [formGroup]="form" class="flex flex-col justify-center">
+
+        <p class="text-left text-2xl">Login</p>
+        <mat-form-field>
+          <mat-label>Identifier</mat-label>
+          <input matInput formControlName="identifier" required>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">Login</button>
+      </form>
+
+    </div>
+
+  </div>
+</div>

@@ -6,28 +6,34 @@
         </div>
 
         <div class="flex">
-            <button class="py-2 px-5 block" matTooltip="Map" matTooltipPosition="right">
+            <button class="py-2 px-5 block" matTooltip="Map" matTooltipPosition="below" routerLink="/home">
                 <mat-icon class="text-white">public</mat-icon>
             </button>
-            <button class="py-2 px-5 block" matTooltip="Navlog" matTooltipPosition="right">
+            <button class="py-2 px-5 block" matTooltip="Navlog" matTooltipPosition="below">
                 <mat-icon class="text-white">map</mat-icon>
             </button>
-            <button class="py-2 px-5 block" matTooltip="Flight" matTooltipPosition="right">
+            <button class="py-2 px-5 block" matTooltip="Flight" matTooltipPosition="below">
                 <mat-icon class="text-white">flight</mat-icon>
             </button>
-            <button class="py-2 px-5 block" matTooltip="Weather" matTooltipPosition="right">
+            <button class="py-2 px-5 block" matTooltip="Weather" matTooltipPosition="below">
                 <mat-icon class="text-white">cloud</mat-icon>
             </button>
         </div>
 
         <div class="flex">
-            <button class="py-2 px-5 block" matTooltip="Settings" matTooltipPosition="right">
+            <button class="py-2 px-5 block" matTooltip="Settings" matTooltipPosition="below" *ngIf="this.authService.isAuthenticated()">
                 <mat-icon class="text-white">settings</mat-icon>
             </button>
-            <button class="py-2 px-5 block" matTooltip="Logout" matTooltipPosition="right">
+            <button class="py-2 px-5 block" matTooltip="Panel Admin" matTooltipPosition="below" routerLink="/admin" *ngIf="this.authService.isAuthenticated() && this.authService.isAdmin()">
+                <mat-icon class="text-white">shield</mat-icon>
+            </button>
+            <button class="py-2 px-5 block" matTooltip="Profile" matTooltipPosition="below" routerLink="/profile" *ngIf="this.authService.isAuthenticated()">
+                <mat-icon class="text-white">account_circle</mat-icon>
+            </button>
+            <button class="py-2 px-5 block" matTooltip="Logout" matTooltipPosition="below" (click)="logout()" *ngIf="this.authService.isAuthenticated()">
                 <mat-icon class="text-white">logout</mat-icon>
             </button>
-            <button class="py-2 px-5 block" matTooltip="Login" matTooltipPosition="right">
+            <button class="py-2 px-5 block" matTooltip="Login" matTooltipPosition="below" routerLink="/login" *ngIf="!this.authService.isAuthenticated()">
                 <mat-icon class="text-white">login</mat-icon>
             </button>
         </div>
