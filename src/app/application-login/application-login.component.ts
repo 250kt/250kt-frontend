@@ -2,8 +2,11 @@ import {Component} from "@angular/core";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../shared/model/user";
 import {AuthService} from "../service/auth.service";
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {RouterService} from "../service/router.service";
+import * as bcrypt from "bcryptjs";
+import {SnackBarService} from "../service/snackbarservice";
+import {TranslateService} from "@ngx-translate/core";
+import {SnackbarTiming} from "../shared/model/snackbarTiming";
 
 @Component({
   selector: 'app-application-login',
@@ -13,8 +16,9 @@ export class ApplicationLoginComponent {
 
     constructor(
         private readonly authService: AuthService,
-        private snackBar: MatSnackBar,
-        private routerService: RouterService
+        private snackBarService: SnackBarService,
+        private routerService: RouterService,
+        private translate: TranslateService,
     ) {}
 
     form: FormGroup = new FormGroup({
@@ -34,14 +38,16 @@ export class ApplicationLoginComponent {
         this.authService.login(user).subscribe(
             (authenticate) => {
                 this.authService.saveToken(authenticate.access_token);
-                console.log('Login successful');
                 this.routerService.navigateTo('/home')
             },
         () => {
-                console.log('Login failed');
-                this.snackBar.open('Login failed', 'Close', {
-                    duration: 10000
-                });
+                this.snackBarService.openSnackBar(
+
+                    //Todo: error management (wrong password, wrong username, etc...)
+                    this.translate.instant('login.error'),
+                    this.translate.instant('general.close'),
+                    SnackbarTiming.MEDIUM
+                )
             });
     }
 
@@ -53,7 +59,7 @@ export class ApplicationLoginComponent {
         const regexEmail = new RegExp('^((?:[A-Za-z0-9!#$%&\'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$');
 
         const user: User = {
-            password: btoa(this.form.value.password)
+            password: this.encodePassword(this.form.value.password)
         }
 
         if(!regexEmail.test(this.form.value.identifier)){
@@ -63,4 +69,10 @@ export class ApplicationLoginComponent {
         }
         return user;
     }
+
+    encodePassword(password: string): string {
+        return bcrypt.hashSync(password);
+    }
+
+
 }

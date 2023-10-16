@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {CoreModule} from "./core/core.module";
@@ -16,14 +15,20 @@ import {MatInputModule} from "@angular/material/input";
 import {MatCardModule} from "@angular/material/card";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
-import {NgOptimizedImage} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
-import {HttpClientModule} from "@angular/common/http";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ApplicationHomeComponent} from "./application-home/application-home.component";
 import { ApplicationProfileComponent } from './application-profile/application-profile.component';
 import { ApplicationAdminComponent } from './application-admin/application-admin.component';
 import { ApplicationRegisterComponent } from './application-register/application-register.component';
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+}
 
 @NgModule({
     declarations: [
@@ -50,11 +55,19 @@ import { ApplicationRegisterComponent } from './application-register/application
         MatButtonModule,
         HttpClientModule,
         MatIconModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        TranslateModule.forRoot({
+            defaultLanguage: 'en',
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
     ],
     providers: [],
     bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}
+
 

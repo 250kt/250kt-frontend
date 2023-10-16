@@ -4,30 +4,26 @@
         <div class="basis-3/4 p-16">
             <form [formGroup]="form" class="flex flex-col justify-center">
 
-                <p class="text-left text-2xl">Register</p>
+                <p class="text-left text-2xl">{{'register.register' | translate}}</p>
                 <mat-form-field>
-                    <mat-label>Username</mat-label>
+                    <mat-label>{{'general.username' | translate}}</mat-label>
                     <input matInput formControlName="username" required>
+                    <mat-error *ngIf="form.get('username')?.invalid">{{getUsernameErrorMessage()}}</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <mat-label>Email</mat-label>
+                    <mat-label>{{'general.email' | translate}}</mat-label>
                     <input matInput formControlName="email" required>
+                    <mat-error *ngIf="form.get('email')?.invalid">{{getEmailErrorMessage()}}</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <mat-label>Password</mat-label>
+                    <mat-label>{{'general.password' | translate}}</mat-label>
                     <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                    <mat-error *ngIf="form.get('password')?.invalid">{{getPasswordErrorMessage()}}</mat-error>
                     <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
                 </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Confirm password</mat-label>
-                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="confirmPassword" required>
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-                <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">Register</button>
+                <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">{{'register.register' | translate}}</button>
             </form>
 
         </div>
