@@ -2,10 +2,10 @@ import {Component} from "@angular/core";
 import {AuthService} from "../../../service/auth.service";
 
 @Component({
-  selector: 'app-sidenav',
-  templateUrl: 'sidenav.component.html'
+  selector: 'app-navbar',
+  templateUrl: 'navbar.component.html'
 })
-export class SideNavComponent {
+export class NavbarComponent {
 
     constructor(
         public authService: AuthService

@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
-import {AuthService} from "../service/auth.service";
+import {AuthService} from "../../service/auth.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {RouterService} from "../service/router.service";
+import {RouterService} from "../../service/router.service";
 import * as bcrypt from "bcryptjs";
-import {SnackbarTiming} from "../shared/model/snackbarTiming";
-import {SnackBarService} from "../service/snackbarservice";
+import {SnackbarTiming} from "../../shared/model/snackbarTiming";
+import {SnackBarService} from "../../service/snackbarservice";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
@@ -31,7 +31,7 @@ export class ApplicationRegisterComponent{
             [
                 Validators.required,
                 Validators.minLength(8),
-                Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).*$')
+                Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-]).{8,}$')
             ]),
     });
 
@@ -58,7 +58,8 @@ export class ApplicationRegisterComponent{
                 this.authService.saveToken(authenticate.access_token);
                 this.routerService.navigateTo('/home')
             },
-            () => {
+            (error) => {
+                console.log(error.status)
                 //Todo: error register management (email already used, username already used, etc...)
                 this.snackBarService.openSnackBar(
                     this.translate.instant('register.error'),
@@ -76,7 +77,7 @@ export class ApplicationRegisterComponent{
 
     checkPassword(password: string): boolean {
 
-        const regexPassword = new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$');
+        const regexPassword = new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-]).{8,}$');
 
         if(!regexPassword.test(password)){
             this.snackBarService.openSnackBar(
@@ -121,7 +122,7 @@ export class ApplicationRegisterComponent{
             return this.translate.instant('register.emailRequired');
         }
         if (this.form.get('email')?.hasError('email')) {
-            return this.translate.instant('register.emailInvalid');
+            return this.translate.instant('register.emailPattern');
         }
         return '';
     }

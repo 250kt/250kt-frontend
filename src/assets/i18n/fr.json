@@ -4,7 +4,19 @@
         "username": "Nom d'utilisateur",
         "email": "Email",
         "close": "Fermer"
-        },
+    },
+    "navbar": {
+        "map": "Carte",
+        "navlog": "Journal de bord",
+        "flight": "Vol",
+        "weather": "Météo",
+        "settings": "Paramètres",
+        "adminPanel": "Panneau d'administration",
+        "profile": "Profil",
+        "logout": "Déconnexion",
+        "login": "Connexion",
+        "register": "Inscription"
+    },
     "login": {
         "login": "Connexion",
         "error": "Erreur lors de la connexion",

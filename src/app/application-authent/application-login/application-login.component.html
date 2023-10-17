@@ -1,0 +1,19 @@
+<div class="p-16 text-center flex flex-row justify-center">
+    <form [formGroup]="form" class="flex flex-col w-1/2">
+
+        <p class="text-left text-2xl">{{'login.login' | translate}}</p>
+            <mat-form-field>
+                <mat-label>{{'login.emailOrUsername' | translate}}</mat-label>
+                <input matInput formControlName="identifier" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{'general.password' | translate}}</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">{{'login.login' | translate}}</button>
+    </form>
+
+</div>

@@ -4,7 +4,19 @@
         "username": "Username",
         "email": "Email",
         "close": "Close"
-       },
+    },
+    "navbar": {
+        "map": "Map",
+        "navlog": "Navlog",
+        "flight": "Flight",
+        "weather": "Weather",
+        "settings": "Settings",
+        "adminPanel": "Admin Panel",
+        "profile": "Profile",
+        "logout": "Logout",
+        "login": "Login",
+        "register": "Register"
+    },
     "login": {
         "login": "Login",
         "error": "Login failed!",
@@ -14,7 +26,7 @@
         "register": "Register",
         "error": "Register failed!",
         "passwordRequired": "Password is required",
-        "passwordMinLength": "Password must be at least 8 characters long",
+        "passwordMinLength": "Password must contain at least 8",
         "passwordPattern": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
         "emailRequired": "Email is required",
         "emailPattern": "Email must be a valid email address",

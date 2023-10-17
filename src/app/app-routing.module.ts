@@ -1,13 +1,14 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {ApplicationLoginComponent} from "./application-login/application-login.component";
+import {ApplicationLoginComponent} from "./application-authent/application-login/application-login.component";
 import {AuthenticatedGuard} from "./service/authenticated.guard";
 import {ApplicationHomeComponent} from "./application-home/application-home.component";
 import {ApplicationProfileComponent} from "./application-profile/application-profile.component";
 import {NotAuthenticatedGuard} from "./service/not-authenticated.guard";
 import {ApplicationAdminComponent} from "./application-admin/application-admin.component";
 import {AuthenticatedAdminGuard} from "./service/authenticated-admin.guard";
-import {ApplicationRegisterComponent} from "./application-register/application-register.component";
+import {ApplicationRegisterComponent} from "./application-authent/application-register/application-register.component";
+import {ApplicationAuthentComponent} from "./application-authent/application-authent.component";
 
 const routes: Routes = [
 
@@ -22,12 +23,7 @@ const routes: Routes = [
     },
     {
         path: 'login',
-        component: ApplicationLoginComponent,
-        canActivate: [NotAuthenticatedGuard],
-    },
-    {
-        path: 'register',
-        component: ApplicationRegisterComponent,
+        component: ApplicationAuthentComponent,
         canActivate: [NotAuthenticatedGuard],
     },
     {

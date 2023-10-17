@@ -1,12 +1,12 @@
 import {Component} from "@angular/core";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {User} from "../shared/model/user";
-import {AuthService} from "../service/auth.service";
-import {RouterService} from "../service/router.service";
+import {User} from "../../shared/model/user";
+import {AuthService} from "../../service/auth.service";
+import {RouterService} from "../../service/router.service";
 import * as bcrypt from "bcryptjs";
-import {SnackBarService} from "../service/snackbarservice";
+import {SnackBarService} from "../../service/snackbarservice";
 import {TranslateService} from "@ngx-translate/core";
-import {SnackbarTiming} from "../shared/model/snackbarTiming";
+import {SnackbarTiming} from "../../shared/model/snackbarTiming";
 
 @Component({
   selector: 'app-application-login',

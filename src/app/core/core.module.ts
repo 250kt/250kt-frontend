@@ -3,7 +3,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {AppRoutingModule} from "../app-routing.module";
 import {FooterComponent} from "./components/footer/footer.component";
 import {HeaderComponent} from "./components/header/header.component";
-import {SideNavComponent} from "./components/sidenav/sidenav.component";
+import {NavbarComponent} from "./components/navbar/navbar.component";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
@@ -14,29 +14,31 @@ import {
   MapObjectSelectionPanelComponent
 } from "./components/map-object-selection-panel/map-object-selection-panel.component";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    SideNavComponent,
+    NavbarComponent,
     MapObjectSelectionPanelComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    MatListModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatButtonModule,
-    NgOptimizedImage,
-    MatSlideToggleModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        MatListModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatButtonModule,
+        NgOptimizedImage,
+        MatSlideToggleModule,
+        TranslateModule
+    ],
   providers: [],
   exports: [
     HeaderComponent,
     FooterComponent,
-    SideNavComponent,
+    NavbarComponent,
     MapObjectSelectionPanelComponent,
   ]
 })
