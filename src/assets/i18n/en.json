@@ -1,0 +1,42 @@
+{
+    "general": {
+        "password": "Password",
+        "username": "Username",
+        "email": "Email",
+        "close": "Close"
+    },
+    "navbar": {
+        "map": "Map",
+        "navlog": "Navlog",
+        "flight": "Flight",
+        "weather": "Weather",
+        "settings": "Settings",
+        "adminPanel": "Admin Panel",
+        "profile": "Profile",
+        "logout": "Logout",
+        "signin": "Sign in"
+    },
+    "login": {
+        "login": "Sign in",
+        "error": "Identifier or password is incorrect",
+        "emailOrUsername": "Email or Username"
+    },
+    "register": {
+        "register": "Sign up",
+        "error": "An error occurred while registering, username or email already exists",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Your password must contain at least 8",
+        "passwordPattern": {
+            "base": "Your password must contain at least",
+            "lowercase": "one lowercase letter",
+            "uppercase": "one uppercase letter",
+            "number": "one number",
+            "special": "one special character"
+        },
+        "emailRequired": "Email is required",
+        "emailPattern": "Your email must be a valid email address",
+        "usernameRequired": "Username is required",
+        "usernameMinLength": "Your username must be at least 2 characters long",
+        "usernamePattern": "Your username must contain only letters, numbers, and underscores"
+    }
+}

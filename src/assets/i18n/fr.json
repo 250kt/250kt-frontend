@@ -1,0 +1,42 @@
+{
+    "general": {
+        "password": "Mot de passe",
+        "username": "Nom d'utilisateur",
+        "email": "Email",
+        "close": "Fermer"
+    },
+    "navbar": {
+        "map": "Carte",
+        "navlog": "Journal de bord",
+        "flight": "Vol",
+        "weather": "Météo",
+        "settings": "Paramètres",
+        "adminPanel": "Panneau d'administration",
+        "profile": "Profil",
+        "logout": "Déconnexion",
+        "signin": "Connexion"
+    },
+    "login": {
+        "login": "Connexion",
+        "error": "Identifiant ou mot de passe incorrect",
+        "emailOrUsername": "Email ou nom d'utilisateur"
+    },
+    "register": {
+        "register": "Inscription",
+        "error": "Une erreur s'est produite lors de l'enregistrement, l'utilisateur ou l'email existe déjà",
+        "passwordRequired": "Mot de passe requis",
+        "passwordMinLength": "Votre mot de passe doit contenir au moins 8 caractères",
+        "passwordPattern": {
+            "base": "Votre mot de passe doit contenir au moins",
+            "lowercase": "une lettre minuscule",
+            "uppercase": "une lettre majuscule",
+            "number": "un chiffre",
+            "special": "un caractère spécial"
+        },
+        "emailRequired": "Email requis",
+        "emailPattern": "Votre email est invalide",
+        "usernameRequired": "Nom d'utilisateur requis",
+        "usernameMinLength": "Votre nom d'utilisateur doit contenir au moins 2 caractères",
+        "usernamePattern": "Votre nom d'utilisateur ne peut contenir que des lettres, des chiffres et des tirets"
+    }
+}
