@@ -4,19 +4,19 @@ import {User} from "../../shared/model/user";
 import {AuthService} from "../../service/auth.service";
 import {RouterService} from "../../service/router.service";
 import * as bcrypt from "bcryptjs";
-import {SnackBarService} from "../../service/snackbarservice";
+import {SnackbarService} from "../../service/snackbar.service";
 import {TranslateService} from "@ngx-translate/core";
 import {SnackbarTiming} from "../../shared/model/snackbarTiming";
 
 @Component({
-  selector: 'app-application-login',
-  templateUrl: './application-login.component.html'
+  selector: 'app-application-auth-login',
+  templateUrl: './application-auth-login.component.html'
 })
-export class ApplicationLoginComponent {
+export class ApplicationAuthLoginComponent {
 
     constructor(
         private readonly authService: AuthService,
-        private snackBarService: SnackBarService,
+        private snackBarService: SnackbarService,
         private routerService: RouterService,
         private translate: TranslateService,
     ) {}

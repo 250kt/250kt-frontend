@@ -5,7 +5,7 @@ import {SnackbarTiming} from "../shared/model/snackbarTiming";
 @Injectable({
     providedIn: 'root'
 })
-export class SnackBarService {
+export class SnackbarService {
     constructor(
         private snackBar: MatSnackBar,
     ) {}

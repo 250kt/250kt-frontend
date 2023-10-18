@@ -14,24 +14,30 @@
         "adminPanel": "Admin Panel",
         "profile": "Profile",
         "logout": "Logout",
-        "login": "Login",
-        "register": "Register"
+        "login": "Sign in",
+        "register": "Sign up"
     },
     "login": {
-        "login": "Login",
-        "error": "Login failed!",
+        "login": "Sign in",
+        "error": "Identifier or password is incorrect",
         "emailOrUsername": "Email or Username"
     },
     "register": {
-        "register": "Register",
-        "error": "Register failed!",
+        "register": "Sign up",
+        "error": "An error occurred while registering",
         "passwordRequired": "Password is required",
-        "passwordMinLength": "Password must contain at least 8",
-        "passwordPattern": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+        "passwordMinLength": "Your password must contain at least 8",
+        "passwordPattern": {
+            "title": "Your password must contain at least",
+            "lowercase": "one lowercase letter",
+            "uppercase": "one uppercase letter",
+            "number": "one number",
+            "special": "one special character"
+        },
         "emailRequired": "Email is required",
-        "emailPattern": "Email must be a valid email address",
+        "emailPattern": "Your email must be a valid email address",
         "usernameRequired": "Username is required",
-        "usernameMinLength": "Username must be at least 2 characters long",
-        "usernamePattern": "Username must contain only letters, numbers, and underscores"
+        "usernameMinLength": "Your username must be at least 2 characters long",
+        "usernamePattern": "Your username must contain only letters, numbers, and underscores"
     }
 }

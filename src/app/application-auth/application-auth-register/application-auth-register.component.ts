@@ -2,22 +2,23 @@ import {Component} from '@angular/core';
 import {AuthService} from "../../service/auth.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {RouterService} from "../../service/router.service";
-import * as bcrypt from "bcryptjs";
 import {SnackbarTiming} from "../../shared/model/snackbarTiming";
-import {SnackBarService} from "../../service/snackbarservice";
+import {SnackbarService} from "../../service/snackbar.service";
 import {TranslateService} from "@ngx-translate/core";
+import {PasswordService} from "../../service/password.service";
 
 @Component({
-  selector: 'app-application-register',
-  templateUrl: './application-register.component.html',
+  selector: 'app-application-auth-register',
+  templateUrl: './application-auth-register.component.html',
 })
-export class ApplicationRegisterComponent{
+export class ApplicationAuthRegisterComponent {
 
     constructor(
        private readonly authService: AuthService,
-       private snackBarService: SnackBarService,
+       private snackBarService: SnackbarService,
        private routerService: RouterService,
-       private translate: TranslateService
+       private translate: TranslateService,
+       private passwordService: PasswordService
     ) {}
 
     form: FormGroup = new FormGroup({
@@ -50,7 +51,7 @@ export class ApplicationRegisterComponent{
         const user = {
             username: this.form.value.username,
             email: this.form.value.email,
-            password: this.encodePassword(this.form.value.password)
+            password: this.passwordService.encodePassword(this.form.value.password)
         }
 
         this.authService.register(user).subscribe(
@@ -59,7 +60,6 @@ export class ApplicationRegisterComponent{
                 this.routerService.navigateTo('/home')
             },
             (error) => {
-                console.log(error.status)
                 //Todo: error register management (email already used, username already used, etc...)
                 this.snackBarService.openSnackBar(
                     this.translate.instant('register.error'),
@@ -112,7 +112,7 @@ export class ApplicationRegisterComponent{
             return this.translate.instant('register.passwordMinLength');
         }
         if (this.form.get('password')?.hasError('pattern')) {
-            return this.translate.instant('register.passwordPattern');
+            return this.passwordService.validatePasswordLive(this.form.value.password);
         }
         return '';
     }
@@ -140,8 +140,5 @@ export class ApplicationRegisterComponent{
         return '';
     }
 
-    encodePassword(password: string): string {
-        return bcrypt.hashSync(password);
-    }
 
 }

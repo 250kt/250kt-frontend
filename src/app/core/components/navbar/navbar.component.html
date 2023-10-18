@@ -30,14 +30,11 @@
             <button class="py-2 px-5 block" matTooltip="{{ 'navbar.profile' | translate }}" matTooltipPosition="below" routerLink="/profile" *ngIf="this.authService.isAuthenticated()">
                 <mat-icon class="text-white">account_circle</mat-icon>
             </button>
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.register' | translate }}" matTooltipPosition="below" (click)="logout()" *ngIf="this.authService.isAuthenticated()">
+            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.signin' | translate }}" matTooltipPosition="below" routerLink="/signin">
                 <mat-icon class="text-white">signin</mat-icon>
             </button>
             <button class="py-2 px-5 block" matTooltip="{{ 'navbar.logout' | translate }}" matTooltipPosition="below" (click)="logout()" *ngIf="this.authService.isAuthenticated()">
                 <mat-icon class="text-white">logout</mat-icon>
-            </button>
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.login' | translate }}" matTooltipPosition="below" routerLink="/login" *ngIf="!this.authService.isAuthenticated()">
-                <mat-icon class="text-white">login</mat-icon>
             </button>
         </div>
 
