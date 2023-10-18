@@ -14,8 +14,7 @@
         "adminPanel": "Panneau d'administration",
         "profile": "Profil",
         "logout": "Déconnexion",
-        "login": "Connexion",
-        "register": "Inscription"
+        "signin": "Connexion"
     },
     "login": {
         "login": "Connexion",
@@ -24,11 +23,11 @@
     },
     "register": {
         "register": "Inscription",
-        "error": "Une erreur s'est produite lors de l'enregistrement",
+        "error": "Une erreur s'est produite lors de l'enregistrement, l'utilisateur ou l'email existe déjà",
         "passwordRequired": "Mot de passe requis",
         "passwordMinLength": "Votre mot de passe doit contenir au moins 8 caractères",
         "passwordPattern": {
-            "title": "Votre mot de passe doit contenir au moins",
+            "base": "Votre mot de passe doit contenir au moins",
             "lowercase": "une lettre minuscule",
             "uppercase": "une lettre majuscule",
             "number": "un chiffre",

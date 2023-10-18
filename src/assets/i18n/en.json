@@ -14,8 +14,7 @@
         "adminPanel": "Admin Panel",
         "profile": "Profile",
         "logout": "Logout",
-        "login": "Sign in",
-        "register": "Sign up"
+        "signin": "Sign in"
     },
     "login": {
         "login": "Sign in",
@@ -24,11 +23,11 @@
     },
     "register": {
         "register": "Sign up",
-        "error": "An error occurred while registering",
+        "error": "An error occurred while registering, username or email already exists",
         "passwordRequired": "Password is required",
         "passwordMinLength": "Your password must contain at least 8",
         "passwordPattern": {
-            "title": "Your password must contain at least",
+            "base": "Your password must contain at least",
             "lowercase": "one lowercase letter",
             "uppercase": "one uppercase letter",
             "number": "one number",

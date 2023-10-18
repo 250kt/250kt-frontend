@@ -5,7 +5,7 @@ import {RouterService} from "../../service/router.service";
 import {SnackbarTiming} from "../../shared/model/snackbarTiming";
 import {SnackbarService} from "../../service/snackbar.service";
 import {TranslateService} from "@ngx-translate/core";
-import {PasswordService} from "../../service/password.service";
+import {RegexService} from "../../service/regex.service";
 
 @Component({
   selector: 'app-application-auth-register',
@@ -18,7 +18,7 @@ export class ApplicationAuthRegisterComponent {
        private snackBarService: SnackbarService,
        private routerService: RouterService,
        private translate: TranslateService,
-       private passwordService: PasswordService
+       private passwordService: RegexService
     ) {}
 
     form: FormGroup = new FormGroup({
@@ -37,14 +37,13 @@ export class ApplicationAuthRegisterComponent {
     });
 
     hide: boolean = true;
-    regexEmail = new RegExp('^((?:[A-Za-z0-9!#$%&\'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$');
 
     onSubmit(){
         if(!this.checkForm()){
             return;
         }
 
-        if(!this.checkEmail(this.form.value.email) || !this.checkPassword(this.form.value.password)){
+        if(!this.passwordService.checkEmail(this.form.value.email) || !this.passwordService.checkPassword(this.form.value.password)){
             return;
         }
 
@@ -60,7 +59,6 @@ export class ApplicationAuthRegisterComponent {
                 this.routerService.navigateTo('/home')
             },
             (error) => {
-                //Todo: error register management (email already used, username already used, etc...)
                 this.snackBarService.openSnackBar(
                     this.translate.instant('register.error'),
                     this.translate.instant('general.close'),
@@ -73,35 +71,6 @@ export class ApplicationAuthRegisterComponent {
 
     checkForm(): boolean {
         return this.form.valid;
-    }
-
-    checkPassword(password: string): boolean {
-
-        const regexPassword = new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-]).{8,}$');
-
-        if(!regexPassword.test(password)){
-            this.snackBarService.openSnackBar(
-                this.translate.instant('register.passwordPattern'),
-                this.translate.instant('general.close'),
-                SnackbarTiming.MEDIUM)
-            return false;
-        }
-
-        return true;
-    }
-
-    checkEmail(email: string): boolean {
-        this.form.get('email')?.setErrors({invalid: true});
-
-        if(!this.regexEmail.test(email)){
-            this.snackBarService.openSnackBar(
-                this.translate.instant('register.emailPattern'),
-                this.translate.instant('general.close'),
-                SnackbarTiming.LONG
-            )
-            return false;
-        }
-        return true;
     }
 
     getPasswordErrorMessage(): string {

@@ -15,7 +15,6 @@ export class NotAuthenticatedGuard implements CanActivate, CanActivateChild {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('AuthGuard#canActivate called')
         if(!this.authService.isAuthenticated()){
             return true;
         }

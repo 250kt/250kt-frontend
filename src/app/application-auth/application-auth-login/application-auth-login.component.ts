@@ -43,7 +43,6 @@ export class ApplicationAuthLoginComponent {
         () => {
                 this.snackBarService.openSnackBar(
 
-                    //Todo: error management (wrong password, wrong username, etc...)
                     this.translate.instant('login.error'),
                     this.translate.instant('general.close'),
                     SnackbarTiming.MEDIUM
