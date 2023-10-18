@@ -12,7 +12,7 @@
             <input matInput formControlName="email" required>
             <mat-error *ngIf="form.get('email')?.invalid">{{getEmailErrorMessage()}}</mat-error>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field class="pb-6">
             <mat-label>{{'general.password' | translate}}</mat-label>
             <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
             <mat-error *ngIf="form.get('password')?.invalid">{{getPasswordErrorMessage()}}</mat-error>
@@ -20,7 +20,6 @@
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
         </mat-form-field>
-        <br>
-        <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">{{'register.register' | translate}}</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()">{{'register.register' | translate}}</button>
     </form>
 </div>

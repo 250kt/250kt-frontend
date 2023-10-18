@@ -1,9 +1,111 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-$gofly-primary: mat.define-palette(mat.$blue-palette, A700);
-$gofly-accent: mat.define-palette(mat.$pink-palette, 500);
-$gofly-warn: mat.define-palette(mat.$red-palette, 500);
+$blue-palette:(
+    50: #eff6ff,
+    100: #dbeafe,
+    200: #bfdbfe,
+    300: #93c5fd,
+    400: #60a5fa,
+    500: #3b82f6,
+    600: #2563eb,
+    700: #1d4ed8,
+    800: #1e40af,
+    900: #1e3a8a,
+    A100: #172554,
+    A200: #0d1e3e,
+    A400: #000b27,
+    A700: #00061a,
+    contrast:(
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #ffffff,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #ffffff,
+        A400: #ffffff,
+        A700: #ffffff,
+    )
+);
+
+$red-palette:(
+  50: #fef2f2,
+  100: #fee2e2,
+  200: #fecaca,
+  300: #fca5a5,
+  400: #f87171,
+  500: #ef4444,
+  600: #dc2626,
+  700: #b91c1c,
+  800: #991b1b,
+  900: #7f1d1d,
+  A100: #450a0a,
+  A200: #610404,
+  A400: #7b0a0a,
+  A700: #8b0000,
+  contrast:(
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  )
+);
+
+
+$orange-palette:(
+
+  50: #fff7ed,
+  100: #ffedd5,
+  200: #fed7aa,
+  300: #fdba74,
+  400: #fb923c,
+  500: #f97316,
+  600: #ea580c,
+  700: #c2410c,
+  800: #9a3412,
+  900: #7c2d12,
+  A100: #5a1e08,
+  A200: #3d1305,
+  A400: #291003,
+  A700: #1e0a03,
+  contrast:(
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  )
+);
+
+
+$gofly-primary: mat.define-palette($blue-palette, 700);
+$gofly-accent: mat.define-palette(mat.$orange-palette, 500);
+$gofly-warn: mat.define-palette(mat.$red-palette, 700);
 $gofly-theme: mat.define-light-theme((
     color: (
         primary: $gofly-primary,
