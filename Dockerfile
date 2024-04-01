@@ -1,2 +1,2 @@
 FROM nginx:alpine
-COPY ./dist/250kt-cs ./usr/share/nginx/html
+COPY ./dist/250kt-frontend ./usr/share/nginx/html

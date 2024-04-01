@@ -23,13 +23,13 @@ describe('AppComponent', () => {
   it(`should have as title '250kt-cs'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('250kt-cs');
+    expect(app.title).toEqual('250kt-frontend');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('250kt-cs app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('250kt-frontend app is running!');
   });
 });
