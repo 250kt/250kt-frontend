@@ -21,20 +21,24 @@
         </div>
 
         <div class="flex">
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.settings' | translate }}" matTooltipPosition="below" *ngIf="this.authService.isAuthenticated()">
-                <mat-icon class="text-white">settings</mat-icon>
-            </button>
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.adminPanel' | translate }}" matTooltipPosition="below" routerLink="/admin" *ngIf="this.authService.isAuthenticated() && this.authService.isAdmin()">
-                <mat-icon class="text-white">shield</mat-icon>
-            </button>
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.profile' | translate }}" matTooltipPosition="below" routerLink="/profile" *ngIf="this.authService.isAuthenticated()">
-                <mat-icon class="text-white">account_circle</mat-icon>
-            </button>
+            @if (this.authService.isAuthenticated()){
+                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.settings' | translate }}" matTooltipPosition="below">
+                    <mat-icon class="text-white">settings</mat-icon>
+                </button>
+                @if (this.authService.isAdmin()){
+                    <button class="py-2 px-5 block" matTooltip="{{ 'navbar.adminPanel' | translate }}" matTooltipPosition="below" routerLink="/admin">
+                        <mat-icon class="text-white">shield</mat-icon>
+                    </button>
+                }
+                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.profile' | translate }}" matTooltipPosition="below" routerLink="/profile">
+                    <mat-icon class="text-white">account_circle</mat-icon>
+                </button>
+                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.logout' | translate }}" matTooltipPosition="below" (click)="logout()">
+                    <mat-icon class="text-white">logout</mat-icon>
+                </button>
+            }
             <button class="py-2 px-5 block" matTooltip="{{ 'navbar.signin' | translate }}" matTooltipPosition="below" routerLink="/signin">
                 <mat-icon class="text-white">login</mat-icon>
-            </button>
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.logout' | translate }}" matTooltipPosition="below" (click)="logout()" *ngIf="this.authService.isAuthenticated()">
-                <mat-icon class="text-white">logout</mat-icon>
             </button>
         </div>
 

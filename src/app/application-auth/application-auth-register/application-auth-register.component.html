@@ -5,17 +5,23 @@
         <mat-form-field>
             <mat-label>{{'general.username' | translate}}</mat-label>
             <input matInput formControlName="username" required>
-            <mat-error *ngIf="form.get('username')?.invalid">{{getUsernameErrorMessage()}}</mat-error>
+            @if (form.get('username')?.invalid){
+                <mat-error>{{getUsernameErrorMessage()}}</mat-error>
+            }
         </mat-form-field>
         <mat-form-field>
             <mat-label>{{'general.email' | translate}}</mat-label>
             <input matInput formControlName="email" required>
-            <mat-error *ngIf="form.get('email')?.invalid">{{getEmailErrorMessage()}}</mat-error>
+            @if(form.get('email')?.invalid){
+                <mat-error>{{getEmailErrorMessage()}}</mat-error>
+            }
         </mat-form-field>
         <mat-form-field>
             <mat-label>{{'general.password' | translate}}</mat-label>
             <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
-            <mat-error *ngIf="form.get('password')?.invalid">{{getPasswordErrorMessage()}}</mat-error>
+            @if (form.get('password')?.invalid){
+                <mat-error>{{getPasswordErrorMessage()}}</mat-error>
+            }
             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
