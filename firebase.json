@@ -1,7 +1,7 @@
 {
   "hosting": {
-    "target": "250kt-cs",
-    "public": "dist/250kt-cs",
+    "target": "250kt-frontend",
+    "public": "dist/250kt-frontend",
     "ignore": [
       "**/.*"
     ],
