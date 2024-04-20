@@ -9,6 +9,7 @@ import {ApplicationAdminComponent} from "./application-admin/application-admin.c
 import {AuthenticatedAdminGuard} from "./guard/authenticated-admin.guard";
 import {ApplicationAuthRegisterComponent} from "./application-auth/application-auth-register/application-auth-register.component";
 import {ApplicationAuthComponent} from "./application-auth/application-auth.component";
+import {ApplicationAircraftComponent} from "./application-aircraft/application-aircraft.component";
 
 const routes: Routes = [
 
@@ -35,6 +36,11 @@ const routes: Routes = [
         path: 'admin',
         component: ApplicationAdminComponent,
         canActivate: [AuthenticatedAdminGuard],
+    },
+    {
+        path: 'aircraft-create',
+        component: ApplicationAircraftComponent,
+        canActivate: [AuthenticatedGuard],
     }
 ];
 

@@ -26,6 +26,9 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { ApplicationAuthComponent } from './application-auth/application-auth.component';
 import {MatTabsModule} from "@angular/material/tabs";
+import {ApplicationAircraftComponent} from "./application-aircraft/application-aircraft.component";
+import {MatOption} from "@angular/material/autocomplete";
+import {MatSelect} from "@angular/material/select";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -40,7 +43,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         ApplicationProfileComponent,
         ApplicationAdminComponent,
         ApplicationAuthRegisterComponent,
-        ApplicationAuthComponent
+        ApplicationAuthComponent,
+        ApplicationAircraftComponent
     ],
     imports: [
         BrowserModule,
@@ -67,7 +71,9 @@ export function HttpLoaderFactory(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        MatTabsModule
+        MatTabsModule,
+        MatOption,
+        MatSelect
     ],
     providers: [],
     bootstrap: [AppComponent]
