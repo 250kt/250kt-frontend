@@ -1,22 +1,20 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {FuelType} from "../shared/model/fuelType";
-import {AircraftService} from '../service/aircraft.service';
-import {RouterService} from "../service/router.service";
-import {SnackbarService} from "../service/snackbar.service";
+import {FuelType} from "../../shared/model/fuelType";
+import {AircraftService} from '../../service/aircraft.service';
+import {SnackbarService} from "../../service/snackbar.service";
 import {TranslateService} from "@ngx-translate/core";
-import {SnackbarTiming} from "../shared/model/snackbarTiming";
-import {JwtService} from "../service/jwt.service";
+import {SnackbarTiming} from "../../shared/model/snackbarTiming";
+import {JwtService} from "../../service/jwt.service";
 
 @Component({
-  selector: 'app-application-aircraft',
-  templateUrl: './application-aircraft.component.html',
+  selector: 'create-aircraft',
+  templateUrl: './create-aircraft.component.html',
 })
-export class ApplicationAircraftComponent {
+export class CreateAircraftComponent {
 
     constructor(
         private readonly aircraftService: AircraftService,
-        private readonly routerService: RouterService,
         private readonly snackbarService: SnackbarService,
         private readonly translateService:TranslateService,
         private readonly jwtService: JwtService
@@ -28,7 +26,7 @@ export class ApplicationAircraftComponent {
 
     aircraftForm: FormGroup = new FormGroup({
         registration: new FormControl('', Validators.minLength(3)),
-        model: new FormControl('', Validators.minLength(3)),
+        model: new FormControl('', Validators.minLength(2)),
         consumption: new FormControl(''),
         fuelType: new FormControl(FuelType.AVGAS100LL),
         tankCapacity: new FormControl(''),
@@ -39,6 +37,7 @@ export class ApplicationAircraftComponent {
     });
 
     createAircraft() {
+        this.aircraftForm.value.registration = this.aircraftForm.value.registration.toUpperCase();
         this.aircraftService.createAircraft(this.aircraftForm.value, this.jwtService.getToken()).subscribe({
             next: () => {
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.creation-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
@@ -46,7 +45,6 @@ export class ApplicationAircraftComponent {
             },
             error: (error) => {
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.creation-error'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
-                console.error(error);
             }
         });
     }

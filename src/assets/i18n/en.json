@@ -60,6 +60,14 @@
         "true-air-speed-placeholder": "100",
         "creation-success": "Aircraft created successfully",
         "creation-error": "An error occurred while creating the aircraft",
-        "create": "Create"
+        "create": "Create",
+        "update": "Update",
+        "update-success": "Aircraft updated successfully",
+        "update-error": "An error occurred while updating the aircraft",
+        "delete": "Delete",
+        "list-title": "Aircrafts",
+        "selected-title": "Selected Aircraft",
+        "delete-success": "Aircraft deleted successfully",
+        "delete-error": "An error occurred while deleting the aircraft"
     }
 }

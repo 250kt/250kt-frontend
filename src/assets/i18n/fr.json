@@ -60,6 +60,14 @@
         "true-air-speed-placeholder": "100",
         "creation-success": "L'avion a été créé avec succès",
         "creation-error": "Une erreur s'est produite lors de la création de l'avion",
-        "create": "Créer"
+        "create": "Créer",
+        "update": "Mettre à jour",
+        "update-success": "L'avion a été mis à jour avec succès",
+        "update-error": "Une erreur s'est produite lors de la mise à jour de l'avion",
+        "delete": "Supprimer",
+        "list-title": "Liste des avions",
+        "selected-title": "Avion sélectionné",
+        "delete-success": "L'avion a été supprimé avec succès",
+        "delete-error": "Une erreur s'est produite lors de la suppression de l'avion"
     }
 }
