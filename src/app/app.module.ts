@@ -26,6 +26,14 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { ApplicationAuthComponent } from './application-auth/application-auth.component';
 import {MatTabsModule} from "@angular/material/tabs";
+import {CreateAircraftComponent} from "./aircraft/create-aircraft/create-aircraft.component";
+import {MatOption} from "@angular/material/autocomplete";
+import {MatSelect} from "@angular/material/select";
+import {
+    UserAircraftsComponent
+} from "./aircraft/user-aircrafts/user-aircrafts.component";
+import {MatActionList, MatList, MatListItem} from "@angular/material/list";
+import {MatLine} from "@angular/material/core";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -40,7 +48,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         ApplicationProfileComponent,
         ApplicationAdminComponent,
         ApplicationAuthRegisterComponent,
-        ApplicationAuthComponent
+        ApplicationAuthComponent,
+        CreateAircraftComponent,
+        UserAircraftsComponent
     ],
     imports: [
         BrowserModule,
@@ -67,7 +77,13 @@ export function HttpLoaderFactory(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        MatTabsModule
+        MatTabsModule,
+        MatOption,
+        MatSelect,
+        MatActionList,
+        MatListItem,
+        MatList,
+        MatLine
     ],
     providers: [],
     bootstrap: [AppComponent]

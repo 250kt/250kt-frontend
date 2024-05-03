@@ -1,14 +1,16 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {ApplicationAuthLoginComponent} from "./application-auth/application-auth-login/application-auth-login.component";
 import {AuthenticatedGuard} from "./guard/authenticated.guard";
 import {ApplicationHomeComponent} from "./application-home/application-home.component";
 import {ApplicationProfileComponent} from "./application-profile/application-profile.component";
 import {NotAuthenticatedGuard} from "./guard/not-authenticated.guard";
 import {ApplicationAdminComponent} from "./application-admin/application-admin.component";
 import {AuthenticatedAdminGuard} from "./guard/authenticated-admin.guard";
-import {ApplicationAuthRegisterComponent} from "./application-auth/application-auth-register/application-auth-register.component";
 import {ApplicationAuthComponent} from "./application-auth/application-auth.component";
+import {CreateAircraftComponent} from "./aircraft/create-aircraft/create-aircraft.component";
+import {
+    UserAircraftsComponent
+} from "./aircraft/user-aircrafts/user-aircrafts.component";
 
 const routes: Routes = [
 
@@ -35,6 +37,21 @@ const routes: Routes = [
         path: 'admin',
         component: ApplicationAdminComponent,
         canActivate: [AuthenticatedAdminGuard],
+    },
+    {
+        path: 'aircraft',
+        children: [
+            {
+                path: 'create',
+                component: CreateAircraftComponent,
+                canActivate: [AuthenticatedGuard],
+            },
+            {
+                path: 'list',
+                component: UserAircraftsComponent,
+                canActivate: [AuthenticatedGuard],
+            }
+        ]
     }
 ];
 
