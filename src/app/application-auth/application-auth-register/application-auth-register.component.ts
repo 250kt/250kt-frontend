@@ -18,7 +18,7 @@ export class ApplicationAuthRegisterComponent {
        private snackBarService: SnackbarService,
        private routerService: RouterService,
        private translate: TranslateService,
-       private passwordService: RegexService
+       private regexService: RegexService
     ) {}
 
     form: FormGroup = new FormGroup({
@@ -43,14 +43,14 @@ export class ApplicationAuthRegisterComponent {
             return;
         }
 
-        if(!this.passwordService.checkEmail(this.form.value.email) || !this.passwordService.checkPassword(this.form.value.password)){
+        if(!this.regexService.checkEmail(this.form.value.email) || !this.regexService.checkPassword(this.form.value.password)){
             return;
         }
 
         const user = {
             username: this.form.value.username,
             email: this.form.value.email,
-            password: this.passwordService.encodePassword(this.form.value.password)
+            password: this.form.value.password
         }
 
         this.authService.register(user).subscribe(
@@ -81,7 +81,7 @@ export class ApplicationAuthRegisterComponent {
             return this.translate.instant('register.passwordMinLength');
         }
         if (this.form.get('password')?.hasError('pattern')) {
-            return this.passwordService.validatePasswordLive(this.form.value.password);
+            return this.regexService.validatePasswordLive(this.form.value.password);
         }
         return '';
     }

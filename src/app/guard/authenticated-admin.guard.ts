@@ -10,14 +10,13 @@ export class AuthenticatedAdminGuard  {
 
     constructor(
         private authService: AuthService,
-        private routerService: RouterService
     ) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         if(this.authService.isAuthenticated() && this.authService.isAdmin()){
             return true;
         }
-        this.routerService.navigateTo('login');
+        this.authService.logout();
         return false;
     }
 
@@ -25,7 +24,7 @@ export class AuthenticatedAdminGuard  {
         if(this.authService.isAuthenticated() && this.authService.isAdmin()){
             return true;
         }
-        this.routerService.navigateTo('login');
+        this.authService.logout();
         return false;
     }
 }
