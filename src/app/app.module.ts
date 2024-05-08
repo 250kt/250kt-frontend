@@ -16,7 +16,7 @@ import {MatCardModule} from "@angular/material/card";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ApplicationHomeComponent} from "./application-home/application-home.component";
 import { ApplicationProfileComponent } from './application-profile/application-profile.component';
@@ -34,6 +34,7 @@ import {
 } from "./aircraft/user-aircrafts/user-aircrafts.component";
 import {MatActionList, MatList, MatListItem} from "@angular/material/list";
 import {MatLine} from "@angular/material/core";
+import {TokenInterceptorService} from "./service/token-interceptor.service";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -85,7 +86,13 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatList,
         MatLine
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TokenInterceptorService,
+            multi: true
+        }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

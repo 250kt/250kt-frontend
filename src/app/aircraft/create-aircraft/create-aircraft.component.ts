@@ -38,7 +38,7 @@ export class CreateAircraftComponent {
 
     createAircraft() {
         this.aircraftForm.value.registration = this.aircraftForm.value.registration.toUpperCase();
-        this.aircraftService.createAircraft(this.aircraftForm.value, this.jwtService.getToken()).subscribe({
+        this.aircraftService.createAircraft(this.aircraftForm.value).subscribe({
             next: () => {
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.creation-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
                 this.aircraftForm.reset();

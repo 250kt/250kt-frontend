@@ -41,7 +41,7 @@ export class UserAircraftsComponent implements OnInit{
     });
 
     ngOnInit(): void {
-        this.aircrafts$ = this.aircraftService.retrieveUserAircrafts(this.jwtService.getToken())
+        this.aircrafts$ = this.aircraftService.retrieveUserAircrafts()
         this.aircrafts$.pipe().subscribe(aircrafts => {
             if (aircrafts.length > 0) {
                 this.selectAircraft(aircrafts[0])
@@ -56,9 +56,9 @@ export class UserAircraftsComponent implements OnInit{
 
     updateAircraft() {
         this.aircraftForm.value.id = this.selectedAircraft.id;
-        this.aircraftService.updateAircraft(this.aircraftForm.value, this.jwtService.getToken()).subscribe({
+        this.aircraftService.updateAircraft(this.aircraftForm.value).subscribe({
             next: () => {
-                this.aircrafts$ = this.aircraftService.retrieveUserAircrafts(this.jwtService.getToken());
+                this.aircrafts$ = this.aircraftService.retrieveUserAircrafts();
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.update-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
             },
             error: (error) => {
@@ -68,9 +68,9 @@ export class UserAircraftsComponent implements OnInit{
     }
 
     deleteAircraft(){
-        this.aircraftService.deleteAircraft(this.selectedAircraft.id, this.jwtService.getToken()).subscribe({
+        this.aircraftService.deleteAircraft(this.selectedAircraft.id).subscribe({
             next: () => {
-                this.aircrafts$ = this.aircraftService.retrieveUserAircrafts(this.jwtService.getToken());
+                this.aircrafts$ = this.aircraftService.retrieveUserAircrafts();
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.delete-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
             },
             error: (error) => {

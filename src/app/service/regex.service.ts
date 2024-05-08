@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import * as bcrypt from "bcryptjs";
 import {TranslateService} from "@ngx-translate/core";
 import {SnackbarTiming} from "../shared/model/snackbarTiming";
 import {SnackbarService} from "./snackbar.service";
@@ -61,10 +60,6 @@ export class RegexService {
     isStringHasLowerCase(password: string): boolean {
         const regexLowerCase = new RegExp('^(?=.*[a-z])');
         return regexLowerCase.test(password);
-    }
-
-    encodePassword(password: string): string {
-        return bcrypt.hashSync(password);
     }
 
     checkPassword(password: string): boolean {

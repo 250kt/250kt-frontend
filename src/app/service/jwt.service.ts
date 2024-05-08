@@ -5,20 +5,25 @@ import {Injectable} from "@angular/core";
 })
 export class JwtService {
 
-    isTokenValid(): boolean {
-        const expirationDate = this.getExpirationDate();
-        if(expirationDate === null){
-            return false;
-        }
-        return !(expirationDate.valueOf() > new Date().valueOf());
-    }
-
     getExpirationDate(): any {
         const token = this.getToken();
         if(token){
-            return JSON.parse(atob(token.split('.')[1])).exp;
+            const exp = JSON.parse(atob(token.split('.')[1])).exp;
+            return new Date(exp * 1000); // Convert to milliseconds
         }
         return null;
+    }
+
+    isTokenValid(): boolean {
+        const token = this.getToken();
+        if (!token) {
+            return false;
+        }
+        const expirationDate = this.getExpirationDate();
+        if (!expirationDate) {
+            return false;
+        }
+        return expirationDate.getTime() > new Date().getTime();
     }
 
     getToken(): any {
@@ -31,6 +36,18 @@ export class JwtService {
 
     destroyToken() {
       sessionStorage.removeItem('token');
+    }
+
+    saveRefreshToken(refreshToken: string) {
+        sessionStorage.setItem('refreshToken', refreshToken);
+    }
+
+    getRefreshToken(): any {
+        return sessionStorage.getItem('refreshToken');
+    }
+
+    destroyRefreshToken() {
+        sessionStorage.removeItem('refreshToken');
     }
 
     getAuthorities(): string[] {

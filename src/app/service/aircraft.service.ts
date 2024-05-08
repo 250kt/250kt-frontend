@@ -3,6 +3,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Aircraft} from "../shared/model/aircraft";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
+import {JwtService} from "./jwt.service";
+import {AuthService} from "./auth.service";
 
 @Injectable({
     providedIn: 'root'
@@ -15,35 +17,19 @@ export class AircraftService {
 
     private url = environment.backendUrl + '/aircraft';
 
-    createAircraft(aircraft: Aircraft, token: string) {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        });
-        return this.http.post(this.url, aircraft, {headers:headers});
+    createAircraft(aircraft: Aircraft) {
+        return this.http.post(this.url, aircraft);
     }
 
-    retrieveUserAircrafts(token: string): Observable<Aircraft[]> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        });
-        return this.http.get<Aircraft[]>(`${this.url}/user-aircrafts`, {headers:headers});
+    retrieveUserAircrafts(): Observable<Aircraft[]> {
+        return this.http.get<Aircraft[]>(`${this.url}/user-aircrafts`);
     }
 
-    updateAircraft(aircraft: Aircraft, token: string) {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        });
-        return this.http.put(this.url, aircraft, {headers: headers});
+    updateAircraft(aircraft: Aircraft) {
+        return this.http.put(this.url, aircraft);
     }
 
-    deleteAircraft(id: number, token: string) {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        });
-        return this.http.delete(`${this.url}/${id}`, {headers: headers});
+    deleteAircraft(id: number) {
+        return this.http.delete(`${this.url}/${id}`);
     }
 }
