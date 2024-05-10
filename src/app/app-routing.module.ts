@@ -11,6 +11,7 @@ import {CreateAircraftComponent} from "./aircraft/create-aircraft/create-aircraf
 import {
     UserAircraftsComponent
 } from "./aircraft/user-aircrafts/user-aircrafts.component";
+import {ApplicationMapComponent} from "./application-map/application-map.component";
 
 const routes: Routes = [
 
@@ -37,6 +38,10 @@ const routes: Routes = [
         path: 'admin',
         component: ApplicationAdminComponent,
         canActivate: [AuthenticatedAdminGuard],
+    },
+    {
+        path: 'map',
+        component: ApplicationMapComponent,
     },
     {
         path: 'aircraft',
