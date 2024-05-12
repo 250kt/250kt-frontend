@@ -6,9 +6,11 @@
         </div>
 
         <div class="flex">
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.map' | translate }}" matTooltipPosition="below" routerLink="/map">
-                <mat-icon class="text-white">public</mat-icon>
-            </button>
+            @if (this.authService.isAuthenticated()){
+                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.map' | translate }}" matTooltipPosition="below" routerLink="/map">
+                    <mat-icon class="text-white">public</mat-icon>
+                </button>
+            }
             <button class="py-2 px-5 block" matTooltip="{{ 'navbar.navlog' | translate }}" matTooltipPosition="below">
                 <mat-icon class="text-white">map</mat-icon>
             </button>

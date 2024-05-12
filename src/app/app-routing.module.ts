@@ -42,6 +42,7 @@ const routes: Routes = [
     {
         path: 'map',
         component: ApplicationMapComponent,
+        canActivate: [AuthenticatedGuard],
     },
     {
         path: 'aircraft',
