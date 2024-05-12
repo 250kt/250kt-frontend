@@ -3,7 +3,8 @@
         "password": "Mot de passe",
         "username": "Nom d'utilisateur",
         "email": "Email",
-        "close": "Fermer"
+        "close": "Fermer",
+        "favorite-airfield": "Aérodrome favori"
     },
     "navbar": {
         "map": "Carte",

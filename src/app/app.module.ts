@@ -27,7 +27,7 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { ApplicationAuthComponent } from './application-auth/application-auth.component';
 import {MatTabsModule} from "@angular/material/tabs";
 import {CreateAircraftComponent} from "./aircraft/create-aircraft/create-aircraft.component";
-import {MatOption} from "@angular/material/autocomplete";
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {
     UserAircraftsComponent
@@ -84,7 +84,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatActionList,
         MatListItem,
         MatList,
-        MatLine
+        MatLine,
+        MatAutocompleteTrigger,
+        MatAutocomplete
     ],
     providers: [
         {

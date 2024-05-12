@@ -3,7 +3,8 @@
         "password": "Password",
         "username": "Username",
         "email": "Email",
-        "close": "Close"
+        "close": "Close",
+        "favorite-airfield": "Favorite airfield"
     },
     "navbar": {
         "map": "Map",
