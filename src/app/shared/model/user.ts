@@ -1,3 +1,5 @@
+import {Airfield} from "./airfield";
+
 export interface User {
     id?: number;
     username?: string;
@@ -6,4 +8,5 @@ export interface User {
     authorities?: string[];
     tokens?: string[];
     isEmailConfirmed?: boolean;
+    favoriteAirfield?: Airfield;
 }

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../service/auth.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {RouterService} from "../../service/router.service";
@@ -6,19 +6,24 @@ import {SnackbarTiming} from "../../shared/model/snackbarTiming";
 import {SnackbarService} from "../../service/snackbar.service";
 import {TranslateService} from "@ngx-translate/core";
 import {RegexService} from "../../service/regex.service";
+import {AirfieldService} from "../../service/airfield.service";
+import {map, Observable, startWith} from "rxjs";
+import {Airfield} from "../../shared/model/airfield";
+import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 
 @Component({
   selector: 'app-application-auth-register',
   templateUrl: './application-auth-register.component.html',
 })
-export class ApplicationAuthRegisterComponent {
+export class ApplicationAuthRegisterComponent implements OnInit {
 
     constructor(
        private readonly authService: AuthService,
        private snackBarService: SnackbarService,
        private routerService: RouterService,
        private translate: TranslateService,
-       private regexService: RegexService
+       private regexService: RegexService,
+       private airfieldService: AirfieldService
     ) {}
 
     form: FormGroup = new FormGroup({
@@ -28,6 +33,7 @@ export class ApplicationAuthRegisterComponent {
             Validators.minLength(2)
         ]),
         email: new FormControl('', [Validators.required, Validators.email]),
+        favoriteAirfield: new FormControl('', [Validators.required]),
         password: new FormControl('',
             [
                 Validators.required,
@@ -37,6 +43,25 @@ export class ApplicationAuthRegisterComponent {
     });
 
     hide: boolean = true;
+    airfields!: Airfield[];
+    filteredAirfields!: Observable<Airfield[]>;
+
+    ngOnInit(): void {
+        this.airfieldService.retrieveAllAirfields()
+            .pipe()
+            .subscribe(
+                (airfields) => {
+                    this.airfields = airfields;
+                    this.filteredAirfields = this.form.controls['favoriteAirfield'].valueChanges.pipe(
+                        startWith(''),
+                        map(value => {
+                            const name = typeof value === 'string' ? value : value?.name;
+                            return name ? this._filter(name as string) : this.airfields.slice();
+                        }),
+                    );
+                }
+            );
+    }
 
     onSubmit(){
         if(!this.checkForm()){
@@ -50,6 +75,7 @@ export class ApplicationAuthRegisterComponent {
         const user = {
             username: this.form.value.username,
             email: this.form.value.email,
+            favoriteAirfield: this.form.value.favoriteAirfield,
             password: this.form.value.password
         }
 
@@ -109,5 +135,16 @@ export class ApplicationAuthRegisterComponent {
         return '';
     }
 
+    displayFn(airfield: Airfield): string {
+        return airfield ? airfield.territory.identificationCode + '' + airfield.code + ' - ' + airfield.fullName : '';
+    }
 
+    private _filter(value: string): Airfield[] {
+        const filterValue = value.toLowerCase();
+
+        return this.airfields.filter(airfield =>
+            airfield.territory.identificationCode.concat(airfield.code).toLowerCase().includes(filterValue) ||
+            airfield.fullName.toLowerCase().includes(filterValue)
+        );
+    }
 }
