@@ -4,6 +4,8 @@ import {ObstacleService} from '../service/obstacle.service';
 import {getIconUrl, Obstacle} from "../shared/model/obstacle";
 import {AsyncPipe} from "@angular/common";
 import {Observable} from "rxjs";
+import {UserService} from "../service/user.service";
+import { Airfield } from '../shared/model/airfield';
 
 @Component({
     selector: 'app-application-map',
@@ -18,8 +20,7 @@ import {Observable} from "rxjs";
 })
 export class ApplicationMapComponent implements OnInit {
     options: google.maps.MapOptions = {
-        center: {lat: 49, lng: 3}, //Center on favorite user's airport
-        zoom: 9,
+        zoom: 10,
         scrollwheel: true,
         disableDoubleClickZoom: false,
         disableDefaultUI: true,
@@ -34,18 +35,21 @@ export class ApplicationMapComponent implements OnInit {
         tiltInteractionEnabled: false,
         zoomControl: true,
     };
-    obstacles$: Observable<Obstacle[]> | undefined
     markers: google.maps.Marker[] = [];
 
     constructor(
-        private readonly obstacleService: ObstacleService
+        private readonly obstacleService: ObstacleService,
+        private readonly userService: UserService,
     ) {}
 
-    ngOnInit() {
-        this.obstacles$ = this.obstacleService.retrieveObstacles();
-    }
+    ngOnInit() {}
 
     handleMapLoad(map: google.maps.Map) {
+        this.userService.retrieveFavoriteAirfield().subscribe((airfield: Airfield) => {
+            map.setCenter({lat: airfield.latitude, lng: airfield.longitude});
+
+        });
+
         this.obstacleService.retrieveObstacles().subscribe((obstacles: Obstacle[]) => {
             this.markers = obstacles.map((obstacle: Obstacle) => {
                 const icon = getIconUrl(obstacle.type);
