@@ -47,7 +47,7 @@ export class ApplicationAuthRegisterComponent implements OnInit {
     filteredAirfields!: Observable<Airfield[]>;
 
     ngOnInit(): void {
-        this.airfieldService.retrieveAllAirfields()
+        this.airfieldService.retrieveAllAirfieldsAcceptVfr()
             .pipe()
             .subscribe(
                 (airfields) => {

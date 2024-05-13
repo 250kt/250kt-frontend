@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import {ObstacleService} from '../service/obstacle.service';
-import {getIconUrl, Obstacle} from "../shared/model/obstacle";
+import {getIconObstacle, Obstacle} from "../shared/model/obstacle";
 import {AsyncPipe} from "@angular/common";
-import {Observable} from "rxjs";
 import {UserService} from "../service/user.service";
-import { Airfield } from '../shared/model/airfield';
+import {Airfield, getIconAirfield} from '../shared/model/airfield';
+import {AirfieldService} from "../service/airfield.service";
 
 @Component({
     selector: 'app-application-map',
@@ -35,11 +35,13 @@ export class ApplicationMapComponent implements OnInit {
         tiltInteractionEnabled: false,
         zoomControl: true,
     };
-    markers: google.maps.Marker[] = [];
+    markersObstacles: google.maps.Marker[] = [];
+    markersAirfields: google.maps.Marker[] = [];
 
     constructor(
         private readonly obstacleService: ObstacleService,
         private readonly userService: UserService,
+        private readonly airfieldService: AirfieldService
     ) {}
 
     ngOnInit() {}
@@ -47,40 +49,76 @@ export class ApplicationMapComponent implements OnInit {
     handleMapLoad(map: google.maps.Map) {
         this.userService.retrieveFavoriteAirfield().subscribe((airfield: Airfield) => {
             map.setCenter({lat: airfield.latitude, lng: airfield.longitude});
+        });
 
+        this.airfieldService.retrieveAllAirfields().subscribe((airfields: Airfield[]) => {
+            this.markersAirfields = airfields.map((airfield: Airfield) => {
+                return new google.maps.Marker({
+                    position: {lat: airfield.latitude, lng: airfield.longitude},
+                    title: airfield.fullName,
+                    icon: {
+                        url: getIconAirfield(airfield.type),
+                        scaledSize: new google.maps.Size(35, 35),
+                        anchor: new google.maps.Point(17.5, 17.5),
+                    },
+
+                });
+            });
+            this.updateMarkersAirfields(map);
         });
 
         this.obstacleService.retrieveObstacles().subscribe((obstacles: Obstacle[]) => {
-            this.markers = obstacles.map((obstacle: Obstacle) => {
-                const icon = getIconUrl(obstacle.type);
+            this.markersObstacles = obstacles.map((obstacle: Obstacle) => {
                 return new google.maps.Marker({
                     position: {lat: obstacle.latitude, lng: obstacle.longitude},
                     title: obstacle.id + ' ' + obstacle.type,
                     icon: {
-                        url: icon,
+                        url: getIconObstacle(obstacle.type),
                         scaledSize: new google.maps.Size(25, 35),
                     }
                 });
             });
 
-            this.updateMarkers(map);
+            this.updateMarkersObstacles(map);
         });
 
         map.addListener('bounds_changed', () => {
-            this.updateMarkers(map);
+            this.updateMarkersObstacles(map);
+            this.updateMarkersAirfields(map);
         });
     }
 
-    updateMarkers(map: google.maps.Map) {
+    updateMarkersAirfields(map: google.maps.Map) {
+        const zoom = map.getZoom();
+        const bounds = map.getBounds();
+
+        if(zoom && zoom < 6){
+            this.markersAirfields.forEach(marker => {
+                marker.setMap(null);
+            });
+        }else{
+            if(bounds){
+                this.markersAirfields.forEach(marker => {
+                    if (bounds.contains(marker.getPosition()!)) {
+                        marker.setMap(map);
+                    } else {
+                        marker.setMap(null);
+                    }
+                });
+            }
+        }
+    }
+
+    updateMarkersObstacles(map: google.maps.Map) {
         const bounds = map.getBounds();
         const zoom = map.getZoom();
 
         if(zoom && zoom < 10){
-            this.markers.forEach(marker => {
+            this.markersObstacles.forEach(marker => {
                 marker.setMap(null);
             });
         } else if(bounds) {
-            this.markers.forEach(marker => {
+            this.markersObstacles.forEach(marker => {
                 if (bounds.contains(marker.getPosition()!)) {
                     marker.setMap(map);
                 } else {
