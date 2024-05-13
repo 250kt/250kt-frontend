@@ -24,27 +24,27 @@ export enum ObstacleType {
 }
 
 
-export function getIconUrl(type: ObstacleType): any{
+export function getIconObstacle(type: ObstacleType): any{
     switch (type) {
         case ObstacleType.WIND_TURBINE:
-            return 'assets/icons/wind_turbine.png';
+            return 'assets/icons/obstacles/wind_turbine.png';
         case ObstacleType.GROUP_OF_OBSTACLES_LIGHTED_AT_NIGHT_ABOVE_500_AGL:
-            return 'assets/icons/group_of_obstacles_lighted_at_night_above_500_agl.png';
+            return 'assets/icons/obstacles/group_of_obstacles_lighted_at_night_above_500_agl.png';
         case ObstacleType.GROUP_OF_OBSTACLES_LIGHTED_AT_NIGHT_UNDER_500_AGL:
-            return 'assets/icons/group_of_obstacles_lighted_at_night_under_500_agl.png';
+            return 'assets/icons/obstacles/group_of_obstacles_lighted_at_night_under_500_agl.png';
         case ObstacleType.GROUP_OF_OBSTACLES_NOT_LIGHTED_AT_NIGHT_UNDER_500_AGL:
-            return 'assets/icons/group_of_obstacles_not_lighted_at_night_under_500_agl.png';
+            return 'assets/icons/obstacles/group_of_obstacles_not_lighted_at_night_under_500_agl.png';
         case ObstacleType.GROUP_OF_OBSTACLES_NOT_LIGHTED_AT_NIGHT_ABOVE_500_AGL:
-            return 'assets/icons/group_of_obstacles_not_lighted_at_night_above_500_agl.png';
+            return 'assets/icons/obstacles/group_of_obstacles_not_lighted_at_night_above_500_agl.png';
         case ObstacleType.OBSTACLE_NOT_LIGHTED_AT_NIGHT_ABOVE_500_AGL:
-            return 'assets/icons/obstacle_not_lighted_at_night_above_500_agl.png';
+            return 'assets/icons/obstacles/obstacle_not_lighted_at_night_above_500_agl.png';
         case ObstacleType.OBSTACLE_NOT_LIGHTED_AT_NIGHT_UNDER_500_AGL:
-            return 'assets/icons/obstacle_not_lighted_at_night_under_500_agl.png';
+            return 'assets/icons/obstacles/obstacle_not_lighted_at_night_under_500_agl.png';
         case ObstacleType.OBSTACLE_LIGHTED_AT_NIGHT_ABOVE_500_AGL:
-            return 'assets/icons/obstacle_lighted_at_night_above_500_agl.png';
+            return 'assets/icons/obstacles/obstacle_lighted_at_night_above_500_agl.png';
         case ObstacleType.OBSTACLE_LIGHTED_AT_NIGHT_UNDER_500_AGL:
-            return 'assets/icons/obstacle_lighted_at_night_under_500_agl.png';
+            return 'assets/icons/obstacles/obstacle_lighted_at_night_under_500_agl.png';
         default:
-            return 'assets/icons/wind_turbine.png';
+            return 'assets/icons/obstacles/wind_turbine.png';
     }
 }

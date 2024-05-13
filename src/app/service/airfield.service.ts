@@ -15,6 +15,10 @@ export class AirfieldService {
 
     private url = environment.backendUrl + '/airfield';
 
+    retrieveAllAirfieldsAcceptVfr(): Observable<Airfield[]> {
+        return this.http.get<Airfield[]>(`${this.url}/all-accept-vfr`);
+    }
+
     retrieveAllAirfields(): Observable<Airfield[]> {
         return this.http.get<Airfield[]>(`${this.url}/all`);
     }
