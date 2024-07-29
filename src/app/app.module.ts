@@ -19,7 +19,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ApplicationHomeComponent} from "./application-home/application-home.component";
-import { ApplicationProfileComponent } from './application-profile/application-profile.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ApplicationAdminComponent } from './application-admin/application-admin.component';
 import { ApplicationAuthRegisterComponent } from './application-auth/application-auth-register/application-auth-register.component';
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
@@ -46,7 +46,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppComponent,
         ApplicationAuthLoginComponent,
         ApplicationHomeComponent,
-        ApplicationProfileComponent,
+        UserProfileComponent,
         ApplicationAdminComponent,
         ApplicationAuthRegisterComponent,
         ApplicationAuthComponent,

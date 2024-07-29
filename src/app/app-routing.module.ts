@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthenticatedGuard} from "./guard/authenticated.guard";
 import {ApplicationHomeComponent} from "./application-home/application-home.component";
-import {ApplicationProfileComponent} from "./application-profile/application-profile.component";
+import {UserProfileComponent} from "./user-profile/user-profile.component";
 import {NotAuthenticatedGuard} from "./guard/not-authenticated.guard";
 import {ApplicationAdminComponent} from "./application-admin/application-admin.component";
 import {AuthenticatedAdminGuard} from "./guard/authenticated-admin.guard";
@@ -31,7 +31,7 @@ const routes: Routes = [
     },
     {
         path: 'profile',
-        component: ApplicationProfileComponent,
+        component: UserProfileComponent,
         canActivate: [AuthenticatedGuard],
     },
     {

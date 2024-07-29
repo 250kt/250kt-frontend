@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 import {Airfield} from "../shared/model/airfield";
+import { User } from "../shared/model/user";
 
 @Injectable({
     providedIn: 'root'
@@ -17,5 +18,9 @@ export class UserService {
 
     retrieveFavoriteAirfield(): Observable<Airfield> {
         return this.http.get<Airfield>(`${this.url}/favorite-airfield`);
+    }
+
+    getUserProfile(): Observable<User> {
+        return this.http.get<User>(`${this.url}/profile`);
     }
 }
