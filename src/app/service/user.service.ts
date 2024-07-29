@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 import {Airfield} from "../shared/model/airfield";
@@ -23,4 +23,9 @@ export class UserService {
     getUserProfile(): Observable<User> {
         return this.http.get<User>(`${this.url}/profile`);
     }
+
+    updateFavoriteAirfield(airfield: Airfield) {
+        return this.http.put(`${this.url}/favorite-airfield`, airfield);
+    }
+
 }

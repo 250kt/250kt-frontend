@@ -35,6 +35,7 @@ import {
 import {MatActionList, MatList, MatListItem} from "@angular/material/list";
 import {MatLine} from "@angular/material/core";
 import {TokenInterceptorService} from "./service/token-interceptor.service";
+import {NgOptimizedImage} from "@angular/common";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -86,7 +87,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatList,
         MatLine,
         MatAutocompleteTrigger,
-        MatAutocomplete
+        MatAutocomplete,
+        NgOptimizedImage
     ],
     providers: [
         {

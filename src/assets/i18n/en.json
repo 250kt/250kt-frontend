@@ -70,5 +70,11 @@
         "selected-title": "Selected Aircraft",
         "delete-success": "Aircraft deleted successfully",
         "delete-error": "An error occurred while deleting the aircraft"
+    },
+    "profile": {
+        "favorite-airfield": "Favorite airfield: ",
+        "update-favorite-airfield": "Change",
+        "update-favorite-airfield-success": "Favorite airfield updated successfully",
+        "update-favorite-airfield-error": "An error occurred while updating the favorite airfield"
     }
 }
