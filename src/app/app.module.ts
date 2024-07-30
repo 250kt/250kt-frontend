@@ -36,6 +36,10 @@ import {MatActionList, MatList, MatListItem} from "@angular/material/list";
 import {MatLine} from "@angular/material/core";
 import {TokenInterceptorService} from "./service/token-interceptor.service";
 import {NgOptimizedImage} from "@angular/common";
+import {MatBadge} from "@angular/material/badge";
+import {ConfirmEmailComponent} from "./confirm-email/confirm-email.component";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatTooltip} from "@angular/material/tooltip";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -52,7 +56,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         ApplicationAuthRegisterComponent,
         ApplicationAuthComponent,
         CreateAircraftComponent,
-        UserAircraftsComponent
+        UserAircraftsComponent,
+        ConfirmEmailComponent,
     ],
     imports: [
         BrowserModule,
@@ -88,7 +93,10 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatLine,
         MatAutocompleteTrigger,
         MatAutocomplete,
-        NgOptimizedImage
+        NgOptimizedImage,
+        MatBadge,
+        MatProgressSpinner,
+        MatTooltip
     ],
     providers: [
         {

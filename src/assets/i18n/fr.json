@@ -72,9 +72,41 @@
         "delete-error": "Une erreur s'est produite lors de la suppression de l'avion"
     },
     "profile": {
-        "favorite-airfield": "Aérodrome favori: ",
-        "update-favorite-airfield": "Changer",
-        "update-favorite-airfield-success": "L'aérodfavorirome  a été mis à jour avec succès",
-        "update-favorite-airfield-error": "Une erreur s'est produite lors de la mise à jour de l'aérodrome favori"
+        "of-user": "Profil de ",
+        "email-label": "Email: ",
+        "favorite-airfield": {
+            "label": "Aérodrome favori: ",
+            "success": "L'aérodrome favori a été mis à jour avec succès",
+            "error": "Une erreur s'est produite lors de la mise à jour de l'aérodrome favori"
+        },
+        "confirm-email": {
+            "button": "Confirmer l'email",
+            "send-success": "Un email de confirmation a été envoyé à votre adresse email",
+            "send-error": "Une erreur s'est produite lors de l'envoi de l'email de confirmation"
+        },
+        "new-password": {
+            "label": "Nouveau mot de passe",
+            "placeholder": "Nouveau mot de passe",
+            "button": "Changer le mot de passe",
+            "success": "Le mot de passe a été mis à jour avec succès",
+            "error": "Une erreur s'est produite lors de la mise à jour du mot de passe"
+        },
+        "tooltip": {
+            "update-favorite-airfield": "Changer l'aérodrome favori",
+            "confirm-email-send": "Envoyer un email de confirmation",
+            "change-password": "Redéfinir le mot de passe",
+            "cancel": "Annuler",
+            "update": "Mettre à jour"
+        },
+        "alt": {
+            "avatar": "Avatar de l'utilisateur"
+        }
+    },
+    "confirm-email": {
+        "success": "Votre email a été confirmé avec succès",
+        "error": "Une erreur s'est produite lors de la confirmation de l'email",
+        "sorry": "Désolé",
+        "congratulations": "Félicitations",
+        "back": "Retour à l'application"
     }
 }

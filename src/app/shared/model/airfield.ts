@@ -11,6 +11,15 @@ export interface Airfield {
     type: AirfieldType;
 }
 
+export interface AirfieldShort {
+    id: number;
+    fullName: string;
+    code: string;
+    territory: Territory;
+    latitude: number;
+    longitude: number;
+}
+
 export enum AirfieldType {
     MILITARY_PAVED = 'MILITARY_PAVED',
     MILITARY_UNPAVED = 'MILITARY_UNPAVED',

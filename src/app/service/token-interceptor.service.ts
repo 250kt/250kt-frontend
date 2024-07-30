@@ -13,7 +13,7 @@ export class TokenInterceptorService implements HttpInterceptor {
     constructor(private authService: AuthService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (!request.url.includes('auth/refresh-token') && !request.url.includes('auth/authenticate') && !request.url.includes('airfield/all-accept-vfr')) {
+        if (!request.url.includes('auth/refresh-token') && !request.url.includes('auth/authenticate') && !request.url.includes('airfield/all-accept-vfr') && !request.url.includes('user/confirm-email')) {
             if (this.authService.getToken()) {
                 request = this.addToken(request, this.authService.getToken());
             }

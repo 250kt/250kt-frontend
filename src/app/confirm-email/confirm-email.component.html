@@ -1,0 +1,16 @@
+<div class="items-center justify-center flex h-full">
+    @if(!loading){
+        <div class="justify-center text-center">
+            @if(emailConfirmed){
+                <h2>{{ 'confirm-email.congratulations' | translate }}</h2>
+                <p>{{ 'confirm-email.success' | translate }}</p>
+            } @else {
+                <h2>{{ 'confirm-email.sorry' | translate }}</h2>
+                <p>{{ 'confirm-email.error' | translate }}</p>
+            }
+            <a mat-flat-button color="primary" [routerLink]="'/map'">{{ 'confirm-email.back' | translate }}</a>
+        </div>
+    } @else {
+        <mat-spinner></mat-spinner>
+    }
+</div>

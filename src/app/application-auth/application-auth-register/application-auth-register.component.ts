@@ -9,7 +9,6 @@ import {RegexService} from "../../service/regex.service";
 import {AirfieldService} from "../../service/airfield.service";
 import {map, Observable, startWith} from "rxjs";
 import {Airfield} from "../../shared/model/airfield";
-import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {AirfieldUtils} from "../../shared/utils/airfield.utils";
 
 @Component({

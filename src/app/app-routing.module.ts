@@ -12,6 +12,7 @@ import {
     UserAircraftsComponent
 } from "./aircraft/user-aircrafts/user-aircrafts.component";
 import {ApplicationMapComponent} from "./application-map/application-map.component";
+import {ConfirmEmailComponent} from "./confirm-email/confirm-email.component";
 
 const routes: Routes = [
 
@@ -58,6 +59,10 @@ const routes: Routes = [
                 canActivate: [AuthenticatedGuard],
             }
         ]
+    },
+    {
+        path: 'confirm-email',
+        component: ConfirmEmailComponent,
     }
 ];
 

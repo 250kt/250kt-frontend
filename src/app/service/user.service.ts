@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
-import {Airfield} from "../shared/model/airfield";
+import {Airfield, AirfieldShort} from "../shared/model/airfield";
 import { User } from "../shared/model/user";
 
 @Injectable({
@@ -16,16 +16,27 @@ export class UserService {
 
     private url = environment.backendUrl + '/user';
 
-    retrieveFavoriteAirfield(): Observable<Airfield> {
-        return this.http.get<Airfield>(`${this.url}/favorite-airfield`);
+    retrieveFavoriteAirfield(): Observable<AirfieldShort> {
+        return this.http.get<AirfieldShort>(`${this.url}/favorite-airfield`);
     }
 
     getUserProfile(): Observable<User> {
         return this.http.get<User>(`${this.url}/profile`);
     }
 
-    updateFavoriteAirfield(airfield: Airfield) {
+    updateFavoriteAirfield(airfield: AirfieldShort) {
         return this.http.put(`${this.url}/favorite-airfield`, airfield);
     }
 
+    sendConfirmEmail() {
+        return this.http.post(`${this.url}/send-confirm-email`, null);
+    }
+
+    confirmEmail(code: string) {
+        return this.http.post(`${this.url}/confirm-email`, code);
+    }
+
+    changePassword(password: string) {
+        return this.http.put(`${this.url}/change-password`, password);
+    }
 }

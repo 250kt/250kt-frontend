@@ -4,7 +4,7 @@ import {ObstacleService} from '../service/obstacle.service';
 import {getIconObstacle, Obstacle} from "../shared/model/obstacle";
 import {AsyncPipe} from "@angular/common";
 import {UserService} from "../service/user.service";
-import {Airfield, getIconAirfield} from '../shared/model/airfield';
+import {Airfield, AirfieldShort, getIconAirfield} from '../shared/model/airfield';
 import {AirfieldService} from "../service/airfield.service";
 
 @Component({
@@ -47,7 +47,7 @@ export class ApplicationMapComponent implements OnInit {
     ngOnInit() {}
 
     handleMapLoad(map: google.maps.Map) {
-        this.userService.retrieveFavoriteAirfield().subscribe((airfield: Airfield) => {
+        this.userService.retrieveFavoriteAirfield().subscribe((airfield: AirfieldShort) => {
             map.setCenter({lat: airfield.latitude, lng: airfield.longitude});
         });
 
