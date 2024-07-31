@@ -4,7 +4,8 @@
         "username": "Username",
         "email": "Email",
         "close": "Close",
-        "favorite-airfield": "Favorite airfield"
+        "favorite-airfield": "Favorite airfield",
+        "cancel": "Cancel"
     },
     "navbar": {
         "map": "Map",
@@ -69,6 +70,46 @@
         "list-title": "Aircrafts",
         "selected-title": "Selected Aircraft",
         "delete-success": "Aircraft deleted successfully",
-        "delete-error": "An error occurred while deleting the aircraft"
+        "delete-error": "An error occurred while deleting the aircraft",
+    },
+    "profile": {
+        "of-user": "Profile of ",
+        "email-label": "Email: ",
+        "favorite-airfield": {
+            "label": "Favorite airfield: ",
+            "success": "Favorite airfield changed successfully",
+            "error": "An error occurred while changing the favorite airfield"
+        },
+        "confirm-email": {
+            "button": "Confirm Email",
+            "send-success": "Email sent successfully",
+            "send-error": "An error occurred while sending the email"
+        },
+        "new-password": {
+            "label": "New Password",
+            "placeholder": "New Password",
+            "button": "Change Password",
+            "success": "Password changed successfully",
+            "error": "An error occurred while changing the password"
+        },
+        "tooltip": {
+            "update-favorite-airfield": "Update favorite airfield",
+            "confirm-email-send": "Confirm email send",
+            "cancel": "Cancel",
+            "update": "Update"
+        },
+        "alt": {
+            "avatar": "User avatar"
+        },
+        "add-aircraft": {
+            "button": "Add Aircraft"
+        }
+    },
+    "confirm-email": {
+        "success": "Email confirmed successfully",
+        "error": "An error occurred while confirming the email",
+        "sorry": "Sorry",
+        "congratulations": "Congratulations",
+        "back": "Back to the application"
     }
 }

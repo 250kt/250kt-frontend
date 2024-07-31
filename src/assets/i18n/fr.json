@@ -4,7 +4,8 @@
         "username": "Nom d'utilisateur",
         "email": "Email",
         "close": "Fermer",
-        "favorite-airfield": "Aérodrome favori"
+        "favorite-airfield": "Aérodrome favori",
+        "cancel": "Annuler"
     },
     "navbar": {
         "map": "Carte",
@@ -70,5 +71,52 @@
         "selected-title": "Avion sélectionné",
         "delete-success": "L'avion a été supprimé avec succès",
         "delete-error": "Une erreur s'est produite lors de la suppression de l'avion"
+    },
+    "profile": {
+        "of-user": "Profil de ",
+        "email-label": "Email: ",
+        "favorite-airfield": {
+            "label": "Aérodrome favori: ",
+            "success": "L'aérodrome favori a été mis à jour avec succès",
+            "error": "Une erreur s'est produite lors de la mise à jour de l'aérodrome favori"
+        },
+        "confirm-email": {
+            "button": "Confirmer l'email",
+            "send-success": "Un email de confirmation a été envoyé à votre adresse email",
+            "send-error": "Une erreur s'est produite lors de l'envoi de l'email de confirmation"
+        },
+        "new-password": {
+            "label": "Nouveau mot de passe",
+            "placeholder": "Nouveau mot de passe",
+            "button": "Changer le mot de passe",
+            "success": "Le mot de passe a été mis à jour avec succès",
+            "error": "Une erreur s'est produite lors de la mise à jour du mot de passe"
+        },
+        "tooltip": {
+            "update-favorite-airfield": "Changer l'aérodrome favori",
+            "confirm-email-send": "Envoyer un email de confirmation",
+            "cancel": "Annuler",
+            "update": "Mettre à jour"
+        },
+        "alt": {
+            "avatar": "Avatar de l'utilisateur"
+        },
+        "delete-account": {
+            "button": "Supprimer le compte",
+            "success": "Votre compte a été supprimé avec succès",
+            "error": "Une erreur s'est produite lors de la suppression du compte",
+            "confirm": "Je souhaite supprimer mon compte !",
+            "cancel": "Je souhaite conserver mon compte !"
+        },
+        "add-aircraft": {
+            "button": "Ajouter un avion"
+        }
+    },
+    "confirm-email": {
+        "success": "Votre email a été confirmé avec succès",
+        "error": "Une erreur s'est produite lors de la confirmation de l'email",
+        "sorry": "Désolé",
+        "congratulations": "Félicitations",
+        "back": "Retour à l'application"
     }
 }

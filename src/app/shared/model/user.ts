@@ -1,4 +1,5 @@
 import {Airfield} from "./airfield";
+import {PilotAvatar} from "./pilotAvatar";
 
 export interface User {
     id?: number;
@@ -9,4 +10,5 @@ export interface User {
     tokens?: string[];
     isEmailConfirmed?: boolean;
     favoriteAirfield?: Airfield;
+    avatar?: PilotAvatar;
 }

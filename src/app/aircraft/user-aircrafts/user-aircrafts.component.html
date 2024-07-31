@@ -1,23 +1,24 @@
-<div class="p-6 flex flex-row gap-4">
+<div class="flex flex-row gap-4">
 
-    <div class="relative flex flex-col text-gray-700 bg-white shadow-md rounded-xl basis-1/6">
+    <div class="relative flex flex-col text-gray-700 basis-1/6">
         <div class="p-4">
             <h2 class="font-bold text-xl">{{'aircraft.list-title' | translate}}</h2>
         </div>
         <div class="flex min-w-[240px] flex-col gap-1 font-sans text-base font-normal text-blue-gray-700 px-2">
-            @for(aircraft of aircrafts$ | async; track $index){
+            @for(aircraft of aircraftsPage; track $index){
                 <button  class="flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-gray-100 hover:bg-opacity-80 focus:bg-gray-100" (click)="selectAircraft(aircraft)">
                     <span class="font-bold">{{ aircraft.registration }}</span>&nbsp;- {{ aircraft.model }}
                 </button>
             }
+            <mat-paginator [length]="nbAircrafts" [pageSize]="5" [hidePageSize]="true" (page)="onPageChange($event)"></mat-paginator>
         </div>
     </div>
 
-    <div class="relative flex flex-col text-gray-700 bg-white shadow-md rounded-xl basis-5/6">
+    <div class="relative flex flex-col text-gray-700 basis-5/6">
         <div class="p-4">
             <h2 class="font-bold text-xl">{{'aircraft.selected-title' | translate}}</h2>
             @if (selectedAircraft){
-                <form [formGroup]="aircraftForm" class="flex flex-col md:px-12 lg:px-24 p-6">
+                <form [formGroup]="formUpdateAircraft" class="flex flex-col md:px-12 lg:px-24 p-6">
                     <div class="flex flex-row gap-4">
                         <mat-form-field class="pb-3 basis-1/3">
                             <mat-label>{{'aircraft.registration' | translate}}</mat-label>
@@ -65,7 +66,7 @@
                         </mat-form-field>
                     </div>
                     <div class="flex flex-row justify-around">
-                        <button mat-raised-button class="basis-1/3" color="primary" (click)="updateAircraft()" [disabled]="aircraftForm.invalid">{{'aircraft.update' | translate}}</button>
+                        <button mat-raised-button class="basis-1/3" color="primary" (click)="updateAircraft()" [disabled]="formUpdateAircraft.invalid">{{'aircraft.update' | translate}}</button>
                         <button mat-raised-button class="basis-1/3" color="warn" (click)="deleteAircraft()">{{'aircraft.delete' | translate}}</button>
                     </div>
                 </form>
@@ -74,4 +75,61 @@
     </div>
 
 </div>
+@if(!isAddAircraft){
+    <button class="mx-6" mat-flat-button color="primary" (click)="wantAddAircraft()" @fadeIn>{{ 'profile.add-aircraft.button' | translate }}</button>
+}@else{
+    <form [formGroup]="formNewAircraft" class="flex flex-col md:px-12 lg:px-24 p-6" @fadeIn>
+        <p class="text-left text-2xl">{{'aircraft.create-aircraft' | translate}}</p>
+        <div class="flex flex-row gap-4">
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.registration' | translate}}</mat-label>
+                <input matInput formControlName="registration" required placeholder="{{'aircraft.registration-placeholder' | translate}}">
+            </mat-form-field>
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.model' | translate}}</mat-label>
+                <input matInput formControlName="model" required placeholder="{{'aircraft.model-placeholder' | translate}}">
+            </mat-form-field>
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.true-air-speed' | translate}}</mat-label>
+                <input matInput type="number" formControlName="trueAirSpeed" required placeholder="{{'aircraft.true-air-speed-placeholder' | translate}}">
+            </mat-form-field>
+        </div>
+        <div class="flex flex-row gap-4">
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.fuel-type' | translate}}</mat-label>
+                <mat-select formControlName="fuelType">
+                    @for (fuelType of enumKeysFuelType(FuelType); track fuelType) {
+                        <mat-option [value]="fuelType">{{fuelType}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.tank-capacity' | translate}}</mat-label>
+                <input matInput type="number" formControlName="tankCapacity" required placeholder="{{'aircraft.tank-capacity-placeholder' | translate}}">
+            </mat-form-field>
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.consumption' | translate}}</mat-label>
+                <input matInput type="number" formControlName="consumption" required placeholder="{{'aircraft.consumption-placeholder' | translate}}">
+            </mat-form-field>
+        </div>
+        <div class="flex flex-row gap-4">
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.non-pumpable-fuel' | translate}}</mat-label>
+                <input matInput type="number" formControlName="nonPumpableFuel" required placeholder="{{'aircraft.non-pumpable-fuel-placeholder' | translate}}">
+            </mat-form-field>
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.maximum-weight' | translate}}</mat-label>
+                <input matInput type="number" formControlName="maximumWeight" required placeholder="{{'aircraft.maximum-weight-placeholder' | translate}}">
+            </mat-form-field>
+            <mat-form-field class="pb-3 basis-1/3">
+                <mat-label>{{'aircraft.unloaded-weight' | translate}}</mat-label>
+                <input matInput type="number" formControlName="unloadedWeight" required placeholder="{{'aircraft.unloaded-weight-placeholder' | translate}}">
+            </mat-form-field>
+        </div>
+        <div class="flex flex-row justify-center gap-2">
+            <button mat-raised-button class="basis-1/3" color="primary" (click)="createAircraft()" [disabled]="formNewAircraft.invalid">{{'aircraft.create' | translate}}</button>
+            <button mat-raised-button class="basis-1/3" color="warn" (click)="wantAddAircraft()">{{'general.cancel' | translate}}</button>
+        </div>
+    </form>
 
+}

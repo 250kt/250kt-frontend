@@ -9,7 +9,7 @@ import {RegexService} from "../../service/regex.service";
 import {AirfieldService} from "../../service/airfield.service";
 import {map, Observable, startWith} from "rxjs";
 import {Airfield} from "../../shared/model/airfield";
-import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
+import {AirfieldUtils} from "../../shared/utils/airfield.utils";
 
 @Component({
   selector: 'app-application-auth-register',
@@ -23,7 +23,8 @@ export class ApplicationAuthRegisterComponent implements OnInit {
        private routerService: RouterService,
        private translate: TranslateService,
        private regexService: RegexService,
-       private airfieldService: AirfieldService
+       private airfieldService: AirfieldService,
+       protected readonly airfieldUtils: AirfieldUtils
     ) {}
 
     form: FormGroup = new FormGroup({
@@ -56,7 +57,7 @@ export class ApplicationAuthRegisterComponent implements OnInit {
                         startWith(''),
                         map(value => {
                             const name = typeof value === 'string' ? value : value?.name;
-                            return name ? this._filter(name as string) : this.airfields.slice();
+                            return name ? this.airfieldUtils.filter(this.airfields, name as string) : this.airfields.slice();
                         }),
                     );
                 }
@@ -135,16 +136,4 @@ export class ApplicationAuthRegisterComponent implements OnInit {
         return '';
     }
 
-    displayFn(airfield: Airfield): string {
-        return airfield ? airfield.territory.identificationCode + '' + airfield.code + ' - ' + airfield.fullName : '';
-    }
-
-    private _filter(value: string): Airfield[] {
-        const filterValue = value.toLowerCase();
-
-        return this.airfields.filter(airfield =>
-            airfield.territory.identificationCode.concat(airfield.code).toLowerCase().includes(filterValue) ||
-            airfield.fullName.toLowerCase().includes(filterValue)
-        );
-    }
 }

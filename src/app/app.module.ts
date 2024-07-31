@@ -19,14 +19,13 @@ import {MatIconModule} from "@angular/material/icon";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ApplicationHomeComponent} from "./application-home/application-home.component";
-import { ApplicationProfileComponent } from './application-profile/application-profile.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ApplicationAdminComponent } from './application-admin/application-admin.component';
 import { ApplicationAuthRegisterComponent } from './application-auth/application-auth-register/application-auth-register.component';
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { ApplicationAuthComponent } from './application-auth/application-auth.component';
 import {MatTabsModule} from "@angular/material/tabs";
-import {CreateAircraftComponent} from "./aircraft/create-aircraft/create-aircraft.component";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {
@@ -35,6 +34,13 @@ import {
 import {MatActionList, MatList, MatListItem} from "@angular/material/list";
 import {MatLine} from "@angular/material/core";
 import {TokenInterceptorService} from "./service/token-interceptor.service";
+import {NgOptimizedImage} from "@angular/common";
+import {MatBadge} from "@angular/material/badge";
+import {ConfirmEmailComponent} from "./confirm-email/confirm-email.component";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatTooltip} from "@angular/material/tooltip";
+import {MatDivider} from "@angular/material/divider";
+import {MatPaginator} from "@angular/material/paginator";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -46,12 +52,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppComponent,
         ApplicationAuthLoginComponent,
         ApplicationHomeComponent,
-        ApplicationProfileComponent,
+        UserProfileComponent,
         ApplicationAdminComponent,
         ApplicationAuthRegisterComponent,
         ApplicationAuthComponent,
-        CreateAircraftComponent,
-        UserAircraftsComponent
+        UserAircraftsComponent,
+        ConfirmEmailComponent,
     ],
     imports: [
         BrowserModule,
@@ -86,7 +92,13 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatList,
         MatLine,
         MatAutocompleteTrigger,
-        MatAutocomplete
+        MatAutocomplete,
+        NgOptimizedImage,
+        MatBadge,
+        MatProgressSpinner,
+        MatTooltip,
+        MatDivider,
+        MatPaginator
     ],
     providers: [
         {

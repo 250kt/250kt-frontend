@@ -23,7 +23,7 @@
                    matInput
                    formControlName="favoriteAirfield"
                    [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete"  [displayWith]="displayFn">
+            <mat-autocomplete #auto="matAutocomplete"  [displayWith]="airfieldUtils.displayFn">
                 @for (airfield of filteredAirfields | async; track airfield) {
                     <mat-option [value]="airfield">{{ airfield.territory.identificationCode }}{{ airfield.code}} - {{ airfield.fullName }}</mat-option>
                 }
