@@ -26,7 +26,6 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { ApplicationAuthComponent } from './application-auth/application-auth.component';
 import {MatTabsModule} from "@angular/material/tabs";
-import {CreateAircraftComponent} from "./aircraft/create-aircraft/create-aircraft.component";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {
@@ -40,6 +39,8 @@ import {MatBadge} from "@angular/material/badge";
 import {ConfirmEmailComponent} from "./confirm-email/confirm-email.component";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatTooltip} from "@angular/material/tooltip";
+import {MatDivider} from "@angular/material/divider";
+import {MatPaginator} from "@angular/material/paginator";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -55,7 +56,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         ApplicationAdminComponent,
         ApplicationAuthRegisterComponent,
         ApplicationAuthComponent,
-        CreateAircraftComponent,
         UserAircraftsComponent,
         ConfirmEmailComponent,
     ],
@@ -96,7 +96,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         NgOptimizedImage,
         MatBadge,
         MatProgressSpinner,
-        MatTooltip
+        MatTooltip,
+        MatDivider,
+        MatPaginator
     ],
     providers: [
         {

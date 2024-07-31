@@ -39,4 +39,8 @@ export class UserService {
     changePassword(password: string) {
         return this.http.put(`${this.url}/change-password`, password);
     }
+
+    deleteAccount() {
+        return this.http.delete(`${this.url}/delete-account`);
+    }
 }

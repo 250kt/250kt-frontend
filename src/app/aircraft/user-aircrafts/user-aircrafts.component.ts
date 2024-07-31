@@ -8,27 +8,38 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {SnackbarService} from "../../service/snackbar.service";
 import {SnackbarTiming} from "../../shared/model/snackbarTiming";
 import {TranslateService} from "@ngx-translate/core";
+import {animate, state, style, transition, trigger} from "@angular/animations";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'user-aircrafts',
   templateUrl: './user-aircrafts.component.html',
+    animations: [
+        trigger('fadeIn', [
+            state('void', style({ opacity: 0 })),
+            transition(':enter', [
+                animate('300ms ease-in', style({ opacity: 1 }))
+            ])
+        ])
+    ]
 })
 export class UserAircraftsComponent implements OnInit{
 
     constructor(
         private readonly aircraftService: AircraftService,
-        private readonly jwtService: JwtService,
         private readonly snackbarService: SnackbarService,
         private readonly translateService: TranslateService
     ) {}
 
-    aircrafts$!: Observable<Aircraft[]>;
+    aircrafts: Aircraft[] = [];
+    aircraftsPage!: Aircraft[];
+    nbAircrafts!: number;
     selectedAircraft!: Aircraft;
 
     protected readonly FuelType = FuelType;
     protected readonly enumKeysFuelType = enumKeysFuelType;
 
-    aircraftForm: FormGroup = new FormGroup({
+    formUpdateAircraft: FormGroup = new FormGroup({
         registration: new FormControl('', Validators.minLength(3)),
         model: new FormControl('', Validators.minLength(2)),
         consumption: new FormControl(''),
@@ -40,25 +51,46 @@ export class UserAircraftsComponent implements OnInit{
         trueAirSpeed: new FormControl(''),
     });
 
+    formNewAircraft: FormGroup = new FormGroup({
+        registration: new FormControl('', Validators.minLength(3)),
+        model: new FormControl('', Validators.minLength(2)),
+        consumption: new FormControl(''),
+        fuelType: new FormControl(FuelType.AVGAS100LL),
+        tankCapacity: new FormControl(''),
+        nonPumpableFuel: new FormControl(''),
+        maximumWeight: new FormControl(''),
+        unloadedWeight: new FormControl(''),
+        trueAirSpeed: new FormControl(''),
+    });
+
+    isAddAircraft: boolean = false;
+
+
     ngOnInit(): void {
-        this.aircrafts$ = this.aircraftService.retrieveUserAircrafts()
-        this.aircrafts$.pipe().subscribe(aircrafts => {
+        this.getUserAircrafts();
+    }
+
+    getUserAircrafts() {
+        this.aircraftService.retrieveUserAircrafts().pipe().subscribe(aircrafts => {
+            this.aircraftsPage = aircrafts.slice(0, 5);
+            this.aircrafts = aircrafts;
+            this.nbAircrafts = aircrafts.length;
             if (aircrafts.length > 0) {
-                this.selectAircraft(aircrafts[0])
+                this.selectAircraft(aircrafts[0]);
             }
         });
     }
 
     selectAircraft(aircraft: Aircraft) {
         this.selectedAircraft = aircraft;
-        this.aircraftForm.patchValue(aircraft);
+        this.formUpdateAircraft.patchValue(aircraft);
     }
 
     updateAircraft() {
-        this.aircraftForm.value.id = this.selectedAircraft.id;
-        this.aircraftService.updateAircraft(this.aircraftForm.value).subscribe({
+        this.formUpdateAircraft.value.id = this.selectedAircraft.id;
+        this.aircraftService.updateAircraft(this.formUpdateAircraft.value).subscribe({
             next: () => {
-                this.aircrafts$ = this.aircraftService.retrieveUserAircrafts();
+                this.getUserAircrafts();
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.update-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
             },
             error: (error) => {
@@ -70,7 +102,7 @@ export class UserAircraftsComponent implements OnInit{
     deleteAircraft(){
         this.aircraftService.deleteAircraft(this.selectedAircraft.id).subscribe({
             next: () => {
-                this.aircrafts$ = this.aircraftService.retrieveUserAircrafts();
+                this.getUserAircrafts();
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.delete-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
             },
             error: (error) => {
@@ -79,6 +111,33 @@ export class UserAircraftsComponent implements OnInit{
         })
     }
 
+    wantAddAircraft() {
+        this.isAddAircraft = !this.isAddAircraft;
+    }
+
+    createAircraft() {
+        this.formNewAircraft.value.registration = this.formNewAircraft.value.registration.toUpperCase();
+        this.aircraftService.createAircraft(this.formNewAircraft.value).subscribe({
+            next: () => {
+                this.snackbarService.openSnackBar(this.translateService.instant('aircraft.creation-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
+                this.formNewAircraft.reset();
+                this.wantAddAircraft();
+                this.getUserAircrafts();
+            },
+            error: () => {
+                this.snackbarService.openSnackBar(this.translateService.instant('aircraft.creation-error'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
+            }
+        });
+    }
+
+    onPageChange(event: PageEvent) {
+        const startIndex = event.pageIndex * event.pageSize;
+        let endIndex = startIndex + event.pageSize;
+        if (endIndex > this.nbAircrafts) {
+            endIndex = this.nbAircrafts;
+        }
+        this.aircraftsPage = this.aircrafts.slice(startIndex, endIndex);
+    }
 }
 
 function enumKeysFuelType<O extends object, K extends keyof O = keyof O>(obj: O): K[] {

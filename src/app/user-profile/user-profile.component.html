@@ -11,14 +11,7 @@
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <div class="flex items-baseline gap-2">
-                <p>{{ 'profile.email-label' | translate }} {{ user?.email }}</p>
-                @if (!user?.isEmailConfirmed){
-                    <button mat-flat-button color="accent" (click)="confirmEmail()">{{ 'profile.confirm-email.button' | translate }}</button>
-                }
-            </div>
-
-            @if (!changeFavoriteAirfield){
+            @if (!isChangeFavoriteAirfield){
                 <div class="flex items-center gap-1" @fadeIn>
                     <span>{{ 'profile.favorite-airfield.label' | translate }} {{ user?.favoriteAirfield?.territory?.identificationCode }}{{ user?.favoriteAirfield?.code }} {{ user?.favoriteAirfield?.fullName }}</span>
                     <button mat-icon-button color="primary" (click)="retrieveAllAirfieldsAcceptVfr()" matTooltip="{{ 'profile.tooltip.update-favorite-airfield' | translate }}"><mat-icon class="text-base">edit</mat-icon></button>
@@ -43,14 +36,21 @@
                 </form>
             }
 
-            @if(!changePassword){
-                <button mat-flat-button color="primary" (click)="wantUpdatePassword()" @fadeIn matTooltip="{{ 'profile.tooltip.change-password' | translate}}">{{ 'profile.new-password.button' | translate }}</button>
+            <div class="flex items-baseline gap-2">
+                <p>{{ 'profile.email-label' | translate }} {{ user?.email }}</p>
+                @if (!user?.isEmailConfirmed){
+                    <button mat-flat-button color="accent" (click)="confirmEmail()">{{ 'profile.confirm-email.button' | translate }}</button>
+                }
+            </div>
+
+            @if(!isChangePassword){
+                <button mat-flat-button color="primary" (click)="wantUpdatePassword()" @fadeIn>{{ 'profile.new-password.button' | translate }}</button>
             } @else {
                 <form [formGroup]="formChangePassword" @fadeIn>
                     <div class="flex items-center gap-2">
                         <span>{{ 'profile.new-password.label' | translate }} </span>
                         <mat-form-field>
-                            <mat-label>{{'profile.new-password-placeholder' | translate}}</mat-label>
+                            <mat-label>{{'profile.new-password.placeholder' | translate}}</mat-label>
                             <input type="text"
                                    placeholder="{{ 'profile.new-password-placeholder' | translate }}"
                                    matInput
@@ -58,7 +58,7 @@
                         </mat-form-field>
 
                         <button mat-icon-button color="primary" (click)="updatePassword()" matTooltip="{{ 'profile.tooltip.update' | translate }}"><mat-icon class="text-base">check</mat-icon></button>
-                        <button mat-icon-button color="warn" (click)="cancelUpdatePassword()" matTooltip="{{ 'profile.tooltip.cancel' | translate }}"><mat-icon class="text-base">close</mat-icon></button>
+                        <button mat-icon-button color="warn" (click)="wantUpdatePassword()" matTooltip="{{ 'profile.tooltip.cancel' | translate }}"><mat-icon class="text-base">close</mat-icon></button>
                     </div>
                     @if (formChangePassword.get('newPassword')?.invalid && formChangePassword.get('newPassword')?.touched){
                         <mat-error>{{getPasswordErrorMessage()}}</mat-error>
@@ -66,7 +66,17 @@
                    </form>
 
             }
-
+            <div class="mt-2">
+                @if(!isDeleteAccount){
+                    <button mat-flat-button color="warn" (click)="wantDeleteAccount()" @fadeIn>{{ 'profile.delete-account.button' | translate }}</button>
+                }@else{
+                    <div class="flex flex-row gap-1">
+                        <button mat-flat-button color="warn" (click)="deleteAccount()" @fadeIn>{{ 'profile.delete-account.confirm' | translate }}</button>
+                        <button mat-flat-button color="primary" (click)="wantDeleteAccount()" @fadeIn>{{ 'profile.delete-account.cancel' | translate }}</button>
+                    </div>
+                }
+            </div>
+            <user-aircrafts></user-aircrafts>
         </mat-card-content>
     </mat-card>
 }

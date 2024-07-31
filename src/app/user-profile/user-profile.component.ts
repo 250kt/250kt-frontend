@@ -11,6 +11,7 @@ import {SnackbarTiming} from "../shared/model/snackbarTiming";
 import {TranslateService} from "@ngx-translate/core";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {RegexService} from "../service/regex.service";
+import {AuthService} from "../service/auth.service";
 
 @Component({
     selector: 'user-profile',
@@ -33,6 +34,7 @@ export class UserProfileComponent implements OnInit{
         private readonly snackbarService: SnackbarService,
         private readonly translateService: TranslateService,
         private readonly regexService: RegexService,
+        private readonly authService: AuthService,
     ) {}
 
     user?: User;
@@ -51,9 +53,10 @@ export class UserProfileComponent implements OnInit{
             ]),
     });
 
-    changeFavoriteAirfield: boolean = false;
-    changePassword: boolean = false;
-
+    isChangeFavoriteAirfield: boolean = false;
+    isChangePassword: boolean = false;
+    isDeleteAccount: boolean = false;
+    isAddAircraft: boolean = false;
 
     ngOnInit() {
         this.getUserProfile();
@@ -80,12 +83,12 @@ export class UserProfileComponent implements OnInit{
 
                     }
                });
-           this.changeFavoriteAirfield = !this.changeFavoriteAirfield;
+           this.isChangeFavoriteAirfield = !this.isChangeFavoriteAirfield;
         }
     }
 
     cancelUpdateFavoriteAirfield() {
-        this.changeFavoriteAirfield = !this.changeFavoriteAirfield;
+        this.isChangeFavoriteAirfield = !this.isChangeFavoriteAirfield;
     }
 
     retrieveAllAirfieldsAcceptVfr() {
@@ -103,7 +106,7 @@ export class UserProfileComponent implements OnInit{
                     );
                 }
             );
-        this.changeFavoriteAirfield = !this.changeFavoriteAirfield;
+        this.isChangeFavoriteAirfield = !this.isChangeFavoriteAirfield;
     }
 
     confirmEmail() {
@@ -119,7 +122,7 @@ export class UserProfileComponent implements OnInit{
     }
 
     wantUpdatePassword() {
-        this.changePassword = !this.changePassword;
+        this.isChangePassword = !this.isChangePassword;
     }
 
     updatePassword() {
@@ -128,17 +131,13 @@ export class UserProfileComponent implements OnInit{
                 {
                     next: () => {
                         this.snackbarService.openSnackBar(this.translateService.instant('profile.new-password.success'), this.translateService.instant('general.close'), SnackbarTiming.SHORT);
-                        this.changePassword = !this.changePassword;
+                        this.isChangePassword = !this.isChangePassword;
                     },
                     error: () => {
                         this.snackbarService.openSnackBar(this.translateService.instant('profile.new-password.error'), this.translateService.instant('general.close'), SnackbarTiming.SHORT);
                     }
                 });
         }
-    }
-
-    cancelUpdatePassword() {
-        this.changePassword = !this.changePassword;
     }
 
     getPasswordErrorMessage(): string {
@@ -153,4 +152,22 @@ export class UserProfileComponent implements OnInit{
         }
         return '';
     }
+
+    wantDeleteAccount() {
+        this.isDeleteAccount = !this.isDeleteAccount;
+    }
+
+    deleteAccount() {
+        this.userService.deleteAccount().subscribe(
+            {
+                next: () => {
+                    this.authService.logout();
+                    this.snackbarService.openSnackBar(this.translateService.instant('profile.delete-account.success'), this.translateService.instant('general.close'), SnackbarTiming.SHORT);
+                },
+                error: () => {
+                    this.snackbarService.openSnackBar(this.translateService.instant('profile.delete-account.error'), this.translateService.instant('general.close'), SnackbarTiming.SHORT);
+                }
+            });
+    }
+
 }
