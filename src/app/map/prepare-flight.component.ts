@@ -1,24 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import {ObstacleService} from '../service/obstacle.service';
 import {getIconObstacle, Obstacle} from "../shared/model/obstacle";
-import {AsyncPipe} from "@angular/common";
 import {UserService} from "../service/user.service";
 import {Airfield, AirfieldShort, getIconAirfield} from '../shared/model/airfield';
 import {AirfieldService} from "../service/airfield.service";
 
 @Component({
-    selector: 'app-application-map',
-    standalone: true,
-    imports: [
-        GoogleMap,
-        MapMarker,
-        AsyncPipe,
-        MapAdvancedMarker
-    ],
-    templateUrl: './application-map.component.html',
+    selector: 'prepare-flight',
+    templateUrl: './prepare-flight.component.html',
 })
-export class ApplicationMapComponent implements OnInit {
+export class PrepareFlightComponent implements OnInit {
     options: google.maps.MapOptions = {
         zoom: 10,
         scrollwheel: true,
@@ -38,6 +29,9 @@ export class ApplicationMapComponent implements OnInit {
     markersObstacles: google.maps.Marker[] = [];
     markersAirfields: google.maps.Marker[] = [];
 
+    isObstacleShown = true;
+    map?: google.maps.Map;
+
     constructor(
         private readonly obstacleService: ObstacleService,
         private readonly userService: UserService,
@@ -47,6 +41,7 @@ export class ApplicationMapComponent implements OnInit {
     ngOnInit() {}
 
     handleMapLoad(map: google.maps.Map) {
+        this.map = map;
         this.userService.retrieveFavoriteAirfield().subscribe((airfield: AirfieldShort) => {
             map.setCenter({lat: airfield.latitude, lng: airfield.longitude});
         });
@@ -113,19 +108,17 @@ export class ApplicationMapComponent implements OnInit {
         const bounds = map.getBounds();
         const zoom = map.getZoom();
 
-        if(zoom && zoom < 10){
-            this.markersObstacles.forEach(marker => {
+        this.markersObstacles.forEach(marker => {
+            if (this.isObstacleShown && zoom && zoom >= 10 && bounds && bounds.contains(marker.getPosition()!)) {
+                marker.setMap(map);
+            } else {
                 marker.setMap(null);
-            });
-        } else if(bounds) {
-            this.markersObstacles.forEach(marker => {
-                if (bounds.contains(marker.getPosition()!)) {
-                    marker.setMap(map);
-                } else {
-                    marker.setMap(null);
-                }
-            });
-        }
+            }
+        });
     }
 
+    toggleObstacleVisibility() {
+        this.isObstacleShown = !this.isObstacleShown;
+        this.updateMarkersObstacles(this.map!);
+    }
 }

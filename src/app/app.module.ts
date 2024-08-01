@@ -41,6 +41,10 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatDivider} from "@angular/material/divider";
 import {MatPaginator} from "@angular/material/paginator";
+import {MapElementSelectionPanelComponent} from "./map/map-element-selection-panel/map-element-selection-panel.component";
+import {GoogleMap} from "@angular/google-maps";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
+import {PrepareFlightComponent} from "./map/prepare-flight.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -58,6 +62,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         ApplicationAuthComponent,
         UserAircraftsComponent,
         ConfirmEmailComponent,
+        MapElementSelectionPanelComponent,
+        PrepareFlightComponent
     ],
     imports: [
         BrowserModule,
@@ -98,7 +104,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatProgressSpinner,
         MatTooltip,
         MatDivider,
-        MatPaginator
+        MatPaginator,
+        GoogleMap,
+        MatSlideToggle
     ],
     providers: [
         {
@@ -106,6 +114,9 @@ export function HttpLoaderFactory(http: HttpClient) {
             useClass: TokenInterceptorService,
             multi: true
         }
+    ],
+    exports: [
+        MapElementSelectionPanelComponent
     ],
     bootstrap: [AppComponent]
 })

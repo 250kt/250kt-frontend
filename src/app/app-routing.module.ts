@@ -7,8 +7,8 @@ import {NotAuthenticatedGuard} from "./guard/not-authenticated.guard";
 import {ApplicationAdminComponent} from "./application-admin/application-admin.component";
 import {AuthenticatedAdminGuard} from "./guard/authenticated-admin.guard";
 import {ApplicationAuthComponent} from "./application-auth/application-auth.component";
-import {ApplicationMapComponent} from "./application-map/application-map.component";
 import {ConfirmEmailComponent} from "./confirm-email/confirm-email.component";
+import {PrepareFlightComponent} from "./map/prepare-flight.component";
 
 const routes: Routes = [
 
@@ -37,8 +37,8 @@ const routes: Routes = [
         canActivate: [AuthenticatedAdminGuard],
     },
     {
-        path: 'map',
-        component: ApplicationMapComponent,
+        path: 'prepare-flight',
+        component: PrepareFlightComponent,
         canActivate: [AuthenticatedGuard],
     },
     {

@@ -1,50 +1,95 @@
-<div class="w-full h-fit">
-    <div class="bg-blue-A700 text-white flex flex-row justify-between py-3 mat-elevation-z10">
-
-        <div>
-            <img ngSrc="assets/img.png" class="block w-12 rounded-full ml-2" height="224" width="228" alt="Logo 250Kt">
-        </div>
-
-        <div class="flex">
-            @if (this.authService.isAuthenticated()){
-                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.map' | translate }}" matTooltipPosition="below" routerLink="/map">
-                    <mat-icon class="text-white">public</mat-icon>
+<nav class="shadow">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 z-30">
+        <div class="relative flex items-center justify-between h-16">
+            <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                <button mat-mini-fab color="primary" (click)="toggleMobileMenu()">
+                    @if(isMobileMenuOpen){
+                        <mat-icon>close</mat-icon>
+                    } @else {
+                        <mat-icon>menu</mat-icon>
+                    }
                 </button>
-            }
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.navlog' | translate }}" matTooltipPosition="below">
-                <mat-icon class="text-white">map</mat-icon>
-            </button>
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.flight' | translate }}" matTooltipPosition="below">
-                <mat-icon class="text-white">flight</mat-icon>
-            </button>
-            <button class="py-2 px-5 block" matTooltip="{{ 'navbar.weather' | translate }}" matTooltipPosition="below">
-                <mat-icon class="text-white">cloud</mat-icon>
-            </button>
-        </div>
+            </div>
+            <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+                <div class="flex-shrink-0 flex items-center">
+                    <img class="block rounded-full ml-2 h-auto w-12" src="assets/img.png" alt="Logo 250Kt">
+                </div>
+                <div class="hidden sm:block sm:ml-6">
+                    <div class="flex space-x-4 h-16">
+                        <a (click)="changePage('home')"
+                           class="px-3 py-2 text-sm font-medium flex items-center border-b-2 transition duration-300 cursor-pointer"
+                           [ngClass]="{'border-blue-A700' : isActive('home'), 'border-transparent hover:border-blue-A700' : !isActive('home')}"
+                        >{{ 'navbar.home' | translate }}</a>
+                        @if (this.authService.isAuthenticated()){
+                            <a (click)="changePage('prepare-flight')"
+                               class="px-3 py-2 text-sm font-medium flex items-center border-b-2 transition duration-300 cursor-pointer"
+                               [ngClass]="{'border-blue-A700' : isActive('prepare-flight'), 'border-transparent hover:border-blue-A700' : !isActive('prepare-flight')}"
+                            >{{ 'navbar.prepare-flight' | translate }}</a>
+                            <a (click)="changePage('logbook')"
+                               class="px-3 py-2 text-sm font-medium flex items-center border-b-2 transition duration-300 cursor-pointer"
+                               [ngClass]="{'border-blue-A700' : isActive('logbook'), 'border-transparent hover:border-blue-A700' : !isActive('logbook')}"
+                            >{{ 'navbar.logbook' | translate }}</a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 gap-1">
+                @if (this.authService.isAuthenticated()){
 
-        <div class="flex">
-            @if (this.authService.isAuthenticated()){
-                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.settings' | translate }}" matTooltipPosition="below">
-                    <mat-icon class="text-white">settings</mat-icon>
-                </button>
-                @if (this.authService.isAdmin()){
-                    <button class="py-2 px-5 block" matTooltip="{{ 'navbar.adminPanel' | translate }}" matTooltipPosition="below" routerLink="/admin">
-                        <mat-icon class="text-white">shield</mat-icon>
+                    <button mat-mini-fab color="primary">
+                        <mat-icon matBadge="10" matBadgeColor="accent">notifications</mat-icon>
                     </button>
+
+                    <div class="relative flex items-center z-50">
+                        <button color="primary" mat-mini-fab (click)="toggleProfilDropdown()" class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-A700 focus:ring-white">
+                            <img class="object-cover rounded-full" src="assets/icons/pilots/pilot_man.png" alt="{{ 'profile.alt.avatar' | translate }}">
+                        </button>
+                        @if(isProfilDropdownOpen){
+                            <div class="origin-top-right absolute top-full right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" @fadeInDropdown @fadeOutDropdown>
+                                <a (click)="changePage('profile')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">{{ 'navbar.profile' | translate }}</a>
+                                <a (click)="changePage('settings')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">{{ 'navbar.settings' | translate }}</a>
+                                @if (this.authService.isAdmin()){
+                                    <a (click)="changePage('admin')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">{{ 'navbar.panel-admin' | translate }}</a>
+                                }
+                                <a (click)="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">{{ 'navbar.logout' | translate }}</a>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <div class="hidden sm:block">
+                        <button mat-flat-button color="primary" routerLink="/signin" class="p-1 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                            {{ 'navbar.signin' | translate }}
+                            <mat-icon>login</mat-icon>
+                        </button>
+                    </div>
+                    <div class="block sm:hidden">
+                        <button mat-mini-fab color="primary" routerLink="/signin">
+                            <mat-icon>login</mat-icon>
+                        </button>
+                    </div>
                 }
-                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.profile' | translate }}" matTooltipPosition="below" routerLink="/profile">
-                    <mat-icon class="text-white">account_circle</mat-icon>
-                </button>
-                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.logout' | translate }}" matTooltipPosition="below" (click)="logout()">
-                    <mat-icon class="text-white">logout</mat-icon>
-                </button>
-            } @else {
-                <button class="py-2 px-5 block" matTooltip="{{ 'navbar.signin' | translate }}" matTooltipPosition="below" routerLink="/signin">
-                    <mat-icon class="text-white">login</mat-icon>
-                </button>
-            }
+            </div>
         </div>
-
     </div>
-</div>
 
+    @if (isMobileMenuOpen){
+        <div class="block sm:hidden absolute w-full bg-white z-40" @fadeInDropdown @fadeOutDropdown>
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a (click)="changePage('home')"
+                   class="block px-3 py-2 rounded-md text-base font-medium cursor-pointer"
+                   [ngClass]="{'bg-blue-A700 text-white' : isActive('home'), 'hover:bg-blue-A700 hover:text-white' : !isActive('home')}"
+                >{{ 'navbar.home' | translate }}</a>
+                @if (this.authService.isAuthenticated()){
+                    <a (click)="changePage('prepare-flight')"
+                       class="block px-3 py-2 rounded-md text-base font-medium cursor-pointer"
+                       [ngClass]="{'bg-blue-A700 text-white' : isActive('prepare-flight'), 'hover:bg-blue-A700 hover:text-white' : !isActive('prepare-flight')}"
+                    >{{ 'navbar.prepare-flight' | translate }}</a>
+                    <a (click)="changePage('logbook')"
+                        class="block px-3 py-2 rounded-md text-base font-medium cursor-pointer"
+                       [ngClass]="{'bg-blue-A700 text-white' : isActive('logbook'), 'hover:bg-blue-A700 hover:text-white' : !isActive('logbook')}"
+                    >{{ 'navbar.logbook' | translate }}</a>
+                }
+            </div>
+        </div>
+    }
+</nav>
