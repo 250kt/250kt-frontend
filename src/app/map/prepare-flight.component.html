@@ -1,0 +1,8 @@
+<div class="h-full w-full">
+    <google-map height="100%" width="100%" class="border-none overflow-hidden" mapId="mapId" [options]="options" (mapInitialized)="handleMapLoad($event)">
+    </google-map>
+    <map-element-selection-panel
+        [isObstacleShown]="isObstacleShown"
+        (changeObstacleVisibilityEvent)="toggleObstacleVisibility()">
+    </map-element-selection-panel>
+</div>

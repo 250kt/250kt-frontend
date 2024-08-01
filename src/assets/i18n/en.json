@@ -8,12 +8,11 @@
         "cancel": "Cancel"
     },
     "navbar": {
-        "map": "Map",
-        "navlog": "Navlog",
-        "flight": "Flight",
-        "weather": "Weather",
+        "home": "Home",
+        "prepare-flight": "Prepare Flight",
+        "logbook": "Logbook",
         "settings": "Settings",
-        "adminPanel": "Admin Panel",
+        "panel-admin": "Administrator Panel",
         "profile": "Profile",
         "logout": "Logout",
         "signin": "Sign in"

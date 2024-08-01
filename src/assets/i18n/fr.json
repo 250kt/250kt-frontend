@@ -8,13 +8,12 @@
         "cancel": "Annuler"
     },
     "navbar": {
-        "map": "Carte",
-        "navlog": "Journal de bord",
-        "flight": "Vol",
-        "weather": "Météo",
+        "home": "Accueil",
+        "prepare-flight": "Préparer un vol",
+        "logbook": "Journal de bord",
         "settings": "Paramètres",
-        "adminPanel": "Panneau d'administration",
-        "profile": "Profil",
+        "panel-admin": "Panel administrateur",
+        "profile": "Mon profil",
         "logout": "Déconnexion",
         "signin": "Connexion"
     },
