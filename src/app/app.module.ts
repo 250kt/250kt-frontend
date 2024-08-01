@@ -31,7 +31,7 @@ import {MatSelect} from "@angular/material/select";
 import {
     UserAircraftsComponent
 } from "./aircraft/user-aircrafts/user-aircrafts.component";
-import {MatActionList, MatList, MatListItem} from "@angular/material/list";
+import {MatActionList, MatList, MatListItem, MatNavList} from "@angular/material/list";
 import {MatLine} from "@angular/material/core";
 import {TokenInterceptorService} from "./service/token-interceptor.service";
 import {NgOptimizedImage} from "@angular/common";
@@ -45,6 +45,7 @@ import {MapElementSelectionPanelComponent} from "./map/map-element-selection-pan
 import {GoogleMap} from "@angular/google-maps";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
 import {PrepareFlightComponent} from "./map/prepare-flight.component";
+import {MapAirfieldInfoComponent} from "./map/map-airfield-info-component/map-airfield-info.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -63,7 +64,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         UserAircraftsComponent,
         ConfirmEmailComponent,
         MapElementSelectionPanelComponent,
-        PrepareFlightComponent
+        PrepareFlightComponent,
+        MapAirfieldInfoComponent
     ],
     imports: [
         BrowserModule,
@@ -106,7 +108,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatDivider,
         MatPaginator,
         GoogleMap,
-        MatSlideToggle
+        MatSlideToggle,
+        MatNavList
     ],
     providers: [
         {

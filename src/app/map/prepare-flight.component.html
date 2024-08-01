@@ -5,4 +5,8 @@
         [isObstacleShown]="isObstacleShown"
         (changeObstacleVisibilityEvent)="toggleObstacleVisibility()">
     </map-element-selection-panel>
+    <map-airfield-info-component
+        [airfield]="selectedAirfield"
+        (closeEvent)="closeAirfieldInfo()">
+    </map-airfield-info-component>
 </div>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ObstacleService} from '../service/obstacle.service';
 import {getIconObstacle, Obstacle} from "../shared/model/obstacle";
 import {UserService} from "../service/user.service";
@@ -32,10 +32,13 @@ export class PrepareFlightComponent implements OnInit {
     isObstacleShown = true;
     map?: google.maps.Map;
 
+    selectedAirfield?: Airfield;
+
     constructor(
         private readonly obstacleService: ObstacleService,
         private readonly userService: UserService,
-        private readonly airfieldService: AirfieldService
+        private readonly airfieldService: AirfieldService,
+        private cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit() {}
@@ -48,7 +51,7 @@ export class PrepareFlightComponent implements OnInit {
 
         this.airfieldService.retrieveAllAirfields().subscribe((airfields: Airfield[]) => {
             this.markersAirfields = airfields.map((airfield: Airfield) => {
-                return new google.maps.Marker({
+                const marker = new google.maps.Marker({
                     position: {lat: airfield.latitude, lng: airfield.longitude},
                     title: airfield.fullName,
                     icon: {
@@ -56,8 +59,10 @@ export class PrepareFlightComponent implements OnInit {
                         scaledSize: new google.maps.Size(35, 35),
                         anchor: new google.maps.Point(17.5, 17.5),
                     },
-
                 });
+                marker.addListener('click', () => this.handleAirfieldClick(airfield));
+                return marker;
+
             });
             this.updateMarkersAirfields(map);
         });
@@ -120,5 +125,19 @@ export class PrepareFlightComponent implements OnInit {
     toggleObstacleVisibility() {
         this.isObstacleShown = !this.isObstacleShown;
         this.updateMarkersObstacles(this.map!);
+    }
+
+    handleAirfieldClick(airfield: Airfield) {
+        if (this.selectedAirfield === airfield) {
+            this.selectedAirfield = undefined;
+        } else {
+            this.selectedAirfield = airfield;
+        }
+        this.cdr.detectChanges();
+    }
+
+    closeAirfieldInfo() {
+        this.selectedAirfield = undefined;
+        this.cdr.detectChanges();
     }
 }
