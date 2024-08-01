@@ -9,10 +9,10 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
             state('void', style({ transform: 'translateX(-100%)' })),
             state('*', style({ transform: 'translateX(0)' })),
             transition(':enter', [
-                animate('300ms ease-in')
+                animate('200ms ease-in')
             ]),
             transition(':leave', [
-                animate('300ms ease-out')
+                animate('200ms ease-out')
             ])
         ])
     ]
@@ -20,7 +20,6 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 export class MapElementSelectionPanelComponent {
 
     @Input() isObstacleShown?: boolean;
-
     @Output() changeObstacleVisibilityEvent = new EventEmitter<boolean>();
 
     isFilterShown = false;

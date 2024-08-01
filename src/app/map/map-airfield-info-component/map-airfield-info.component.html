@@ -1,0 +1,14 @@
+@if(airfield){
+    <div class="fixed bottom-0 shadow-xl w-full"  @slideInFromBottom @slideOutToBottom>
+        <div class="relative w-full flex flex-row justify-center ">
+            <div class="relative flex justify-center p-4 w-full sm:w-fit bg-white sm:rounded-t-xl">
+                <div class="absolute w-full -mx-4 -top-7 sm:-top-6 sm:w-fit flex justify-center sm:-right-1">
+                    <button mat-mini-fab color="warn" (click)="close()"><mat-icon class="text-base">close</mat-icon></button>
+                </div>
+                <div class="w-full h-fit text-center">
+                    <span>{{ airfield?.fullName }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+}

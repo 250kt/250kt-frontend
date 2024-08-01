@@ -69,7 +69,7 @@
         "list-title": "Aircrafts",
         "selected-title": "Selected Aircraft",
         "delete-success": "Aircraft deleted successfully",
-        "delete-error": "An error occurred while deleting the aircraft",
+        "delete-error": "An error occurred while deleting the aircraft"
     },
     "profile": {
         "of-user": "Profile of ",
