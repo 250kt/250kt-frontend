@@ -13,11 +13,14 @@
         <mat-card-content>
             @if (!isChangeFavoriteAirfield){
                 <div class="flex items-center gap-1" @fadeIn>
-                    <span>{{ 'profile.favorite-airfield.label' | translate }} {{ user?.favoriteAirfield?.territory?.identificationCode }}{{ user?.favoriteAirfield?.code }} {{ user?.favoriteAirfield?.fullName }}</span>
+                    <div class="flex flex-col sm:flex-row">
+                        <span>{{ 'profile.favorite-airfield.label' | translate }}</span>
+                        <span>{{ user?.favoriteAirfield?.territory?.identificationCode }}{{ user?.favoriteAirfield?.code }} - {{ user?.favoriteAirfield?.fullName }}</span>
+                    </div>
                     <button mat-icon-button color="primary" (click)="retrieveAllAirfieldsAcceptVfr()" matTooltip="{{ 'profile.tooltip.update-favorite-airfield' | translate }}"><mat-icon class="text-base">edit</mat-icon></button>
                 </div>
             } @else {
-                <form [formGroup]="formChangeFavoriteAirfield" class="flex items-center gap-2" @fadeIn>
+                <form [formGroup]="formChangeFavoriteAirfield" class="flex flex-col items-center gap-2 sm:flex-row" @fadeIn>
                     <span>{{ 'profile.favorite-airfield.label' | translate }} </span>
                     <mat-form-field>
                         <input type="text"
@@ -31,8 +34,10 @@
                             }
                         </mat-autocomplete>
                     </mat-form-field>
-                    <button mat-icon-button color="primary" (click)="updateFavoriteAirfield()" matTooltip="{{ 'profile.tooltip.update' | translate }}"><mat-icon class="text-base">check</mat-icon></button>
-                    <button mat-icon-button color="warn" (click)="cancelUpdateFavoriteAirfield()" matTooltip="{{ 'profile.tooltip.cancel' | translate }}"><mat-icon class="text-base">close</mat-icon></button>
+                    <div class="flex flex-row gap-1">
+                        <button mat-icon-button color="primary" (click)="updateFavoriteAirfield()" matTooltip="{{ 'profile.tooltip.update' | translate }}"><mat-icon class="text-base">check</mat-icon></button>
+                        <button mat-icon-button color="warn" (click)="cancelUpdateFavoriteAirfield()" matTooltip="{{ 'profile.tooltip.cancel' | translate }}"><mat-icon class="text-base">close</mat-icon></button>
+                    </div>
                 </form>
             }
 
@@ -44,10 +49,10 @@
             </div>
 
             @if(!isChangePassword){
-                <button mat-flat-button color="primary" (click)="wantUpdatePassword()" @fadeIn>{{ 'profile.new-password.button' | translate }}</button>
+                <button mat-flat-button color="primary" class="w-full sm:w-fit" (click)="wantUpdatePassword()" @fadeIn>{{ 'profile.new-password.button' | translate }}</button>
             } @else {
                 <form [formGroup]="formChangePassword" @fadeIn>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-col items-center gap-2 sm:flex-row">
                         <span>{{ 'profile.new-password.label' | translate }} </span>
                         <mat-form-field>
                             <mat-label>{{'profile.new-password.placeholder' | translate}}</mat-label>
@@ -56,27 +61,27 @@
                                    matInput
                                    formControlName="newPassword">
                         </mat-form-field>
-
-                        <button mat-icon-button color="primary" (click)="updatePassword()" matTooltip="{{ 'profile.tooltip.update' | translate }}"><mat-icon class="text-base">check</mat-icon></button>
-                        <button mat-icon-button color="warn" (click)="wantUpdatePassword()" matTooltip="{{ 'profile.tooltip.cancel' | translate }}"><mat-icon class="text-base">close</mat-icon></button>
+                        <div class="flex flex-row gap-1">
+                            <button mat-icon-button color="primary" (click)="updatePassword()" matTooltip="{{ 'profile.tooltip.update' | translate }}"><mat-icon class="text-base">check</mat-icon></button>
+                            <button mat-icon-button color="warn" (click)="wantUpdatePassword()" matTooltip="{{ 'profile.tooltip.cancel' | translate }}"><mat-icon class="text-base">close</mat-icon></button>
+                        </div>
                     </div>
                     @if (formChangePassword.get('newPassword')?.invalid && formChangePassword.get('newPassword')?.touched){
                         <mat-error>{{getPasswordErrorMessage()}}</mat-error>
                     }
-                   </form>
-
+                </form>
             }
             <div class="mt-2">
                 @if(!isDeleteAccount){
-                    <button mat-flat-button color="warn" (click)="wantDeleteAccount()" @fadeIn>{{ 'profile.delete-account.button' | translate }}</button>
+                    <button mat-flat-button color="warn" class="w-full sm:w-fit" (click)="wantDeleteAccount()" @fadeIn>{{ 'profile.delete-account.button' | translate }}</button>
                 }@else{
-                    <div class="flex flex-row gap-1">
+                    <div class="flex flex-col gap-1 sm:flex-row">
                         <button mat-flat-button color="warn" (click)="deleteAccount()" @fadeIn>{{ 'profile.delete-account.confirm' | translate }}</button>
                         <button mat-flat-button color="primary" (click)="wantDeleteAccount()" @fadeIn>{{ 'profile.delete-account.cancel' | translate }}</button>
                     </div>
                 }
             </div>
-            <user-aircrafts></user-aircrafts>
+           <!-- <user-aircrafts></user-aircrafts>-->
         </mat-card-content>
     </mat-card>
 }
