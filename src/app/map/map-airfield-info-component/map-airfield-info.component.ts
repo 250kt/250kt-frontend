@@ -1,6 +1,7 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {Airfield} from "../../shared/model/airfield";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'map-airfield-info-component',
@@ -25,7 +26,7 @@ import {Airfield} from "../../shared/model/airfield";
 export class MapAirfieldInfoComponent {
 
     constructor(
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
     ) {}
 
     @Input() airfield?: Airfield;
@@ -35,5 +36,10 @@ export class MapAirfieldInfoComponent {
         this.airfield = undefined;
         this.cdr.detectChanges();
         this.closeEvent.emit();
+    }
+
+    openPdf(code: string) {
+        const pdfUrl = 'https://storage.cloud.google.com/avian-foundry-384513.appspot.com/AD/AD-2.LF' + code + '.pdf';
+        window.open(pdfUrl, '_blank');
     }
 }

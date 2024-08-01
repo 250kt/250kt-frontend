@@ -6,7 +6,12 @@
                     <button mat-mini-fab color="warn" (click)="close()"><mat-icon class="text-base">close</mat-icon></button>
                 </div>
                 <div class="w-full h-fit text-center">
-                    <span>{{ airfield?.fullName }}</span>
+                    <p>{{ airfield?.fullName }}</p>
+                    <div class="flex flex-row gap-2 justify-center">
+                        <button mat-flat-button color="primary" (click)="openPdf(airfield.code)">VAC</button>
+                        <button mat-flat-button color="primary">NOTAM</button>
+                        <button mat-flat-button color="primary">METEO</button>
+                    </div>
                 </div>
             </div>
         </div>
