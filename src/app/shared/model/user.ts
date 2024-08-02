@@ -1,5 +1,7 @@
 import {Airfield} from "./airfield";
 import {PilotAvatar} from "./pilotAvatar";
+import {Flight} from "./flight";
+import {Aircraft} from "./aircraft";
 
 export interface User {
     id?: number;
@@ -11,4 +13,5 @@ export interface User {
     isEmailConfirmed?: boolean;
     favoriteAirfield?: Airfield;
     avatar?: PilotAvatar;
+    flights?: Flight[];
 }

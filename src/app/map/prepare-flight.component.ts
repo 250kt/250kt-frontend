@@ -4,12 +4,16 @@ import {getIconObstacle, Obstacle} from "../shared/model/obstacle";
 import {UserService} from "../service/user.service";
 import {Airfield, AirfieldShort, getIconAirfield} from '../shared/model/airfield';
 import {AirfieldService} from "../service/airfield.service";
+import {FlightService} from "../service/flight.service";
+import {Flight} from "../shared/model/flight";
+import {delay} from "rxjs";
 
 @Component({
     selector: 'prepare-flight',
     templateUrl: './prepare-flight.component.html',
 })
 export class PrepareFlightComponent implements OnInit {
+
     options: google.maps.MapOptions = {
         zoom: 10,
         scrollwheel: true,
@@ -29,22 +33,38 @@ export class PrepareFlightComponent implements OnInit {
     markersObstacles: google.maps.Marker[] = [];
     markersAirfields: google.maps.Marker[] = [];
 
-    isObstacleShown = true;
+    flightPath?: google.maps.Polyline;
     map?: google.maps.Map;
 
     selectedAirfield?: Airfield;
+    currentFlight?: Flight;
+
+    isLoading: boolean = true;
+    isObstacleShown = true;
+
+    isMapLoaded = false;
 
     constructor(
         private readonly obstacleService: ObstacleService,
         private readonly userService: UserService,
         private readonly airfieldService: AirfieldService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private readonly flightService: FlightService,
     ) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.flightService.getCurrentUserFlight()
+            .pipe(delay(1000))
+            .subscribe((flight: Flight) => {
+            this.currentFlight = flight;
+            this.isLoading = false;
+            this.cdr.detectChanges();
+        });
+    }
 
     handleMapLoad(map: google.maps.Map) {
         this.map = map;
+        this.isMapLoaded = true;
         this.userService.retrieveFavoriteAirfield().subscribe((airfield: AirfieldShort) => {
             map.setCenter({lat: airfield.latitude, lng: airfield.longitude});
         });
@@ -75,7 +95,7 @@ export class PrepareFlightComponent implements OnInit {
                     icon: {
                         url: getIconObstacle(obstacle.type),
                         scaledSize: new google.maps.Size(25, 35),
-                    }
+                    },
                 });
             });
 
@@ -86,6 +106,7 @@ export class PrepareFlightComponent implements OnInit {
             this.updateMarkersObstacles(map);
             this.updateMarkersAirfields(map);
         });
+
     }
 
     updateMarkersAirfields(map: google.maps.Map) {
@@ -139,5 +160,54 @@ export class PrepareFlightComponent implements OnInit {
     closeAirfieldInfo() {
         this.selectedAirfield = undefined;
         this.cdr.detectChanges();
+    }
+
+    loadCurrentFlight(flight: Flight) {
+        this.currentFlight = flight;
+        this.drawLineBetweenAirfields();
+        this.cdr.detectChanges();
+    }
+
+    drawLineBetweenAirfields() {
+        setTimeout(() => {
+            this.flightPath?.setMap(null);
+
+            if (this.currentFlight?.airfieldDeparture && this.currentFlight?.airfieldArrival) {
+                this.flightPath = new google.maps.Polyline({
+                    map: this.map,
+                    path: [
+                        {lat: this.currentFlight.airfieldDeparture.latitude, lng: this.currentFlight.airfieldDeparture.longitude},
+                        {lat: this.currentFlight.airfieldArrival.latitude, lng: this.currentFlight.airfieldArrival.longitude},
+                    ],
+                    geodesic: false,
+                    strokeColor: '#2962FF',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 6,
+                });
+                const midpoint = {
+                    lat: (this.currentFlight.airfieldDeparture.latitude + this.currentFlight.airfieldArrival.latitude) / 2,
+                    lng: (this.currentFlight.airfieldDeparture.longitude + this.currentFlight.airfieldArrival.longitude) / 2,
+                };
+
+                this.centerMapOnCurrentFlight(this.currentFlight.airfieldDeparture, this.currentFlight.airfieldArrival, midpoint);
+            }
+        }, 1000)
+    }
+
+    centerMapOnCurrentFlight(airfieldDeparture: Airfield, airfieldArrival: Airfield, midpoint: {lat: number, lng: number}) {
+        if(airfieldDeparture.code === airfieldArrival.code){
+            this.map!.setZoom(10);
+            this.map!.setCenter({lat: airfieldDeparture.latitude, lng: airfieldDeparture.longitude});
+        }else{
+
+
+            this.map!.setCenter(midpoint);
+
+            const bounds = new google.maps.LatLngBounds();
+            bounds.extend({lat: airfieldDeparture.latitude, lng: airfieldDeparture.longitude});
+            bounds.extend({lat: airfieldArrival.latitude, lng: airfieldArrival.longitude});
+
+            this.map!.fitBounds(bounds);
+        }
     }
 }
