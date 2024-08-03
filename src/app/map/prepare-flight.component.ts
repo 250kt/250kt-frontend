@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ObstacleService} from '../service/obstacle.service';
 import {getIconObstacle, Obstacle} from "../shared/model/obstacle";
 import {UserService} from "../service/user.service";
-import {Airfield, AirfieldShort, getIconAirfield} from '../shared/model/airfield';
+import {Airfield, AirfieldShort, AirfieldType, getIconAirfield} from '../shared/model/airfield';
 import {AirfieldService} from "../service/airfield.service";
 import {FlightService} from "../service/flight.service";
 import {Flight} from "../shared/model/flight";
@@ -80,7 +80,9 @@ export class PrepareFlightComponent implements OnInit {
                         anchor: new google.maps.Point(17.5, 17.5),
                     },
                 });
-                marker.addListener('click', () => this.handleAirfieldClick(airfield));
+                if(airfield.type === AirfieldType.CIVIL_PAVED || airfield.type === AirfieldType.CIVIL_UNPAVED){
+                    marker.addListener('click', () => this.handleAirfieldClick(airfield));
+                }
                 return marker;
 
             });
