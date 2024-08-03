@@ -1,8 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Renderer2} from '@angular/core';
 import {AircraftService} from "../../service/aircraft.service";
-import {JwtService} from "../../service/jwt.service";
 import {Aircraft} from "../../shared/model/aircraft";
-import {Observable} from "rxjs";
 import {FuelType} from "../../shared/model/fuelType";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {SnackbarService} from "../../service/snackbar.service";
@@ -28,7 +26,8 @@ export class UserAircraftsComponent implements OnInit{
     constructor(
         private readonly aircraftService: AircraftService,
         private readonly snackbarService: SnackbarService,
-        private readonly translateService: TranslateService
+        private readonly translateService: TranslateService,
+        private readonly renderer: Renderer2,
     ) {}
 
     aircrafts: Aircraft[] = [];
@@ -49,6 +48,7 @@ export class UserAircraftsComponent implements OnInit{
         maximumWeight: new FormControl(''),
         unloadedWeight: new FormControl(''),
         trueAirSpeed: new FormControl(''),
+        favorite: new FormControl(''),
     });
 
     formNewAircraft: FormGroup = new FormGroup({
@@ -61,6 +61,7 @@ export class UserAircraftsComponent implements OnInit{
         maximumWeight: new FormControl(''),
         unloadedWeight: new FormControl(''),
         trueAirSpeed: new FormControl(''),
+        favorite: new FormControl(''),
     });
 
     isAddAircraft: boolean = false;
@@ -76,7 +77,12 @@ export class UserAircraftsComponent implements OnInit{
             this.aircrafts = aircrafts;
             this.nbAircrafts = aircrafts.length;
             if (aircrafts.length > 0) {
-                this.selectAircraft(aircrafts[0]);
+                const favoriteAircraft = aircrafts.find(aircraft => aircraft.favorite);
+                if (favoriteAircraft) {
+                    this.selectAircraft(favoriteAircraft);
+                }else{
+                    this.selectAircraft(aircrafts[0]);
+                }
             }
         });
     }
@@ -137,6 +143,36 @@ export class UserAircraftsComponent implements OnInit{
             endIndex = this.nbAircrafts;
         }
         this.aircraftsPage = this.aircrafts.slice(startIndex, endIndex);
+    }
+
+
+    onMouseEnter(event: Event) {
+        const icon = (event.currentTarget as HTMLElement).querySelector('mat-icon');
+        if (icon && !icon.classList.contains('text-amber-400')) {
+            this.renderer.addClass(icon, 'text-amber-400');
+            this.renderer.addClass(icon, 'opacity-50');
+
+        }
+    }
+
+    onMouseLeave(event: Event) {
+        const icon = (event.currentTarget as HTMLElement).querySelector('mat-icon');
+        if (icon && icon.classList.contains('opacity-50')) {
+            this.renderer.removeClass(icon, 'text-amber-400');
+            this.renderer.removeClass(icon, 'opacity-50');
+        }
+    }
+
+    updateFavoriteAircraft(aircraft: Aircraft) {
+        this.aircraftService.updateFavoriteAircraft(aircraft).subscribe({
+            next: () => {
+                this.getUserAircrafts();
+                this.snackbarService.openSnackBar(this.translateService.instant('aircraft.favorite-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
+            },
+            error: () => {
+                this.snackbarService.openSnackBar(this.translateService.instant('aircraft.favorite-error'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
+            }
+        });
     }
 }
 
