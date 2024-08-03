@@ -6,8 +6,21 @@
         </div>
         <div class="flex min-w-[240px] flex-col gap-1 font-sans text-base font-normal text-blue-gray-700 px-2">
             @for(aircraft of aircraftsPage; track $index){
-                <button  class="flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-gray-100 hover:bg-opacity-80 focus:bg-gray-100" (click)="selectAircraft(aircraft)">
-                    <span class="font-bold">{{ aircraft.registration }}</span>&nbsp;- {{ aircraft.model }}
+                <button
+                    class="relative cursor-pointer flex p-3 w-full transition-all rounded-lg outline-none text-start hover:bg-gray-100 hover:bg-opacity-80"
+                    (click)="selectAircraft(aircraft)"
+                    (mouseenter)="onMouseEnter($event)"
+                    (mouseleave)="onMouseLeave($event)"
+                    [ngClass]="{'bg-gray-200' : selectedAircraft === aircraft}">
+                    <span class="font-bold">{{ aircraft.registration }}</span>&nbsp;
+                    <span> - {{ aircraft.model }}</span>
+                    <span class="absolute inset-y-0 right-0 mr-3 flex items-center pl-2" (click)="updateFavoriteAircraft(aircraft)">
+                        @if(aircraft.favorite){
+                            <mat-icon class="text-amber-400">favorite</mat-icon>
+                        }@else{
+                            <mat-icon class="text-gray-300">favorite</mat-icon>
+                        }
+                    </span>
                 </button>
             }
             <mat-paginator [length]="nbAircrafts" [pageSize]="5" [hidePageSize]="true" (page)="onPageChange($event)"></mat-paginator>

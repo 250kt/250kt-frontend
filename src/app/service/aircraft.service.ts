@@ -32,4 +32,8 @@ export class AircraftService {
     deleteAircraft(id: number) {
         return this.http.delete(`${this.url}/${id}`);
     }
+
+    updateFavoriteAircraft(aircraft: Aircraft) {
+        return this.http.put(`${this.url}/favorite`, aircraft);
+    }
 }
