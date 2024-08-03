@@ -1,12 +1,22 @@
-<div class="h-full w-full">
-    <google-map height="100%" width="100%" class="border-none overflow-hidden" mapId="mapId" [options]="options" (mapInitialized)="handleMapLoad($event)">
-    </google-map>
-    <map-element-selection-panel
-        [isObstacleShown]="isObstacleShown"
-        (changeObstacleVisibilityEvent)="toggleObstacleVisibility()">
-    </map-element-selection-panel>
-    <map-airfield-info-component
-        [airfield]="selectedAirfield"
-        (closeEvent)="closeAirfieldInfo()">
-    </map-airfield-info-component>
-</div>
+@if(isLoading){
+    <div class="flex justify-center items-center h-full">
+        <mat-spinner></mat-spinner>
+    </div>
+} @else {
+    <div class="h-full w-full">
+        <google-map height="100%" width="100%" class="border-none overflow-hidden" mapId="mapId" [options]="options" (mapInitialized)="handleMapLoad($event)">
+        </google-map>
+        <map-create-flight
+        [currentFlight]="currentFlight"
+        (loadCurrentFlightEvent)="loadCurrentFlight($event)"
+        ></map-create-flight>
+        <map-element-selection-panel
+            [isObstacleShown]="isObstacleShown"
+            (changeObstacleVisibilityEvent)="toggleObstacleVisibility()">
+        </map-element-selection-panel>
+        <map-airfield-info-component
+            [airfield]="selectedAirfield"
+            (closeEvent)="closeAirfieldInfo()">
+        </map-airfield-info-component>
+    </div>
+}

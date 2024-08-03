@@ -11,4 +11,5 @@ export interface Aircraft {
     maximumWeight: number;
     unloadedWeight: number;
     trueAirSpeed: number;
+    favorite: boolean;
 }

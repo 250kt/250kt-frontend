@@ -1,0 +1,124 @@
+<div class="flex flex-col fixed top-16 sm:top-20 left-0 gap-2 w-full sm:w-fit p-4 bg-white sm:rounded-r-xl z-40">
+    @if(isAircraftsLoaded){
+        @if(aircrafts.length === 0){
+            <button mat-flat-button color="primary" (click)="redirectProfile()" matTooltip="Vous devez avoir au moins un avion avant de créer un vol">Créer un avion</button>
+        }@else{
+            @if(!currentFlight){
+                <button mat-flat-button color="primary" (click)="initFlight()">Créer un vol</button>
+            } @else {
+                <div class="flex flex-row gap-2 items-baseline">
+                    <div class="relative">
+                        <button type="button" (click)="toggleAircraftChoice()" class="relative w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-A700 sm:text-sm sm:leading-6">
+                            <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
+                                <mat-icon class="text-blue-A700 rotate-45">flight</mat-icon>
+                            </span>
+                            <span class="flex items-center ml-6">
+                                <span class="block">{{ selectedAircraft?.registration }} - {{ selectedAircraft?.model }}</span>
+                            </span>
+                            <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </button>
+                        @if(isAircraftChoiceOpen){
+                            <ul class="absolute z-10 h-60 mt-1 w-full rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto" tabindex="-1" role="listbox" @slideInOut>
+                                <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900">
+                                    <input #aircraftSearchInput type="text" [(ngModel)]="searchTermAircraft" (input)="filterAircrafts()" placeholder="Search..." class="outline-none border-none ring-0 w-full">
+                                </li>
+                                @for(aircraft of filteredAircrafts; track $index){
+                                    <li class="relative cursor-pointer select-none py-2 pl-3 hover:text-white hover:bg-blue-A700"
+                                        (click)="selectAircraft(aircraft)"
+                                        [ngClass]="{'bg-blue-A700 text-white' : selectedAircraft === aircraft}"
+                                        id="{{ aircraft.registration }}" role="option">
+                                        <div class="flex items-center">
+                                            <span class="mx-2 block font-normal"
+                                                  [ngClass]="{'font-semibold' : selectedAircraft === aircraft}"
+                                            >{{ aircraft.registration}} - {{ aircraft.model }}</span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+
+                <div class="flex flex-row gap-2 items-baseline">
+                    <div class="relative">
+                        <button type="button" (click)="toggleDepartureAirfieldChoice()" class="relative w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-A700 sm:text-sm sm:leading-6">
+                            <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
+                                <mat-icon class="text-green-500">flag</mat-icon>
+                            </span>
+                            <span class="flex items-center ml-6">
+                                <span class="block">LF{{ selectedDepartureAirfield?.code }} - {{ selectedDepartureAirfield?.fullName }}</span>
+                            </span>
+                            <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </button>
+                        @if(isDepartureAirfieldChoiceOpen){
+                            <ul class="absolute z-10 h-60 mt-1 w-full rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto" tabindex="-1" role="listbox" @slideInOut>
+                                <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900">
+                                    <input #departureAirfieldSearchInput type="text" [(ngModel)]="searchTermAirfield" (input)="filterAirfields()" placeholder="Search..." class="outline-none border-none ring-0 w-full">
+                                </li>
+                                @for(airfield of filteredAirfields; track $index){
+                                    <li class="relative cursor-pointer select-none py-2 pl-3 hover:text-white hover:bg-blue-A700"
+                                        (click)="selectDepartureAirfield(airfield)"
+                                        [ngClass]="{'bg-blue-A700 text-white' : selectedDepartureAirfield === airfield}"
+                                        id="{{ airfield.code }}" role="option">
+                                        <div class="flex items-center">
+                                            <span class="mx-2 block font-normal"
+                                                [ngClass]="{'font-semibold' : selectedDepartureAirfield === airfield}"
+                                            >LF{{ airfield?.code }} - {{ airfield?.fullName }}</span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+
+                <div class="flex flex-row gap-2 items-baseline">
+                    <div class="relative">
+                        <button type="button" (click)="toggleArrivalAirfieldChoice()" class="relative w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-A700 sm:text-sm sm:leading-6">
+                            <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
+                                <mat-icon class="text-red-500">flag</mat-icon>
+                            </span>
+                            <span class="flex items-center ml-6">
+                                <span class="block">LF{{ selectedArrivalAirfield?.code }} - {{ selectedArrivalAirfield?.fullName }}</span>
+                            </span>
+                            <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </button>
+                        @if(isArrivalAirfieldChoiceOpen){
+                            <ul class="absolute z-10 h-60 mt-1 w-full rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto" tabindex="-1" role="listbox" @slideInOut>
+                                <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900">
+                                    <input #arrivalAirfieldSearchInput type="text" [(ngModel)]="searchTermAirfield" (input)="filterAirfields()" placeholder="Search..." class="outline-none border-none ring-0 w-full">
+                                </li>
+                                @for(airfield of filteredAirfields; track $index){
+                                    <li class="relative cursor-pointer select-none py-2 pl-3 hover:text-white hover:bg-blue-A700"
+                                        (click)="selectArrivalAirfield(airfield)"
+                                        [ngClass]="{'bg-blue-A700 text-white' : selectedArrivalAirfield === airfield}"
+                                        id="{{ airfield.code }}" role="option">
+                                        <div class="flex items-center">
+                                            <span class="mx-2 block font-normal"
+                                                  [ngClass]="{'font-semibold' : selectedArrivalAirfield === airfield}"
+                                            >LF{{ airfield?.code }} - {{ airfield?.fullName }}</span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+
+            }
+        }
+    }
+
+</div>

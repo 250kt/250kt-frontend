@@ -13,7 +13,7 @@ import {ApplicationAuthLoginComponent} from "./application-auth/application-auth
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatCardModule} from "@angular/material/card";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
@@ -46,6 +46,7 @@ import {GoogleMap} from "@angular/google-maps";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
 import {PrepareFlightComponent} from "./map/prepare-flight.component";
 import {MapAirfieldInfoComponent} from "./map/map-airfield-info-component/map-airfield-info.component";
+import {MapCreateFlightComponent} from "./map/map-create-flight/map-create-flight.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -65,52 +66,54 @@ export function HttpLoaderFactory(http: HttpClient) {
         ConfirmEmailComponent,
         MapElementSelectionPanelComponent,
         PrepareFlightComponent,
-        MapAirfieldInfoComponent
+        MapAirfieldInfoComponent,
+        MapCreateFlightComponent
     ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        MaterialModule,
-        CoreModule,
-        provideFirebaseApp(() => initializeApp(environment.firebase)),
-        provideAuth(() => getAuth()),
-        provideFirestore(() => getFirestore()),
-        BrowserAnimationsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatCardModule,
-        ReactiveFormsModule,
-        MatButtonModule,
-        HttpClientModule,
-        MatIconModule,
-        MatSnackBarModule,
-        TranslateModule.forRoot({
-            defaultLanguage: 'en',
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
-        }),
-        MatTabsModule,
-        MatOption,
-        MatSelect,
-        MatActionList,
-        MatListItem,
-        MatList,
-        MatLine,
-        MatAutocompleteTrigger,
-        MatAutocomplete,
-        NgOptimizedImage,
-        MatBadge,
-        MatProgressSpinner,
-        MatTooltip,
-        MatDivider,
-        MatPaginator,
-        GoogleMap,
-        MatSlideToggle,
-        MatNavList
-    ],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		MaterialModule,
+		CoreModule,
+		provideFirebaseApp(() => initializeApp(environment.firebase)),
+		provideAuth(() => getAuth()),
+		provideFirestore(() => getFirestore()),
+		BrowserAnimationsModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatCardModule,
+		ReactiveFormsModule,
+		MatButtonModule,
+		HttpClientModule,
+		MatIconModule,
+		MatSnackBarModule,
+		TranslateModule.forRoot({
+			defaultLanguage: 'en',
+			loader: {
+				provide: TranslateLoader,
+				useFactory: HttpLoaderFactory,
+				deps: [HttpClient]
+			}
+		}),
+		MatTabsModule,
+		MatOption,
+		MatSelect,
+		MatActionList,
+		MatListItem,
+		MatList,
+		MatLine,
+		MatAutocompleteTrigger,
+		MatAutocomplete,
+		NgOptimizedImage,
+		MatBadge,
+		MatProgressSpinner,
+		MatTooltip,
+		MatDivider,
+		MatPaginator,
+		GoogleMap,
+		MatSlideToggle,
+		MatNavList,
+		FormsModule
+	],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
