@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {AuthService} from "../../../service/auth.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {RouterService} from "../../../service/router.service";
@@ -30,7 +30,7 @@ export class NavbarComponent {
 
     isProfilDropdownOpen = false;
     isMobileMenuOpen = false;
-    currentPage = 'home';
+    currentPage?: string;
 
     logout() {
         this.toggleProfilDropdown();
@@ -52,6 +52,7 @@ export class NavbarComponent {
     }
 
     isActive(path: string) {
-        return this.currentPage === path;
+        return this.routerService.getCurrentRoute().includes(path);
     }
+
 }
