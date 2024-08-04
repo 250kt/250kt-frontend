@@ -14,4 +14,7 @@ constructor(
         this.router.navigate([route]);
     }
 
+    getCurrentRoute(): string {
+        return this.router.url;
+    }
 }
