@@ -34,6 +34,8 @@ export class PrepareFlightComponent implements OnInit {
     markersAirfields: google.maps.Marker[] = [];
 
     flightPath?: google.maps.Polyline;
+    markerDepartureAirfield?: google.maps.Marker;
+    markerArrivalAirfield?: google.maps.Marker;
     map?: google.maps.Map;
 
     selectedAirfield?: Airfield;
@@ -191,17 +193,59 @@ export class PrepareFlightComponent implements OnInit {
                     lng: (this.currentFlight.airfieldDeparture.longitude + this.currentFlight.airfieldArrival.longitude) / 2,
                 };
 
+                this.addAirfieldsMarker(this.currentFlight.airfieldDeparture, this.currentFlight.airfieldArrival);
                 this.centerMapOnCurrentFlight(this.currentFlight.airfieldDeparture, this.currentFlight.airfieldArrival, midpoint);
             }
         }, 1000)
     }
+
+    addAirfieldsMarker(airfieldDeparture: Airfield, airfieldArrival: Airfield) {
+        this.markerDepartureAirfield?.setMap(null);
+        this.markerArrivalAirfield?.setMap(null);
+
+        if(airfieldDeparture.code === airfieldArrival.code){
+            return;
+        }
+
+        this.markerDepartureAirfield = new google.maps.Marker({
+            position: {lat: airfieldDeparture.latitude, lng: airfieldDeparture.longitude},
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 10,
+                fillColor: '#22c55e',
+                fillOpacity: 1,
+                strokeColor: '#22c55e',
+                strokeOpacity: 1,
+                strokeWeight: 1,
+            },
+            zIndex: 10,
+            clickable: false,
+        });
+        this.markerDepartureAirfield.setMap(this.map!);
+
+        this.markerArrivalAirfield = new google.maps.Marker({
+            position: {lat: airfieldArrival.latitude, lng: airfieldArrival.longitude},
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 10,
+                fillColor: '#ef4444',
+                fillOpacity: 1,
+                strokeColor: '#ef4444',
+                strokeOpacity: 1,
+                strokeWeight: 1,
+            },
+            zIndex: 10,
+            clickable: false,
+        });
+        this.markerArrivalAirfield.setMap(this.map!);
+    }
+
 
     centerMapOnCurrentFlight(airfieldDeparture: Airfield, airfieldArrival: Airfield, midpoint: {lat: number, lng: number}) {
         if(airfieldDeparture.code === airfieldArrival.code){
             this.map!.setZoom(10);
             this.map!.setCenter({lat: airfieldDeparture.latitude, lng: airfieldDeparture.longitude});
         }else{
-
 
             this.map!.setCenter(midpoint);
 
