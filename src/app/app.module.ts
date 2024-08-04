@@ -16,7 +16,7 @@ import {MatCardModule} from "@angular/material/card";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ApplicationHomeComponent} from "./application-home/application-home.component";
 import { UserProfileComponent } from './user-profile/user-profile.component';
@@ -54,8 +54,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         ApplicationAuthLoginComponent,
         ApplicationHomeComponent,
@@ -70,8 +69,10 @@ export function HttpLoaderFactory(http: HttpClient) {
         MapAirfieldInfoComponent,
         MapCreateFlightComponent
     ],
-    imports: [
-        BrowserModule,
+    exports: [
+        MapElementSelectionPanelComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
         MaterialModule,
         CoreModule,
@@ -84,7 +85,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatCardModule,
         ReactiveFormsModule,
         MatButtonModule,
-        HttpClientModule,
         MatIconModule,
         MatSnackBarModule,
         TranslateModule.forRoot({
@@ -114,20 +114,14 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatSlideToggle,
         MatNavList,
         FormsModule,
-        MatCheckbox
-    ],
-    providers: [
+        MatCheckbox], providers: [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: TokenInterceptorService,
             multi: true
-        }
-    ],
-    exports: [
-        MapElementSelectionPanelComponent
-    ],
-    bootstrap: [AppComponent]
-})
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {}
 
 
