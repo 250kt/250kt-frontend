@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AircraftService} from "../../service/aircraft.service";
 import {Aircraft} from "../../shared/model/aircraft";
 import {FuelType} from "../../shared/model/fuelType";
@@ -27,7 +27,6 @@ export class UserAircraftsComponent implements OnInit{
         private readonly aircraftService: AircraftService,
         private readonly snackbarService: SnackbarService,
         private readonly translateService: TranslateService,
-        private readonly renderer: Renderer2,
     ) {}
 
     aircrafts: Aircraft[] = [];

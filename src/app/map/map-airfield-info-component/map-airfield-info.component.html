@@ -8,9 +8,9 @@
                 <div class="w-full h-fit text-center">
                     <p>{{ airfield?.fullName }}</p>
                     <div class="flex flex-row gap-2 justify-center">
-                        <button mat-flat-button color="primary" (click)="openPdf(airfield.code)">VAC</button>
-                        <button mat-flat-button color="primary">NOTAM</button>
-                        <button mat-flat-button color="primary">METEO</button>
+                        <button mat-flat-button color="primary" (click)="openPdf(airfield.code)">{{ 'map.airfield-info.vac' | translate }}</button>
+                        <button mat-flat-button color="primary">{{ 'map.airfield-info.notam' | translate }}</button>
+                        <button mat-flat-button color="primary">{{ 'map.airfield-info.meteo' | translate }}</button>
                     </div>
                 </div>
             </div>

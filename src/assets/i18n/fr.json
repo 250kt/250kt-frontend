@@ -69,7 +69,9 @@
         "list-title": "Liste des avions",
         "selected-title": "Avion sélectionné",
         "delete-success": "L'avion a été supprimé avec succès",
-        "delete-error": "Une erreur s'est produite lors de la suppression de l'avion"
+        "delete-error": "Une erreur s'est produite lors de la suppression de l'avion",
+        "favorite-success": "L'avion a été mis en favori avec succès",
+        "favorite-error": "Une erreur s'est produite lors de la mise en favori de l'avion"
     },
     "profile": {
         "of-user": "Profil de ",
@@ -117,5 +119,24 @@
         "sorry": "Désolé",
         "congratulations": "Félicitations",
         "back": "Retour à l'application"
+    },
+    "map": {
+        "obstacles": "Obstacles",
+        "airfield-info": {
+            "vac": "VAC",
+            "meteo": "Météo",
+            "notam": "NOTAM"
+        }
+    },
+    "create-flight": {
+        "create-aircraft": "Ajouter un avion",
+        "create": "Créer un vol",
+        "placeholder": {
+            "search-aircraft": "Rechercher un avion",
+            "search-airfield": "Rechercher un aérodrome"
+        },
+        "tooltip": {
+            "create-aircraft": "Vous devez avoir au moins un avion avant de créer un vol"
+        }
     }
 }
