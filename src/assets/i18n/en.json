@@ -69,7 +69,9 @@
         "list-title": "Aircrafts",
         "selected-title": "Selected Aircraft",
         "delete-success": "Aircraft deleted successfully",
-        "delete-error": "An error occurred while deleting the aircraft"
+        "delete-error": "An error occurred while deleting the aircraft",
+        "favorite-success": "Aircraft set as favorite successfully",
+        "favorite-error": "An error occurred while setting the aircraft as favorite"
     },
     "profile": {
         "of-user": "Profile of ",
@@ -100,6 +102,13 @@
         "alt": {
             "avatar": "User avatar"
         },
+        "delete-account": {
+            "button": "Delete Account",
+            "success": "Account deleted successfully",
+            "error": "An error occurred while deleting the account",
+            "confirm": "Are you sure you want to delete your account? This action is irreversible.",
+            "cancel": "I want to keep my account"
+        },
         "add-aircraft": {
             "button": "Add Aircraft"
         }
@@ -110,5 +119,24 @@
         "sorry": "Sorry",
         "congratulations": "Congratulations",
         "back": "Back to the application"
+    },
+    "map": {
+        "obstacles": "Obstacles",
+        "airfield-info": {
+            "vac": "VAC",
+            "meteo": "Meteo",
+            "notam": "NOTAM"
+        }
+    },
+    "create-flight": {
+        "create-aircraft": "Create Aircraft",
+        "create": "Create",
+        "placeholder": {
+            "search-aircraft": "Search aircraft",
+            "search-airfield": "Search airfield"
+        },
+        "tooltip": {
+            "create-aircraft": "You must create an aircraft before creating a flight"
+        }
     }
 }
