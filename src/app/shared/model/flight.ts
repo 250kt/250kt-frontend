@@ -8,4 +8,7 @@ export interface Flight {
     createdAt?: String;
     aircraft?: Aircraft;
     isCurrentEdit?: boolean;
+    distance?: number;
+    duration?: number;
+    direction?: number;
 }
