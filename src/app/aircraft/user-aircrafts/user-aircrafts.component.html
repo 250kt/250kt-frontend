@@ -9,8 +9,6 @@
                 <button
                     class="relative cursor-pointer flex p-3 w-full transition-all rounded-lg outline-none text-start hover:bg-gray-100 hover:bg-opacity-80"
                     (click)="selectAircraft(aircraft)"
-                    (mouseenter)="onMouseEnter($event)"
-                    (mouseleave)="onMouseLeave($event)"
                     [ngClass]="{'bg-gray-200' : selectedAircraft === aircraft}">
                     <span class="font-bold">{{ aircraft.registration }}</span>&nbsp;
                     <span> - {{ aircraft.model }}</span>
@@ -18,7 +16,7 @@
                         @if(aircraft.favorite){
                             <mat-icon class="text-amber-400">favorite</mat-icon>
                         }@else{
-                            <mat-icon class="text-gray-300">favorite</mat-icon>
+                            <mat-icon class="text-gray-300 hover:text-amber-300">favorite</mat-icon>
                         }
                     </span>
                 </button>

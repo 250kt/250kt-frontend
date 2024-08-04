@@ -145,24 +145,6 @@ export class UserAircraftsComponent implements OnInit{
         this.aircraftsPage = this.aircrafts.slice(startIndex, endIndex);
     }
 
-
-    onMouseEnter(event: Event) {
-        const icon = (event.currentTarget as HTMLElement).querySelector('mat-icon');
-        if (icon && !icon.classList.contains('text-amber-400')) {
-            this.renderer.addClass(icon, 'text-amber-400');
-            this.renderer.addClass(icon, 'opacity-50');
-
-        }
-    }
-
-    onMouseLeave(event: Event) {
-        const icon = (event.currentTarget as HTMLElement).querySelector('mat-icon');
-        if (icon && icon.classList.contains('opacity-50')) {
-            this.renderer.removeClass(icon, 'text-amber-400');
-            this.renderer.removeClass(icon, 'opacity-50');
-        }
-    }
-
     updateFavoriteAircraft(aircraft: Aircraft) {
         this.aircraftService.updateFavoriteAircraft(aircraft).subscribe({
             next: () => {
