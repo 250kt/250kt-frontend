@@ -130,7 +130,11 @@
     },
     "create-flight": {
         "create-aircraft": "Create Aircraft",
-        "create": "Create",
+        "create": "New flight",
+        "archive-current-and-create-new": {
+            "success": "Flight archived, a new flight has been created",
+            "error": "An error occurred while creating a new flight"
+        },
         "placeholder": {
             "search-aircraft": "Search aircraft",
             "search-airfield": "Search airfield"

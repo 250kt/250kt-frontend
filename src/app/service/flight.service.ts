@@ -26,4 +26,8 @@ export class FlightService {
         return this.http.put(`${this.url}`, flight);
     }
 
+    archiveFlight(flight: Flight){
+        return this.http.put(`${this.url}/archive`, flight);
+    }
+
 }
