@@ -50,6 +50,7 @@ export class MapCreateFlightComponent implements OnInit{
     filteredAircrafts: Aircraft[] = [];
     airfields: Airfield[] = [];
     filteredAirfields: Airfield[] = [];
+    favoriteAircraft?: Aircraft;
 
     selectedAircraft?: Aircraft;
     selectedDepartureAirfield?: Airfield;
@@ -73,7 +74,12 @@ export class MapCreateFlightComponent implements OnInit{
             })
         ).subscribe(
             favoriteAircraft => {
-                this.selectedAircraft = favoriteAircraft;
+                if(!this.currentFlight){
+                    this.selectedAircraft = favoriteAircraft;
+                }else{
+                    this.selectedAircraft = this.currentFlight.aircraft;
+                    this.favoriteAircraft = favoriteAircraft;
+                }
             }
         );
         this.airfieldService.retrieveAllAirfieldsAcceptVfr().subscribe(
@@ -100,7 +106,7 @@ export class MapCreateFlightComponent implements OnInit{
         }
         let flight: Flight = {
             createdAt: new Date().toISOString(),
-            aircraft: this.selectedAircraft,
+            aircraft: this.favoriteAircraft,
         }
         this.flightService.createFlight(flight).subscribe(
             flight => {
@@ -113,6 +119,7 @@ export class MapCreateFlightComponent implements OnInit{
     loadCurrentFlight(){
         this.selectedDepartureAirfield = this.currentFlight?.airfieldDeparture;
         this.selectedArrivalAirfield = this.currentFlight?.airfieldArrival;
+        this.selectedAircraft = this.currentFlight?.aircraft;
         this.loadCurrentFlightEvent.emit(this.currentFlight);
     }
 
