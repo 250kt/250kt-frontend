@@ -32,7 +32,7 @@ import {
     UserAircraftsComponent
 } from "./aircraft/user-aircrafts/user-aircrafts.component";
 import {MatActionList, MatList, MatListItem, MatNavList} from "@angular/material/list";
-import {MatLine} from "@angular/material/core";
+import {MatLine, MatRipple} from "@angular/material/core";
 import {TokenInterceptorService} from "./service/token-interceptor.service";
 import {NgOptimizedImage} from "@angular/common";
 import {MatBadge} from "@angular/material/badge";
@@ -71,53 +71,54 @@ export function HttpLoaderFactory(http: HttpClient) {
         MapAirfieldInfoComponent,
         MapCreateFlightComponent
     ],
-	imports: [
-		BrowserModule,
-		AppRoutingModule,
-		MaterialModule,
-		CoreModule,
-		provideFirebaseApp(() => initializeApp(environment.firebase)),
-		provideAuth(() => getAuth()),
-		provideFirestore(() => getFirestore()),
-		BrowserAnimationsModule,
-		MatFormFieldModule,
-		MatInputModule,
-		MatCardModule,
-		ReactiveFormsModule,
-		MatButtonModule,
-		HttpClientModule,
-		MatIconModule,
-		MatSnackBarModule,
-		TranslateModule.forRoot({
-			defaultLanguage: 'en',
-			loader: {
-				provide: TranslateLoader,
-				useFactory: HttpLoaderFactory,
-				deps: [HttpClient]
-			}
-		}),
-		MatTabsModule,
-		MatOption,
-		MatSelect,
-		MatActionList,
-		MatListItem,
-		MatList,
-		MatLine,
-		MatAutocompleteTrigger,
-		MatAutocomplete,
-		NgOptimizedImage,
-		MatBadge,
-		MatProgressSpinner,
-		MatTooltip,
-		MatDivider,
-		MatPaginator,
-		GoogleMap,
-		MatSlideToggle,
-		MatNavList,
-		FormsModule,
-		MatCheckbox,
-		DurationToHoursMinutesPipe
-	],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        MaterialModule,
+        CoreModule,
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth()),
+        provideFirestore(() => getFirestore()),
+        BrowserAnimationsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatCardModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        HttpClientModule,
+        MatIconModule,
+        MatSnackBarModule,
+        TranslateModule.forRoot({
+            defaultLanguage: 'en',
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
+        MatTabsModule,
+        MatOption,
+        MatSelect,
+        MatActionList,
+        MatListItem,
+        MatList,
+        MatLine,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        NgOptimizedImage,
+        MatBadge,
+        MatProgressSpinner,
+        MatTooltip,
+        MatDivider,
+        MatPaginator,
+        GoogleMap,
+        MatSlideToggle,
+        MatNavList,
+        FormsModule,
+        MatCheckbox,
+        DurationToHoursMinutesPipe,
+        MatRipple
+    ],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,

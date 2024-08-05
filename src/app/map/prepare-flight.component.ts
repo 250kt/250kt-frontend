@@ -184,7 +184,7 @@ export class PrepareFlightComponent implements OnInit {
                         {lat: this.currentFlight.airfieldArrival.latitude, lng: this.currentFlight.airfieldArrival.longitude},
                     ],
                     geodesic: false,
-                    strokeColor: '#2962FF',
+                    strokeColor: '#eab308',
                     strokeOpacity: 1.0,
                     strokeWeight: 6,
                 });

@@ -130,7 +130,11 @@
     },
     "create-flight": {
         "create-aircraft": "Ajouter un avion",
-        "create": "Créer un vol",
+        "create": "Nouveau vol",
+        "archive-current-and-create-new": {
+            "success": "Vol archivé, un nouveau vol a été créé",
+            "error": "Une erreur s'est produite lors de la création d'un nouveau vol"
+        },
         "placeholder": {
             "search-aircraft": "Rechercher un avion",
             "search-airfield": "Rechercher un aérodrome"

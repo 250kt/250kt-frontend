@@ -8,6 +8,9 @@ import {Flight} from "../../shared/model/flight";
 import {FlightService} from "../../service/flight.service";
 import {AirfieldService} from "../../service/airfield.service";
 import {Airfield} from "../../shared/model/airfield";
+import {SnackbarService} from "../../service/snackbar.service";
+import {SnackbarTiming} from "../../shared/model/snackbarTiming";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
     selector: 'map-create-flight',
@@ -31,6 +34,8 @@ export class MapCreateFlightComponent implements OnInit{
         private readonly routerService: RouterService,
         private readonly flightService: FlightService,
         private readonly airfieldService: AirfieldService,
+        private readonly snackbarService: SnackbarService,
+        private readonly translateService: TranslateService,
     ) {}
 
     @Input() currentFlight?: Flight;
@@ -80,7 +85,19 @@ export class MapCreateFlightComponent implements OnInit{
         this.loadCurrentFlight()
     }
 
-    initFlight() {
+    createNewFlight() {
+        if(this.currentFlight){
+            this.flightService.archiveFlight(this.currentFlight).subscribe(
+                {
+                    next: () => {
+                        this.snackbarService.openSnackBar(this.translateService.instant('create-flight.archive-current-and-create-new.success'), this.translateService.instant('general.close'), SnackbarTiming.SHORT);
+                    },
+                    error: (error) => {
+                        this.snackbarService.openSnackBar(this.translateService.instant('create-flight.archive-current-and-create-new.error'), this.translateService.instant('general.close'), SnackbarTiming.SHORT);
+                    }
+                }
+            );
+        }
         let flight: Flight = {
             createdAt: new Date().toISOString(),
             aircraft: this.selectedAircraft,
@@ -89,7 +106,6 @@ export class MapCreateFlightComponent implements OnInit{
             flight => {
                 this.currentFlight = flight;
                 this.loadCurrentFlight()
-
             }
         );
     }
