@@ -131,6 +131,7 @@
     "create-flight": {
         "create-aircraft": "Ajouter un avion",
         "create": "Nouveau vol",
+        "load": "Charger un vol",
         "archive-current-and-create-new": {
             "success": "Vol archivé, un nouveau vol a été créé",
             "error": "Une erreur s'est produite lors de la création d'un nouveau vol"

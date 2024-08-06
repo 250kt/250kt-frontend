@@ -40,12 +40,12 @@
                         <mat-icon matBadge="10" matBadgeColor="accent">notifications</mat-icon>
                     </button>
 
-                    <div class="relative flex items-center z-50">
+                    <div class="relative flex items-center">
                         <button color="primary" mat-mini-fab (click)="toggleProfilDropdown()" class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-A700 focus:ring-white">
                             <img class="object-cover rounded-full" src="assets/icons/pilots/pilot_man.png" alt="{{ 'profile.alt.avatar' | translate }}">
                         </button>
                         @if(isProfilDropdownOpen){
-                            <div class="origin-top-right absolute top-full right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" @fadeInDropdown @fadeOutDropdown>
+                            <div class="origin-top-right absolute top-full right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-40" @fadeInDropdown @fadeOutDropdown>
                                 <a (click)="changePage('profile')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">{{ 'navbar.profile' | translate }}</a>
                                 <a (click)="changePage('settings')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">{{ 'navbar.settings' | translate }}</a>
                                 @if (this.authService.isAdmin()){

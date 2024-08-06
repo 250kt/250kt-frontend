@@ -131,6 +131,7 @@
     "create-flight": {
         "create-aircraft": "Create Aircraft",
         "create": "New flight",
+        "load": "Load flight",
         "archive-current-and-create-new": {
             "success": "Flight archived, a new flight has been created",
             "error": "An error occurred while creating a new flight"
