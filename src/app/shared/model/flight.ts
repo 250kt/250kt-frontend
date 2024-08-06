@@ -5,9 +5,9 @@ export interface Flight {
     id?: number;
     airfieldDeparture?: Airfield;
     airfieldArrival?: Airfield;
-    createdAt?: String;
+    createdAt?: string;
     aircraft?: Aircraft;
-    isCurrentEdit?: boolean;
+    currentEdit?: boolean;
     distance?: number;
     duration?: number;
     direction?: number;

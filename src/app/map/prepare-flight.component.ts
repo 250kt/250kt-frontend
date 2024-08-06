@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ObstacleService} from '../service/obstacle.service';
 import {getIconObstacle, Obstacle} from "../shared/model/obstacle";
 import {UserService} from "../service/user.service";
@@ -6,13 +6,57 @@ import {Airfield, AirfieldShort, AirfieldType, getIconAirfield} from '../shared/
 import {AirfieldService} from "../service/airfield.service";
 import {FlightService} from "../service/flight.service";
 import {Flight} from "../shared/model/flight";
-import {delay} from "rxjs";
+import {Observable, Subscription} from "rxjs";
+import {Aircraft} from "../shared/model/aircraft";
+import {AircraftService} from "../service/aircraft.service";
+import {RouterService} from "../service/router.service";
+import {animate, state, style, transition, trigger} from "@angular/animations";
+import {take} from "rxjs/operators";
 
 @Component({
     selector: 'prepare-flight',
     templateUrl: './prepare-flight.component.html',
+    animations: [
+        trigger('slideInOut', [
+            state('void', style({ opacity: 0 })),
+            transition(':enter', [
+                animate('200ms ease-in')
+            ]),
+            transition(':leave', [
+                animate('200ms ease-out')
+            ])
+        ]),
+        trigger('slideInFromBottom', [
+            state('void', style({ transform: 'translateY(100%)' })),
+            state('*', style({ transform: 'translateY(0)' })),
+            transition(':enter', [
+                animate('100ms ease-in')
+            ])
+        ]),
+        trigger('slideOutToBottom', [
+            state('*', style({ transform: 'translateY(0)' })),
+            state('void', style({ transform: 'translateY(100%)' })),
+            transition(':leave', [
+                animate('100ms ease-out')
+            ])
+        ])
+    ]
 })
-export class PrepareFlightComponent implements OnInit {
+export class PrepareFlightComponent implements OnInit, OnDestroy{
+
+    constructor(
+        private readonly obstacleService: ObstacleService,
+        private readonly userService: UserService,
+        private readonly airfieldService: AirfieldService,
+        private cdr: ChangeDetectorRef,
+        private readonly flightService: FlightService,
+        private readonly aircraftService: AircraftService,
+        private readonly routerService: RouterService,
+    ) {}
+
+    @ViewChild('departureAirfieldSearchInput') departureAirfieldSearchInput!: ElementRef;
+    @ViewChild('arrivalAirfieldSearchInput') arrivalAirfieldSearchInput!: ElementRef;
+    @ViewChild('aircraftSearchInput') aircraftSearchInput!: ElementRef;
 
     options: google.maps.MapOptions = {
         zoom: 10,
@@ -38,30 +82,75 @@ export class PrepareFlightComponent implements OnInit {
     markerArrivalAirfield?: google.maps.Marker;
     map?: google.maps.Map;
 
-    selectedAirfield?: Airfield;
-    currentFlight?: Flight;
-
     isLoading: boolean = true;
     isObstacleShown = true;
 
     isMapLoaded = false;
 
-    constructor(
-        private readonly obstacleService: ObstacleService,
-        private readonly userService: UserService,
-        private readonly airfieldService: AirfieldService,
-        private cdr: ChangeDetectorRef,
-        private readonly flightService: FlightService,
-    ) {}
+    isAircraftChoiceOpen: boolean = false;
+    isDepartureAirfieldChoiceOpen: boolean = false;
+    isArrivalAirfieldChoiceOpen: boolean = false;
+    isShowFlightList: boolean = false;
+
+    searchTermAircraft: string = '';
+    searchTermAirfield: string = '';
+
+    aircrafts: Observable<Aircraft[]> = new Observable<Aircraft[]>();
+    filteredAircrafts: Aircraft[] = [];
+    resetFilteredAircrafts: Aircraft[] = [];
+
+    airfields: Observable<Airfield[]> = new Observable<Airfield[]>();
+    filteredAirfields: Airfield[] = [];
+    resetFilteredAirfields: Airfield[] = [];
+
+    flights: Observable<Flight[]> = new Observable<Flight[]>();
+
+    selectedAirfield?: Airfield;
+    currentFlight?: Flight;
+    subscription: Subscription[] = [];
 
     ngOnInit() {
-        this.flightService.getCurrentUserFlight()
-            .pipe(delay(1000))
-            .subscribe((flight: Flight) => {
-            this.currentFlight = flight;
-            this.isLoading = false;
-            this.cdr.detectChanges();
-        });
+        this.getUserAircrafts();
+        this.getAirfields();
+        this.getFlights();
+        this.loadCurrentFlight()
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(sub => sub.unsubscribe());
+    }
+
+    getUserAircrafts() {
+        this.aircrafts = this.aircraftService.retrieveUserAircrafts();
+        this.aircrafts.forEach(aircrafts => {
+            this.filteredAircrafts = aircrafts;
+            this.resetFilteredAircrafts = aircrafts;
+        })
+    }
+
+    getAirfields() {
+        this.airfields = this.airfieldService.retrieveAllAirfieldsAcceptVfr();
+        this.airfields.forEach(airfields => {
+            this.filteredAirfields = airfields;
+            this.resetFilteredAirfields = airfields;
+        })
+    }
+
+    getFlights() {
+        this.flights = this.flightService.getUserFlights()
+    }
+
+    loadCurrentFlight() {
+        const subscription = this.flightService.getCurrentUserFlight().pipe(take(1000)).subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.isLoading = false;
+                this.drawLineBetweenAirfields();
+            }
+        );
+        if(subscription) {
+            this.subscription.push(subscription);
+        }
     }
 
     handleMapLoad(map: google.maps.Map) {
@@ -166,14 +255,9 @@ export class PrepareFlightComponent implements OnInit {
         this.cdr.detectChanges();
     }
 
-    loadCurrentFlight(flight: Flight) {
-        this.currentFlight = flight;
-        this.drawLineBetweenAirfields();
-        this.cdr.detectChanges();
-    }
-
     drawLineBetweenAirfields() {
         setTimeout(() => {
+
             this.flightPath?.setMap(null);
 
             if (this.currentFlight?.airfieldDeparture && this.currentFlight?.airfieldArrival) {
@@ -196,7 +280,8 @@ export class PrepareFlightComponent implements OnInit {
                 this.addAirfieldsMarker(this.currentFlight.airfieldDeparture, this.currentFlight.airfieldArrival);
                 this.centerMapOnCurrentFlight(this.currentFlight.airfieldDeparture, this.currentFlight.airfieldArrival, midpoint);
             }
-        }, 1000)
+        }, 1000);
+
     }
 
     addAirfieldsMarker(airfieldDeparture: Airfield, airfieldArrival: Airfield) {
@@ -240,7 +325,6 @@ export class PrepareFlightComponent implements OnInit {
         this.markerArrivalAirfield.setMap(this.map!);
     }
 
-
     centerMapOnCurrentFlight(airfieldDeparture: Airfield, airfieldArrival: Airfield, midpoint: {lat: number, lng: number}) {
         if(airfieldDeparture.code === airfieldArrival.code){
             this.map!.setZoom(10);
@@ -254,6 +338,125 @@ export class PrepareFlightComponent implements OnInit {
             bounds.extend({lat: airfieldArrival.latitude, lng: airfieldArrival.longitude});
 
             this.map!.fitBounds(bounds);
+        }
+    }
+
+
+    redirectProfile() {
+        this.routerService.navigateTo('profile')
+    }
+
+    toggleShowFlightList() {
+        this.isShowFlightList = !this.isShowFlightList;
+    }
+
+
+    toggleAircraftChoice() {
+        this.isAircraftChoiceOpen = !this.isAircraftChoiceOpen;
+        this.searchTermAircraft = '';
+        if (this.isAircraftChoiceOpen) {
+            setTimeout(() => {
+                this.aircraftSearchInput.nativeElement.focus();
+            }, 0);
+        }
+    }
+
+    toggleDepartureAirfieldChoice() {
+        this.isDepartureAirfieldChoiceOpen = !this.isDepartureAirfieldChoiceOpen;
+        this.searchTermAirfield = '';
+        if (this.isDepartureAirfieldChoiceOpen) {
+            setTimeout(() => {
+                this.departureAirfieldSearchInput.nativeElement.focus();
+            }, 0);
+        }
+    }
+
+    toggleArrivalAirfieldChoice() {
+        this.isArrivalAirfieldChoiceOpen = !this.isArrivalAirfieldChoiceOpen;
+        this.searchTermAirfield = '';
+        if (this.isArrivalAirfieldChoiceOpen) {
+            setTimeout(() => {
+                this.arrivalAirfieldSearchInput.nativeElement.focus();
+            }, 0);
+        }
+    }
+
+    selectAircraft(aircraft: Aircraft) {
+        this.toggleAircraftChoice();
+        const sub = this.flightService.changeAircraft(aircraft).subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+            }
+        )
+        if(sub){
+            this.subscription.push(sub);
+        }
+    }
+
+    selectDepartureAirfield(airfield: Airfield) {
+        this.toggleDepartureAirfieldChoice();
+        const sub = this.flightService.changeDepartureAirfield(airfield).subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.drawLineBetweenAirfields();
+            }
+        )
+        if(sub){
+            this.subscription.push(sub);
+        }
+    }
+
+    selectArrivalAirfield(airfield: Airfield) {
+        this.toggleArrivalAirfieldChoice();
+        const sub = this.flightService.changeArrivalAirfield(airfield).subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.drawLineBetweenAirfields();
+            }
+        )
+        if(sub){
+            this.subscription.push(sub);
+        }
+    }
+
+    loadFlight(flight: Flight) {
+        const sub = this.flightService.changeCurrentFlight(flight).subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.drawLineBetweenAirfields();
+            }
+        );
+        if (sub) {
+            this.subscription.push(sub);
+        }
+
+        this.toggleShowFlightList();
+        this.drawLineBetweenAirfields();
+    }
+
+    filterAirfields() {
+        this.filteredAirfields = this.resetFilteredAirfields.filter(airfield =>
+            "LF".concat(airfield.code).toLowerCase().includes(this.searchTermAirfield.toLowerCase()) ||
+            airfield.fullName.toLowerCase().includes(this.searchTermAirfield.toLowerCase())
+        );
+    }
+
+    filterAircrafts() {
+        this.filteredAircrafts = this.resetFilteredAircrafts.filter(aircraft =>
+            aircraft.registration.toLowerCase().includes(this.searchTermAircraft.toLowerCase()) ||
+            aircraft.model.toLowerCase().includes(this.searchTermAircraft.toLowerCase())
+        );
+    }
+
+    createNewFlight() {
+        const subscribe = this.flightService.createFlight().subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.drawLineBetweenAirfields();
+            }
+        );
+        if(subscribe){
+            this.subscription.push(subscribe);
         }
     }
 }

@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -34,7 +34,7 @@ import {
 import {MatActionList, MatList, MatListItem, MatNavList} from "@angular/material/list";
 import {MatLine, MatRipple} from "@angular/material/core";
 import {TokenInterceptorService} from "./service/token-interceptor.service";
-import {NgOptimizedImage} from "@angular/common";
+import {NgOptimizedImage, registerLocaleData} from "@angular/common";
 import {MatBadge} from "@angular/material/badge";
 import {ConfirmEmailComponent} from "./confirm-email/confirm-email.component";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
@@ -46,15 +46,15 @@ import {GoogleMap} from "@angular/google-maps";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
 import {PrepareFlightComponent} from "./map/prepare-flight.component";
 import {MapAirfieldInfoComponent} from "./map/map-airfield-info-component/map-airfield-info.component";
-import {MapCreateFlightComponent} from "./map/map-create-flight/map-create-flight.component";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {DurationToHoursMinutesPipe} from "./duration-to-hours-minutes.pipe";
+import localeFr from '@angular/common/locales/fr';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
-
+registerLocaleData(localeFr);
 @NgModule({
     declarations: [
         AppComponent,
@@ -69,7 +69,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         MapElementSelectionPanelComponent,
         PrepareFlightComponent,
         MapAirfieldInfoComponent,
-        MapCreateFlightComponent
     ],
     imports: [
         BrowserModule,
@@ -124,6 +123,10 @@ export function HttpLoaderFactory(http: HttpClient) {
             provide: HTTP_INTERCEPTORS,
             useClass: TokenInterceptorService,
             multi: true
+        },
+        {
+            provide: LOCALE_ID,
+            useValue: 'fr-FR'
         }
     ],
     exports: [

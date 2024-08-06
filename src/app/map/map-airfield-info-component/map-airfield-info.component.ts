@@ -1,11 +1,10 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {Airfield} from "../../shared/model/airfield";
-import {environment} from "../../../environments/environment";
 
 @Component({
-  selector: 'map-airfield-info-component',
-  templateUrl: './map-airfield-info.component.html',
+    selector: 'map-airfield-info-component',
+    templateUrl: './map-airfield-info.component.html',
     animations: [
         trigger('slideInFromBottom', [
             state('void', style({ transform: 'translateY(100%)' })),
