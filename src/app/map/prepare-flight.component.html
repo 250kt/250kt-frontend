@@ -83,7 +83,7 @@
                                         @for(airfield of filteredAirfields; track $index){
                                             <li class="relative cursor-pointer select-none py-2 pl-3 hover:text-white hover:bg-blue-A700"
                                                 [ngClass]="{'bg-blue-A700 text-white' : currentFlight.airfieldDeparture?.id === airfield.id}"
-                                                (click)="selectDepartureAirfield(airfield)"
+                                                (click)="selectDepartureAirfield(airfield, true)"
                                                 id="{{ airfield.code }}" role="option">
                                                 <div class="flex items-center">
                                             <span class="mx-2 block font-normal"
@@ -120,7 +120,7 @@
                                         @for(airfield of filteredAirfields; track $index){
                                             <li class="relative cursor-pointer select-none py-2 pl-3 hover:text-white hover:bg-blue-A700"
                                                 [ngClass]="{'bg-blue-A700 text-white' : currentFlight.airfieldArrival?.id === airfield.id}"
-                                                (click)="selectArrivalAirfield(airfield)"
+                                                (click)="selectArrivalAirfield(airfield, true)"
                                                 id="{{ airfield.code }}" role="option">
                                                 <div class="flex items-center">
                                             <span class="mx-2 block font-normal"
@@ -211,7 +211,9 @@
         </map-element-selection-panel>
         <map-airfield-info-component
             [airfield]="selectedAirfield"
-            (closeEvent)="closeAirfieldInfo()">
+            (closeEvent)="closeAirfieldInfo()"
+            (selectDepartureEvent)="selectDepartureAirfield($event, false)"
+            (selectArrivalEvent)="selectArrivalAirfield($event, false)">
         </map-airfield-info-component>
     </div>
 }
