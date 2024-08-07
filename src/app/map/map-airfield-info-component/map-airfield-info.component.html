@@ -5,12 +5,16 @@
                 <div class="absolute w-full -mx-4 -top-7 sm:-top-6 sm:w-fit flex justify-center sm:-right-1">
                     <button mat-mini-fab color="warn" (click)="close()"><mat-icon class="text-base">close</mat-icon></button>
                 </div>
-                <div class="w-full h-fit text-center">
-                    <p>{{ airfield?.fullName }}</p>
+                <div class="w-full h-fit text-center flex flex-col gap-2">
+                    <span>{{ airfield?.fullName }}</span>
                     <div class="flex flex-row gap-2 justify-center">
                         <button mat-flat-button color="primary" (click)="openPdf(airfield.code)">{{ 'map.airfield-info.vac' | translate }}</button>
                         <button mat-flat-button color="primary">{{ 'map.airfield-info.notam' | translate }}</button>
                         <button mat-flat-button color="primary">{{ 'map.airfield-info.meteo' | translate }}</button>
+                    </div>
+                    <div class="flex flex-row gap-2">
+                        <button (click)="selectAirfieldDeparture()" class="font-semibold bg-green-500 rounded-3xl text-white py-2 px-4 w-fit">Définir le départ</button>
+                        <button (click)="selectAirfieldArrival()" class="font-semibold bg-red-500 rounded-3xl text-white py-2 px-4 w-fit">Définir l'arrivée</button>
                     </div>
                 </div>
             </div>

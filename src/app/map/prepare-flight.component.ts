@@ -367,6 +367,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         if (this.isDepartureAirfieldChoiceOpen) {
             setTimeout(() => {
                 this.departureAirfieldSearchInput.nativeElement.focus();
+                this.cdr.detectChanges();
             }, 0);
         }
     }
@@ -393,12 +394,15 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         }
     }
 
-    selectDepartureAirfield(airfield: Airfield) {
-        this.toggleDepartureAirfieldChoice();
+    selectDepartureAirfield(airfield: Airfield, toogleSelect: boolean) {
+        if(toogleSelect){
+            this.toggleDepartureAirfieldChoice();
+        }
         const sub = this.flightService.changeDepartureAirfield(airfield).subscribe(
             (flight: Flight) => {
                 this.currentFlight = flight;
                 this.drawLineBetweenAirfields();
+                this.cdr.detectChanges();
             }
         )
         if(sub){
@@ -406,12 +410,15 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         }
     }
 
-    selectArrivalAirfield(airfield: Airfield) {
-        this.toggleArrivalAirfieldChoice();
+    selectArrivalAirfield(airfield: Airfield, toogleSelect: boolean) {
+        if(toogleSelect){
+            this.toggleArrivalAirfieldChoice();
+        }
         const sub = this.flightService.changeArrivalAirfield(airfield).subscribe(
             (flight: Flight) => {
                 this.currentFlight = flight;
                 this.drawLineBetweenAirfields();
+                this.cdr.detectChanges();
             }
         )
         if(sub){
@@ -459,4 +466,6 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             this.subscription.push(subscribe);
         }
     }
+
+    protected readonly event = event;
 }

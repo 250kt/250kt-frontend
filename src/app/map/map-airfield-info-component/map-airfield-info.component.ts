@@ -30,6 +30,8 @@ export class MapAirfieldInfoComponent {
 
     @Input() airfield?: Airfield;
     @Output() closeEvent = new EventEmitter<void>();
+    @Output() selectDepartureEvent = new EventEmitter<Airfield>();
+    @Output() selectArrivalEvent = new EventEmitter<Airfield>();
 
     close() {
         this.airfield = undefined;
@@ -40,5 +42,13 @@ export class MapAirfieldInfoComponent {
     openPdf(code: string) {
         const pdfUrl = 'https://storage.cloud.google.com/avian-foundry-384513.appspot.com/AD/AD-2.LF' + code + '.pdf';
         window.open(pdfUrl, '_blank');
+    }
+
+    selectAirfieldDeparture() {
+        this.selectDepartureEvent.emit(this.airfield);
+    }
+
+    selectAirfieldArrival() {
+        this.selectArrivalEvent.emit(this.airfield);
     }
 }
