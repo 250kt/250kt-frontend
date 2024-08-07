@@ -48,4 +48,8 @@ export class FlightService {
     changeArrivalAirfield(airfield: Airfield): Observable<Flight>{
         return this.http.put(`${this.url}/airfield/arrival`, airfield);
     }
+
+    reverseDepartureArrivalAirfield(): Observable<Flight>{
+        return this.http.put(`${this.url}/reverse-departure-arrival-airfield`, {});
+    }
 }

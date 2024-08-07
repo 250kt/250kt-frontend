@@ -426,6 +426,19 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         }
     }
 
+    reverseDepartureArrivalAirfield() {
+        const sub = this.flightService.reverseDepartureArrivalAirfield().subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.drawLineBetweenAirfields();
+                this.cdr.detectChanges();
+            }
+        );
+        if(sub){
+            this.subscription.push(sub);
+        }
+    }
+
     loadFlight(flight: Flight) {
         const sub = this.flightService.changeCurrentFlight(flight).subscribe(
             (flight: Flight) => {
@@ -467,5 +480,4 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         }
     }
 
-    protected readonly event = event;
 }
