@@ -12,4 +12,5 @@ export interface Aircraft {
     unloadedWeight: number;
     trueAirSpeed: number;
     favorite: boolean;
+    common: boolean;
 }
