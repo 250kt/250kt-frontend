@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AircraftService} from "../../service/aircraft.service";
 import {Aircraft} from "../../shared/model/aircraft";
 import {FuelType} from "../../shared/model/fuelType";
@@ -32,7 +32,7 @@ export class UserAircraftsComponent implements OnInit{
     aircrafts: Aircraft[] = [];
     aircraftsPage!: Aircraft[];
     nbAircrafts!: number;
-    selectedAircraft!: Aircraft;
+    selectedAircraft?: Aircraft;
 
     protected readonly FuelType = FuelType;
     protected readonly enumKeysFuelType = enumKeysFuelType;
@@ -82,6 +82,8 @@ export class UserAircraftsComponent implements OnInit{
                 }else{
                     this.selectAircraft(aircrafts[0]);
                 }
+            }else{
+                this.selectedAircraft = undefined;
             }
         });
     }
@@ -92,7 +94,7 @@ export class UserAircraftsComponent implements OnInit{
     }
 
     updateAircraft() {
-        this.formUpdateAircraft.value.id = this.selectedAircraft.id;
+        this.formUpdateAircraft.value.id = this.selectedAircraft!.id;
         this.aircraftService.updateAircraft(this.formUpdateAircraft.value).subscribe({
             next: () => {
                 this.getUserAircrafts();
@@ -105,7 +107,7 @@ export class UserAircraftsComponent implements OnInit{
     }
 
     deleteAircraft(){
-        this.aircraftService.deleteAircraft(this.selectedAircraft.id).subscribe({
+        this.aircraftService.deleteAircraft(this.selectedAircraft!.id).subscribe({
             next: () => {
                 this.getUserAircrafts();
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.delete-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
