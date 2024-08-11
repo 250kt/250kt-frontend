@@ -569,4 +569,17 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             this.isStepChoiceOpen.push(false);
         }
     }
+
+    removeStep(step: Step) {
+        const sub = this.flightService.removeStep(step).subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.initStepChoiceOpen(this.currentFlight.steps!.length);
+                this.drawLineBetweenAirfields();
+            }
+        );
+        if(sub){
+            this.subscription.push(sub);
+        }
+    }
 }
