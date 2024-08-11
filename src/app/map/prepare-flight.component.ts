@@ -150,9 +150,12 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             (flight: Flight) => {
                 this.currentFlight = flight;
                 this.isLoading = false;
-                this.initStepChoiceOpen(this.currentFlight.steps!.length);
-                this.drawLineBetweenAirfields();
-            }
+                if(flight){
+                    this.initStepChoiceOpen(this.currentFlight.steps!.length);
+                    this.drawLineBetweenAirfields();
+                }
+            },
+
         );
         if(subscription) {
             this.subscription.push(subscription);
