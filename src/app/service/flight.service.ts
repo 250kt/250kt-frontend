@@ -53,4 +53,8 @@ export class FlightService {
     addStep(): Observable<Flight>{
         return this.http.post(`${this.url}/step`, {});
     }
+
+    removeStep(step: Step): Observable<Flight> {
+        return this.http.delete(`${this.url}/step/${step.id}`);
+    }
 }
