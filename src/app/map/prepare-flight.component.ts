@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild} from '@angular/core';
 import {ObstacleService} from '../service/obstacle.service';
 import {getIconObstacle, Obstacle} from "../shared/model/obstacle";
 import {UserService} from "../service/user.service";
@@ -12,6 +12,8 @@ import {AircraftService} from "../service/aircraft.service";
 import {RouterService} from "../service/router.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {take} from "rxjs/operators";
+import {Step} from "../shared/model/step";
+import LatLngLiteral = google.maps.LatLngLiteral;
 
 @Component({
     selector: 'prepare-flight',
@@ -57,6 +59,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     @ViewChild('departureAirfieldSearchInput') departureAirfieldSearchInput!: ElementRef;
     @ViewChild('arrivalAirfieldSearchInput') arrivalAirfieldSearchInput!: ElementRef;
     @ViewChild('aircraftSearchInput') aircraftSearchInput!: ElementRef;
+    @ViewChild('stepsAirfieldSearchInput') stepsAirfieldSearchInput!: QueryList<ElementRef>
 
     options: google.maps.MapOptions = {
         zoom: 10,
@@ -80,6 +83,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     flightPath?: google.maps.Polyline;
     markerDepartureAirfield?: google.maps.Marker;
     markerArrivalAirfield?: google.maps.Marker;
+    markersSteps?: google.maps.Marker[] = [];
     map?: google.maps.Map;
 
     isLoading: boolean = true;
@@ -91,6 +95,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     isDepartureAirfieldChoiceOpen: boolean = false;
     isArrivalAirfieldChoiceOpen: boolean = false;
     isShowFlightList: boolean = false;
+    isStepChoiceOpen: boolean[] = [];
 
     searchTermAircraft: string = '';
     searchTermAirfield: string = '';
@@ -145,6 +150,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             (flight: Flight) => {
                 this.currentFlight = flight;
                 this.isLoading = false;
+                this.initStepChoiceOpen(this.currentFlight.steps!.length);
                 this.drawLineBetweenAirfields();
             }
         );
@@ -257,90 +263,125 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
 
     drawLineBetweenAirfields() {
         setTimeout(() => {
-
             this.flightPath?.setMap(null);
 
-            if (this.currentFlight?.airfieldDeparture && this.currentFlight?.airfieldArrival) {
-                this.flightPath = new google.maps.Polyline({
-                    map: this.map,
-                    path: [
-                        {lat: this.currentFlight.airfieldDeparture.latitude, lng: this.currentFlight.airfieldDeparture.longitude},
-                        {lat: this.currentFlight.airfieldArrival.latitude, lng: this.currentFlight.airfieldArrival.longitude},
-                    ],
-                    geodesic: false,
-                    strokeColor: '#eab308',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 6,
-                });
-                const midpoint = {
-                    lat: (this.currentFlight.airfieldDeparture.latitude + this.currentFlight.airfieldArrival.latitude) / 2,
-                    lng: (this.currentFlight.airfieldDeparture.longitude + this.currentFlight.airfieldArrival.longitude) / 2,
-                };
+            let path: LatLngLiteral[] = [];
 
-                this.addAirfieldsMarker(this.currentFlight.airfieldDeparture, this.currentFlight.airfieldArrival);
-                this.centerMapOnCurrentFlight(this.currentFlight.airfieldDeparture, this.currentFlight.airfieldArrival, midpoint);
-            }
+            this.currentFlight?.steps?.forEach(step => {
+                path.push({lat: step.airfield.latitude, lng: step.airfield.longitude});
+            });
+
+            this.flightPath = new google.maps.Polyline({
+                map: this.map,
+                path: path,
+                geodesic: false,
+                strokeColor: '#eab308',
+                strokeOpacity: 1.0,
+                strokeWeight: 6
+            });
+            const midpoint = this.computeMidpoint(this.currentFlight?.steps!);
+            this.centerMapOnCurrentFlight(midpoint, this.currentFlight?.steps!);
+            this.addAirfieldsMarker(this.currentFlight?.steps);
         }, 1000);
 
     }
 
-    addAirfieldsMarker(airfieldDeparture: Airfield, airfieldArrival: Airfield) {
+    addAirfieldsMarker(steps: Step[] | undefined) {
         this.markerDepartureAirfield?.setMap(null);
         this.markerArrivalAirfield?.setMap(null);
+        this.markersSteps?.forEach(marker => marker.setMap(null));
+        this.markersSteps = [];
 
-        if(airfieldDeparture.code === airfieldArrival.code){
+        if(steps?.at(0)!.airfield.code === steps?.at(steps?.length-1)!.airfield.code && steps!.length === 0){
             return;
         }
 
         this.markerDepartureAirfield = new google.maps.Marker({
-            position: {lat: airfieldDeparture.latitude, lng: airfieldDeparture.longitude},
+            position: {lat: steps!.at(0)!.airfield.latitude, lng: steps!.at(0)!.airfield.longitude},
             icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 10,
+                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                scale: 5,
                 fillColor: '#22c55e',
                 fillOpacity: 1,
                 strokeColor: '#22c55e',
                 strokeOpacity: 1,
                 strokeWeight: 1,
+                rotation: -23,
             },
             zIndex: 10,
             clickable: false,
         });
         this.markerDepartureAirfield.setMap(this.map!);
 
+        steps!.forEach(step => {
+            if(steps != steps!.at(0) && steps != steps!.at(steps!.length-1)){
+                const marker = new google.maps.Marker({
+                    position: {lat: step.airfield.latitude, lng: step.airfield.longitude},
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: '#6b7280',
+                        fillOpacity: 1,
+                        strokeColor: '#6b7280',
+                        strokeOpacity: 1,
+                        strokeWeight: 1,
+                    },
+                    zIndex: 10,
+                    clickable: false,
+                });
+                this.markersSteps?.push(marker);
+            }
+        });
+        this.markersSteps?.forEach(marker => marker.setMap(this.map!));
+
         this.markerArrivalAirfield = new google.maps.Marker({
-            position: {lat: airfieldArrival.latitude, lng: airfieldArrival.longitude},
+            position: {lat: steps!.at(steps!.length-1)!.airfield.latitude, lng: steps!.at(steps!.length-1)!.airfield.longitude},
             icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 10,
+                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                scale: 5,
                 fillColor: '#ef4444',
                 fillOpacity: 1,
                 strokeColor: '#ef4444',
                 strokeOpacity: 1,
                 strokeWeight: 1,
+                rotation: 23,
             },
             zIndex: 10,
             clickable: false,
         });
         this.markerArrivalAirfield.setMap(this.map!);
+
+
     }
 
-    centerMapOnCurrentFlight(airfieldDeparture: Airfield, airfieldArrival: Airfield, midpoint: {lat: number, lng: number}) {
-        if(airfieldDeparture.code === airfieldArrival.code){
+    computeMidpoint(steps: Step[]){
+        let latSum = 0;
+        let lngSum = 0;
+        steps.forEach(step => {
+            latSum += step.airfield.latitude;
+            lngSum += step.airfield.longitude;
+        });
+
+        return {lat: latSum/steps.length, lng: lngSum/steps.length};
+    }
+
+    centerMapOnCurrentFlight(midpoint: {lat: number, lng: number}, steps: Step[]){
+        if(steps.at(0)!.airfield.code === steps.at(steps.length-1)?.airfield.code && steps.length === 2){
             this.map!.setZoom(10);
-            this.map!.setCenter({lat: airfieldDeparture.latitude, lng: airfieldDeparture.longitude});
+            this.map!.setCenter({lat: steps.at(0)!.airfield.latitude, lng: steps.at(steps.length-1)!.airfield.longitude});
         }else{
 
             this.map!.setCenter(midpoint);
 
             const bounds = new google.maps.LatLngBounds();
-            bounds.extend({lat: airfieldDeparture.latitude, lng: airfieldDeparture.longitude});
-            bounds.extend({lat: airfieldArrival.latitude, lng: airfieldArrival.longitude});
+
+            steps.forEach(step => {
+                bounds.extend({lat: step.airfield.latitude, lng: step.airfield.longitude});
+            });
 
             this.map!.fitBounds(bounds);
         }
     }
-
 
     redirectProfile() {
         this.routerService.navigateTo('profile')
@@ -426,19 +467,6 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         }
     }
 
-    reverseDepartureArrivalAirfield() {
-        const sub = this.flightService.reverseDepartureArrivalAirfield().subscribe(
-            (flight: Flight) => {
-                this.currentFlight = flight;
-                this.drawLineBetweenAirfields();
-                this.cdr.detectChanges();
-            }
-        );
-        if(sub){
-            this.subscription.push(sub);
-        }
-    }
-
     loadFlight(flight: Flight) {
         const sub = this.flightService.changeCurrentFlight(flight).subscribe(
             (flight: Flight) => {
@@ -480,4 +508,62 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         }
     }
 
+    addStep() {
+        const subscribe = this.flightService.addStep().subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.initStepChoiceOpen(this.currentFlight.steps!.length);
+                this.drawLineBetweenAirfields();
+            }
+        );
+        if(subscribe){
+            this.subscription.push(subscribe);
+        }
+    }
+
+    resetStepChoiceOpen(order: number) {
+        this.isStepChoiceOpen.forEach((value, index) => {
+            if(index !== order){
+                this.isStepChoiceOpen[index] = false;
+            }
+        });
+        this.cdr.detectChanges();
+    }
+
+    toggleStepChoice(step: Step) {
+        this.isStepChoiceOpen[step.order-1] = !this.isStepChoiceOpen[step.order-1];
+        this.resetStepChoiceOpen(step.order-1);
+        this.searchTermAirfield = '';
+        this.filteredAirfields = this.resetFilteredAirfields;
+
+        if (this.isStepChoiceOpen[step.order-1]) {
+            setTimeout(() => {
+                document.getElementById('step-'+step.order)!.focus()
+                this.cdr.detectChanges();
+            }, 0);
+        }
+
+    }
+
+    selectStepAirfield(step: Step, airfield: Airfield, b: boolean) {
+        if(b){
+            this.toggleStepChoice(step);
+        }
+        const sub = this.flightService.changeStepAirfield(step, airfield).subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.drawLineBetweenAirfields();
+                this.cdr.detectChanges();
+            }
+        );
+        if(sub){
+            this.subscription.push(sub);
+        }
+    }
+
+    private initStepChoiceOpen(length: number) {
+        for (let i = 0; i < length; i++) {
+            this.isStepChoiceOpen.push(false);
+        }
+    }
 }

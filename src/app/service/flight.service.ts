@@ -5,6 +5,7 @@ import {Flight} from "../shared/model/flight";
 import {Observable} from "rxjs";
 import {Aircraft} from "../shared/model/aircraft";
 import {Airfield} from "../shared/model/airfield";
+import {Step} from "../shared/model/step";
 
 @Injectable({
     providedIn: 'root'
@@ -23,10 +24,6 @@ export class FlightService {
 
     getCurrentUserFlight(): Observable<Flight>{
         return this.http.get<Flight>(`${this.url}/current`);
-    }
-
-    updateFlight(flight: Flight) : Observable<Flight>{
-        return this.http.put<Flight>(`${this.url}`, flight);
     }
 
     getUserFlights(){
@@ -49,7 +46,11 @@ export class FlightService {
         return this.http.put(`${this.url}/airfield/arrival`, airfield);
     }
 
-    reverseDepartureArrivalAirfield(): Observable<Flight>{
-        return this.http.put(`${this.url}/reverse-departure-arrival-airfield`, {});
+    changeStepAirfield(step: Step, airfield: Airfield) : Observable<Flight>{
+        return this.http.put(`${this.url}/step/${step.id}/airfield`, airfield);
+    }
+
+    addStep(): Observable<Flight>{
+        return this.http.post(`${this.url}/step`, {});
     }
 }

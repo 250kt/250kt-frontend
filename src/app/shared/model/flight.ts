@@ -1,14 +1,12 @@
-import {Airfield} from "./airfield";
 import {Aircraft} from "./aircraft";
+import {Step} from "./step";
 
 export interface Flight {
     id?: number;
-    airfieldDeparture?: Airfield;
-    airfieldArrival?: Airfield;
     createdAt?: string;
     aircraft?: Aircraft;
     currentEdit?: boolean;
     distance?: number;
     duration?: number;
-    direction?: number;
+    steps?: Step[];
 }
