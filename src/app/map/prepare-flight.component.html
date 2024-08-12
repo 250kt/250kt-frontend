@@ -60,16 +60,16 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col gap-1">
+                        <div class="flex flex-col gap-1" cdkDropList (cdkDropListDropped)="drop($event)">
                             @for(step of currentFlight.steps; track $index){
-                                <div class="flex flex-row gap-2 items-center relative">
+                                <div class="flex flex-row gap-2 items-center relative" cdkDrag>
                                     <div class="relative">
                                         <button type="button" (click)="toggleStepChoice(step)" class="relative w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-A700 sm:text-sm sm:leading-6">
-                                            @if(step.order === 1){
+                                            @if(step.order === 0){
                                                 <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
                                                     <mat-icon class="text-green-500">flag</mat-icon>
                                                 </span>
-                                            } @else if (step.order === currentFlight.steps?.length){
+                                            } @else if (step.order+1 === currentFlight.steps?.length){
                                                 <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
                                                     <mat-icon class="text-red-500">flag</mat-icon>
                                                 </span>

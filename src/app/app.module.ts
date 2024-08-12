@@ -49,6 +49,7 @@ import {MapAirfieldInfoComponent} from "./map/map-airfield-info-component/map-ai
 import {MatCheckbox} from "@angular/material/checkbox";
 import {DurationToHoursMinutesPipe} from "./duration-to-hours-minutes.pipe";
 import localeFr from '@angular/common/locales/fr';
+import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -116,7 +117,9 @@ registerLocaleData(localeFr);
         FormsModule,
         MatCheckbox,
         DurationToHoursMinutesPipe,
-        MatRipple
+        MatRipple,
+        CdkDropList,
+        CdkDrag
     ],
     providers: [
         {

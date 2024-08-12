@@ -14,6 +14,7 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {take} from "rxjs/operators";
 import {Step} from "../shared/model/step";
 import LatLngLiteral = google.maps.LatLngLiteral;
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'prepare-flight',
@@ -582,4 +583,23 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             this.subscription.push(sub);
         }
     }
+
+    drop(event: CdkDragDrop<Step[]>) {
+        moveItemInArray(this.currentFlight?.steps!, event.previousIndex, event.currentIndex);
+        this.updateStepOrder(event.previousIndex, event.currentIndex);
+    }
+
+    updateStepOrder(previousOrder: number, currentOrder: number) {
+        const sub = this.flightService.changeStepOrder(previousOrder, currentOrder, this.currentFlight!.id!).subscribe(
+            (flight: Flight) => {
+                this.currentFlight = flight;
+                this.drawLineBetweenAirfields();
+            }
+        );
+        if(sub){
+            this.subscription.push(sub);
+        }
+
+    }
+
 }
