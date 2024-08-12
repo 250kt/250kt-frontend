@@ -57,4 +57,8 @@ export class FlightService {
     removeStep(step: Step): Observable<Flight> {
         return this.http.delete(`${this.url}/step/${step.id}`);
     }
+
+    changeStepOrder(previousOrder: number, currentOrder: number, flightId: number) {
+        return this.http.put(`${this.url}/step/order/${flightId}/${previousOrder}/${currentOrder}`, {});
+    }
 }
