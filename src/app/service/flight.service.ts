@@ -61,4 +61,8 @@ export class FlightService {
     changeStepOrder(previousOrder: number, currentOrder: number, flightId: number) {
         return this.http.put(`${this.url}/step/order/${flightId}/${previousOrder}/${currentOrder}`, {});
     }
+
+    deleteFlight(flightId: number) {
+        return this.http.delete(`${this.url}/${flightId}`);
+    }
 }

@@ -602,4 +602,16 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
 
     }
 
+    deleteFlight(flightId: number) {
+        const sub = this.flightService.deleteFlight(flightId).subscribe(
+            () => {
+                this.toggleShowFlightList();
+                this.loadCurrentFlight();
+                this.drawLineBetweenAirfields();
+            }
+        );
+        if(sub){
+            this.subscription.push(sub);
+        }
+    }
 }
