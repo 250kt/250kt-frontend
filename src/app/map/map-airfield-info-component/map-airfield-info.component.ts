@@ -1,6 +1,9 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {Airfield} from "../../shared/model/airfield";
+import {Subscription} from "rxjs";
+import {WeatherService} from "../../service/weather.service";
+import { AirfieldWeather } from 'src/app/shared/model/weather';
 
 @Component({
     selector: 'map-airfield-info-component',
@@ -19,19 +22,39 @@ import {Airfield} from "../../shared/model/airfield";
             transition(':leave', [
                 animate('100ms ease-out')
             ])
+        ]),
+        trigger('slideInOut', [
+            state('void', style({ opacity: 0 })),
+            transition(':enter', [
+                animate('200ms ease-in')
+            ]),
+            transition(':leave', [
+                animate('200ms ease-out')
+            ])
         ])
     ]
 })
-export class MapAirfieldInfoComponent {
+export class MapAirfieldInfoComponent implements OnDestroy{
 
     constructor(
         private cdr: ChangeDetectorRef,
+        private weatherService: WeatherService,
     ) {}
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(sub => sub.unsubscribe());
+    }
 
     @Input() airfield?: Airfield;
     @Output() closeEvent = new EventEmitter<void>();
     @Output() selectDepartureEvent = new EventEmitter<Airfield>();
     @Output() selectArrivalEvent = new EventEmitter<Airfield>();
+
+    airfieldWeather?: AirfieldWeather;
+
+    isShowWeather = false;
+
+    subscription: Subscription[] = [];
 
     close() {
         this.airfield = undefined;
@@ -50,5 +73,21 @@ export class MapAirfieldInfoComponent {
 
     selectAirfieldArrival() {
         this.selectArrivalEvent.emit(this.airfield);
+    }
+
+    getWeather(airfieldCode: string) {
+        const sub = this.weatherService.getAirfieldWeather(airfieldCode).subscribe(
+            res => {
+                this.airfieldWeather = res;
+                this.isShowWeather = true;
+                this.cdr.detectChanges();
+            }
+        );
+        this.subscription.push(sub);
+    }
+
+    toggleShowwWeather() {
+        this.isShowWeather = !this.isShowWeather;
+        this.cdr.detectChanges();
     }
 }

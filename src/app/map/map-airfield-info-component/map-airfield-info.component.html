@@ -1,6 +1,7 @@
 @if(airfield){
+
     <div class="fixed bottom-0 shadow-xl w-full"  @slideInFromBottom @slideOutToBottom>
-        <div class="relative w-full flex flex-row justify-center ">
+       <div class="relative w-full flex flex-row justify-center">
             <div class="relative flex justify-center p-4 w-full sm:w-fit bg-white sm:rounded-t-xl">
                 <div class="absolute w-full -mx-4 -top-7 sm:-top-6 sm:w-fit flex justify-center sm:-right-1">
                     <button mat-mini-fab color="warn" (click)="close()"><mat-icon class="text-base">close</mat-icon></button>
@@ -10,11 +11,43 @@
                     <div class="flex flex-row gap-2 justify-center">
                         <button mat-flat-button color="primary" (click)="openPdf(airfield.code)">{{ 'map.airfield-info.vac' | translate }}</button>
                         <button mat-flat-button color="primary">{{ 'map.airfield-info.notam' | translate }}</button>
-                        <button mat-flat-button color="primary">{{ 'map.airfield-info.meteo' | translate }}</button>
+                        <button mat-flat-button color="primary" (click)="getWeather('LF'+airfield.code)">{{ 'map.airfield-info.meteo' | translate }}</button>
                     </div>
                     <div class="flex flex-row gap-2">
                         <button (click)="selectAirfieldDeparture()" class="font-semibold bg-green-500 rounded-3xl text-white py-2 px-4 w-fit">Définir le départ</button>
                         <button (click)="selectAirfieldArrival()" class="font-semibold bg-red-500 rounded-3xl text-white py-2 px-4 w-fit">Définir l'arrivée</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if(isShowWeather){
+    <div class="relative z-40" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 z-10 w-3/6 h-fit top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2">
+            <div class="flex items-end justify-center p-4 text-center sm:items-center h-full">
+                <div class="relative transform rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 w-full h-full" @slideInOut>
+                    <button (click)="toggleShowwWeather()" class="absolute top-0 right-0 bg-red-600 px-2 py-1 text-white justify-center rounded-bl-xl rounded-tr-xl font-semibold hover:bg-red-500 shadow-md" type="button"><mat-icon>close</mat-icon></button>
+                    <div class="w-full bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 h-full rounded-xl">
+                        <div class="flex flex-col w-full h-full overflow-hidden">
+                            <div class="flex flex-col gap-1">
+                                <span class="border-b-blue-A700 border-b-2 text-2xl font-semibold w-fit">METAR</span>
+                                @if(airfieldWeather?.metar){
+                                    <span>{{airfieldWeather?.metar?.data}}</span>
+                                }@else{
+                                    <span>Pas de metar disponible !</span>
+                                }
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="border-b-blue-A700 border-b-2 text-2xl font-semibold w-fit">TAF</span>
+                                @if(airfieldWeather?.taf){
+                                    <span>{{airfieldWeather?.taf?.data}}</span>
+                                }@else{
+                                    <span>Pas de taf disponible !</span>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
