@@ -93,8 +93,6 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     isMapLoaded = false;
 
     isAircraftChoiceOpen: boolean = false;
-    isDepartureAirfieldChoiceOpen: boolean = false;
-    isArrivalAirfieldChoiceOpen: boolean = false;
     isShowFlightList: boolean = false;
     isStepChoiceOpen: boolean[] = [];
 
@@ -279,7 +277,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
                 map: this.map,
                 path: path,
                 geodesic: false,
-                strokeColor: '#eab308',
+                strokeColor: '#f59e0b',
                 strokeOpacity: 1.0,
                 strokeWeight: 6
             });
@@ -295,22 +293,29 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         this.markerArrivalAirfield?.setMap(null);
         this.markersSteps?.forEach(marker => marker.setMap(null));
         this.markersSteps = [];
+        let rotationDeparture = -23;
+        let rotationArrival = 23;
 
         if(steps?.at(0)!.airfield.code === steps?.at(steps?.length-1)!.airfield.code && steps!.length === 0){
             return;
+        }
+
+        if(steps?.at(0)!.airfield.code != steps?.at(steps?.length-1)!.airfield.code){
+            rotationDeparture = 0;
+            rotationArrival = 0;
         }
 
         this.markerDepartureAirfield = new google.maps.Marker({
             position: {lat: steps!.at(0)!.airfield.latitude, lng: steps!.at(0)!.airfield.longitude},
             icon: {
                 path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                scale: 5,
+                scale: 6,
                 fillColor: '#22c55e',
                 fillOpacity: 1,
                 strokeColor: '#22c55e',
                 strokeOpacity: 1,
                 strokeWeight: 1,
-                rotation: -23,
+                rotation: rotationDeparture,
             },
             zIndex: 10,
             clickable: false,
@@ -318,16 +323,16 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         this.markerDepartureAirfield.setMap(this.map!);
 
         steps!.forEach(step => {
-            if(steps != steps!.at(0) && steps != steps!.at(steps!.length-1)){
+            if(step != steps!.at(0) && step != steps!.at(steps!.length-1)){
                 const marker = new google.maps.Marker({
                     position: {lat: step.airfield.latitude, lng: step.airfield.longitude},
                     icon: {
                         path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: '#6b7280',
-                        fillOpacity: 1,
-                        strokeColor: '#6b7280',
-                        strokeOpacity: 1,
+                        scale: 6,
+                        fillColor: '#facc15',
+                        fillOpacity: 0,
+                        strokeColor: '#facc15',
+                        strokeOpacity: 0,
                         strokeWeight: 1,
                     },
                     zIndex: 10,
@@ -342,20 +347,18 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             position: {lat: steps!.at(steps!.length-1)!.airfield.latitude, lng: steps!.at(steps!.length-1)!.airfield.longitude},
             icon: {
                 path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                scale: 5,
+                scale: 6,
                 fillColor: '#ef4444',
                 fillOpacity: 1,
                 strokeColor: '#ef4444',
                 strokeOpacity: 1,
                 strokeWeight: 1,
-                rotation: 23,
+                rotation: rotationArrival,
             },
             zIndex: 10,
             clickable: false,
         });
         this.markerArrivalAirfield.setMap(this.map!);
-
-
     }
 
     computeMidpoint(steps: Step[]){
