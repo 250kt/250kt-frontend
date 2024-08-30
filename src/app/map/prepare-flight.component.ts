@@ -406,64 +406,11 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         }
     }
 
-    toggleDepartureAirfieldChoice() {
-        this.isDepartureAirfieldChoiceOpen = !this.isDepartureAirfieldChoiceOpen;
-        this.searchTermAirfield = '';
-        if (this.isDepartureAirfieldChoiceOpen) {
-            setTimeout(() => {
-                this.departureAirfieldSearchInput.nativeElement.focus();
-                this.cdr.detectChanges();
-            }, 0);
-        }
-    }
-
-    toggleArrivalAirfieldChoice() {
-        this.isArrivalAirfieldChoiceOpen = !this.isArrivalAirfieldChoiceOpen;
-        this.searchTermAirfield = '';
-        if (this.isArrivalAirfieldChoiceOpen) {
-            setTimeout(() => {
-                this.arrivalAirfieldSearchInput.nativeElement.focus();
-            }, 0);
-        }
-    }
-
     selectAircraft(aircraft: Aircraft) {
         this.toggleAircraftChoice();
         const sub = this.flightService.changeAircraft(aircraft).subscribe(
             (flight: Flight) => {
                 this.currentFlight = flight;
-            }
-        )
-        if(sub){
-            this.subscription.push(sub);
-        }
-    }
-
-    selectDepartureAirfield(airfield: Airfield, toogleSelect: boolean) {
-        if(toogleSelect){
-            this.toggleDepartureAirfieldChoice();
-        }
-        const sub = this.flightService.changeDepartureAirfield(airfield).subscribe(
-            (flight: Flight) => {
-                this.currentFlight = flight;
-                this.drawLineBetweenAirfields();
-                this.cdr.detectChanges();
-            }
-        )
-        if(sub){
-            this.subscription.push(sub);
-        }
-    }
-
-    selectArrivalAirfield(airfield: Airfield, toogleSelect: boolean) {
-        if(toogleSelect){
-            this.toggleArrivalAirfieldChoice();
-        }
-        const sub = this.flightService.changeArrivalAirfield(airfield).subscribe(
-            (flight: Flight) => {
-                this.currentFlight = flight;
-                this.drawLineBetweenAirfields();
-                this.cdr.detectChanges();
             }
         )
         if(sub){

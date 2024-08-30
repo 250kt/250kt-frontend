@@ -195,8 +195,8 @@
         <map-airfield-info-component
             [airfield]="selectedAirfield"
             (closeEvent)="closeAirfieldInfo()"
-            (selectDepartureEvent)="selectDepartureAirfield($event, false)"
-            (selectArrivalEvent)="selectArrivalAirfield($event, false)">
+            (selectDepartureEvent)="selectStepAirfield(currentFlight?.steps![0], $event, false)"
+            (selectArrivalEvent)="selectStepAirfield(currentFlight?.steps![currentFlight?.steps!.length-1], $event, false)">
         </map-airfield-info-component>
     </div>
 }
