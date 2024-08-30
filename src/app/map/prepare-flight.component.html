@@ -6,21 +6,27 @@
     <div class="h-full w-full">
         <google-map height="100%" width="100%" class="border-none overflow-hidden" mapId="mapId" [options]="options" (mapInitialized)="handleMapLoad($event)">
         </google-map>
-        <div class="flex flex-col fixed top-16 sm:top-20 left-0 gap-2 w-full sm:w-fit p-4 bg-white sm:rounded-r-xl z-30">
+        <div class="flex flex-col fixed top-16 sm:top-20 left-0 gap-2 w-full sm:w-fit py-4 px-4 bg-white sm:rounded-r-xl z-30">
             @if(aircrafts | async; as aircrafts){
                 @if(aircrafts.length > 0){
-                    <div class="flex flex-row gap-2">
-                        <button (click)="createNewFlight()" matRipple class="rounded-3xl items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-fit gap-1">
-                            <mat-icon>add</mat-icon>
-                            <span>{{ 'create-flight.create' | translate }}</span>
-                        </button>
-                        @if(currentFlight){
-                            <button (click)="toggleShowFlightList()" matRipple class="rounded-3xl items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-fit gap-1">
-                                <mat-icon>list</mat-icon>
-                                <span>{{ 'create-flight.load' | translate }}</span>
+                    <div class="flex flex-col">
+                        <div class="flex flex-row w-full">
+                            <button (click)="createNewFlight()" matRipple class="items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-1/2 rounded-tl-2xl hover:bg-blue-600" [ngClass]="{'rounded-bl-2xl' : !currentFlight}">
+                                <span>{{ 'create-flight.create' | translate }}</span>
                             </button>
-                        }
+                            <button (click)="addStep()" matRipple class="items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-1/2 rounded-tr-2xl hover:bg-blue-600" [ngClass]="{'rounded-br-2xl' : !currentFlight}">
+                                <span>Ajouter une étape</span>
+                            </button>
+                        </div>
+                        <div class="flex flex-row w-full">
+                            @if(currentFlight){
+                                <button (click)="toggleShowFlightList()" matRipple class="items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-full rounded-b-2xl hover:bg-blue-600">
+                                    <span>{{ 'create-flight.load' | translate }}</span>
+                                </button>
+                            }
+                        </div>
                     </div>
+
                     @if(currentFlight){
                         <div class="flex flex-row gap-2 items-baseline">
                             <div class="relative">
@@ -61,7 +67,7 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col gap-1" cdkDropList (cdkDropListDropped)="drop($event)">
+                        <div class="flex flex-col gap-1 overflow-y-scroll max-h-80" cdkDropList (cdkDropListDropped)="drop($event)">
                             @for(step of currentFlight.steps; track $index){
                                 <div class="flex flex-row gap-2 items-center relative" cdkDrag>
                                     <div class="relative">
@@ -115,11 +121,6 @@
                                 </div>
                             }
                         </div>
-
-                       <button (click)="addStep()" matRipple class="rounded-3xl text-xs items-center flex flex-row justify-center text-white bg-blue-A700 py-1 px-2 w-fit gap-1">
-                            <mat-icon>add</mat-icon>
-                            <span>Ajouter une étape</span>
-                        </button>
 
                         <div class="flex flex-row gap-2 py-1.5">
                             <span class="flex items-center gap-1">
