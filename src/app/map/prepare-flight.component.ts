@@ -42,6 +42,20 @@ import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
             transition(':leave', [
                 animate('100ms ease-out')
             ])
+        ]),
+        trigger('slideInFromLeft', [
+            state('void', style({ transform: 'translateX(-100%)' })),
+            state('*', style({ transform: 'translateX(0)' })),
+            transition(':enter', [
+                animate('200ms ease-in')
+            ])
+        ]),
+        trigger('slideOutToLeft', [
+            state('*', style({ transform: 'translateX(0)' })),
+            state('void', style({ transform: 'translateX(-100%)' })),
+            transition(':leave', [
+                animate('200ms ease-out')
+            ])
         ])
     ]
 })
@@ -94,6 +108,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
 
     isAircraftChoiceOpen: boolean = false;
     isShowFlightList: boolean = false;
+    isNavlogOpen: boolean = false;
     isStepChoiceOpen: boolean[] = [];
 
     searchTermAircraft: string = '';
@@ -563,5 +578,9 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         if(sub){
             this.subscription.push(sub);
         }
+    }
+
+    toggleNavlog() {
+        this.isNavlogOpen = !this.isNavlogOpen;
     }
 }

@@ -13,4 +13,5 @@ export interface Aircraft {
     trueAirSpeed: number;
     favorite: boolean;
     common: boolean;
+    baseFactor: number;
 }
