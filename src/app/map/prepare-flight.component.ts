@@ -77,7 +77,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     @ViewChild('stepsAirfieldSearchInput') stepsAirfieldSearchInput!: QueryList<ElementRef>
 
     map: mapboxgl.Map | undefined;
-    style = 'mapbox://styles/mapbox/streets-v12';
+    style = 'mapbox://styles/mapbox/standard'//'mapbox://styles/mapbox/outdoors-v12';
 
     markersObstacles: mapboxgl.Marker[] = [];
     markersAirfields: mapboxgl.Marker[] = [];
@@ -121,7 +121,19 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
                 minZoom: 5,
                 maxZoom: 13,
                 dragRotate: false,
+                keyboard: false,
+                logoPosition: 'bottom-right',
+                config: {
+                    basemap: {
+                        showPlaceLabels: true,
+                        showTransitLabels: false,
+                        showRoadLabels: false,
+                        showBuildingModels: false,
+                        showPointOfInterestLabels: false,
+                    }
+                }
             });
+
             this.handleMapLoad();
         }, 5);
 
