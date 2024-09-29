@@ -13,8 +13,8 @@ import {RouterService} from "../service/router.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {take} from "rxjs/operators";
 import {Step} from "../shared/model/step";
-import LatLngLiteral = google.maps.LatLngLiteral;
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import * as mapboxgl from "mapbox-gl";
 
 @Component({
     selector: 'prepare-flight',
@@ -76,35 +76,18 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     @ViewChild('aircraftSearchInput') aircraftSearchInput!: ElementRef;
     @ViewChild('stepsAirfieldSearchInput') stepsAirfieldSearchInput!: QueryList<ElementRef>
 
-    options: google.maps.MapOptions = {
-        zoom: 10,
-        scrollwheel: true,
-        disableDoubleClickZoom: false,
-        disableDefaultUI: true,
-        fullscreenControl: false,
-        headingInteractionEnabled: false,
-        keyboardShortcuts: false,
-        mapTypeControl: false,
-        rotateControl: false,
-        scaleControl: false,
-        clickableIcons: false,
-        streetViewControl: false,
-        tiltInteractionEnabled: false,
-        zoomControl: true,
-    };
-    markersObstacles: google.maps.Marker[] = [];
-    markersAirfields: google.maps.Marker[] = [];
+    map: mapboxgl.Map | undefined;
+    style = 'mapbox://styles/mapbox/streets-v12';
 
-    flightPath?: google.maps.Polyline;
-    markerDepartureAirfield?: google.maps.Marker;
-    markerArrivalAirfield?: google.maps.Marker;
-    markersSteps?: google.maps.Marker[] = [];
-    map?: google.maps.Map;
+    markersObstacles: mapboxgl.Marker[] = [];
+    markersAirfields: mapboxgl.Marker[] = [];
+
+    markerDepartureAirfield?: mapboxgl.Marker;
+    markerArrivalAirfield?: mapboxgl.Marker;
+    markersSteps?: mapboxgl.Marker[] = [];
 
     isLoading: boolean = true;
     isObstacleShown = true;
-
-    isMapLoaded = false;
 
     isAircraftChoiceOpen: boolean = false;
     isShowFlightList: boolean = false;
@@ -129,10 +112,25 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     subscription: Subscription[] = [];
 
     ngOnInit() {
+        setTimeout(() => {
+            this.map = new mapboxgl.Map({
+                accessToken: 'pk.eyJ1IjoiYXVndXN0aW5kZSIsImEiOiJjbTFtYmppMG4wbDluMnBxdHd6ZmZlZ2trIn0.G_2JKIF8CRtts5JRa9zsSA',
+                container: "map",
+                style: this.style,
+                zoom: 10,
+                minZoom: 5,
+                maxZoom: 13,
+                dragRotate: false,
+            });
+            this.handleMapLoad();
+        }, 5);
+
         this.getUserAircrafts();
         this.getAirfields();
         this.getFlights();
+
         this.loadCurrentFlight()
+
     }
 
     ngOnDestroy(): void {
@@ -160,10 +158,10 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     }
 
     loadCurrentFlight() {
+        this.isLoading = false;
         const subscription = this.flightService.getCurrentUserFlight().pipe(take(1000)).subscribe(
             (flight: Flight) => {
                 this.currentFlight = flight;
-                this.isLoading = false;
                 if(flight){
                     this.initStepChoiceOpen(this.currentFlight.steps!.length);
                     this.drawLineBetweenAirfields();
@@ -176,92 +174,94 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         }
     }
 
-    handleMapLoad(map: google.maps.Map) {
-        this.map = map;
-        this.isMapLoaded = true;
+    handleMapLoad(){
         this.userService.retrieveFavoriteAirfield().subscribe((airfield: AirfieldShort) => {
-            map.setCenter({lat: airfield.latitude, lng: airfield.longitude});
+            this.map!.setCenter([airfield.longitude, airfield.latitude]);
         });
 
         this.airfieldService.retrieveAllAirfields().subscribe((airfields: Airfield[]) => {
             this.markersAirfields = airfields.map((airfield: Airfield) => {
-                const marker = new google.maps.Marker({
-                    position: {lat: airfield.latitude, lng: airfield.longitude},
-                    title: airfield.fullName,
-                    icon: {
-                        url: getIconAirfield(airfield.type),
-                        scaledSize: new google.maps.Size(35, 35),
-                        anchor: new google.maps.Point(17.5, 17.5),
-                    },
-                });
+                const elt = document.createElement('div');
+                elt.className = 'marker'
+                elt.style.backgroundImage = `url(${getIconAirfield(airfield.type)})`;
+                elt.style.width = '35px';
+                elt.style.height = '35px';
+                elt.style.backgroundSize = '100%';
+                elt.style.backgroundRepeat = 'no-repeat';
+
+                const marker = new mapboxgl.Marker(elt)
+                    .setLngLat([airfield.longitude, airfield.latitude])
+
                 if(airfield.type === AirfieldType.CIVIL_PAVED || airfield.type === AirfieldType.CIVIL_UNPAVED){
-                    marker.addListener('click', () => this.handleAirfieldClick(airfield));
+                    elt.addEventListener('click', () => this.handleAirfieldClick(airfield));
                 }
                 return marker;
-
             });
-            this.updateMarkersAirfields(map);
+            this.updateMarkersAirfields();
         });
 
         this.obstacleService.retrieveObstacles().subscribe((obstacles: Obstacle[]) => {
             this.markersObstacles = obstacles.map((obstacle: Obstacle) => {
-                return new google.maps.Marker({
-                    position: {lat: obstacle.latitude, lng: obstacle.longitude},
-                    title: obstacle.id + ' ' + obstacle.type,
-                    icon: {
-                        url: getIconObstacle(obstacle.type),
-                        scaledSize: new google.maps.Size(25, 35),
-                    },
-                });
+                const elt = document.createElement('div');
+                elt.className = 'marker'
+                elt.style.backgroundImage = `url(${getIconObstacle(obstacle.type)})`;
+                elt.style.width = '25px';
+                elt.style.height = '35px';
+                elt.style.backgroundSize = '100%';
+                elt.style.backgroundRepeat = 'no-repeat';
+
+                return new mapboxgl.Marker(elt)
+                    .setLngLat([obstacle.longitude, obstacle.latitude])
             });
 
-            this.updateMarkersObstacles(map);
+            this.updateMarkersObstacles();
         });
 
-        map.addListener('bounds_changed', () => {
-            this.updateMarkersObstacles(map);
-            this.updateMarkersAirfields(map);
+        this.map!.on('move', () => {
+            this.updateMarkersObstacles();
+            this.updateMarkersAirfields();
         });
 
     }
 
-    updateMarkersAirfields(map: google.maps.Map) {
-        const zoom = map.getZoom();
-        const bounds = map.getBounds();
+    updateMarkersAirfields() {
+        const zoom = this.map!.getZoom();
+        const bounds = this.map!.getBounds();
 
         if(zoom && zoom < 6){
             this.markersAirfields.forEach(marker => {
-                marker.setMap(null);
+                marker.addTo(this.map!);
             });
-        }else{
-            if(bounds){
+        }else {
+            if(bounds) {
                 this.markersAirfields.forEach(marker => {
-                    if (bounds.contains(marker.getPosition()!)) {
-                        marker.setMap(map);
+                    const lngLat = marker.getLngLat();
+                    if (lngLat && bounds.contains([lngLat.lng, lngLat.lat])) {
+                        marker.addTo(this.map!);
                     } else {
-                        marker.setMap(null);
+                        marker.remove();
                     }
                 });
             }
         }
     }
 
-    updateMarkersObstacles(map: google.maps.Map) {
-        const bounds = map.getBounds();
-        const zoom = map.getZoom();
+    updateMarkersObstacles() {
+        const bounds = this.map!.getBounds();
+        const zoom = this.map!.getZoom();
 
         this.markersObstacles.forEach(marker => {
-            if (this.isObstacleShown && zoom && zoom >= 10 && bounds && bounds.contains(marker.getPosition()!)) {
-                marker.setMap(map);
+            if (this.isObstacleShown && zoom && zoom >= 10 && bounds && bounds.contains(marker.getLngLat())) {
+                marker.addTo(this.map!);
             } else {
-                marker.setMap(null);
+                marker.remove();
             }
         });
     }
 
     toggleObstacleVisibility() {
         this.isObstacleShown = !this.isObstacleShown;
-        this.updateMarkersObstacles(this.map!);
+        this.updateMarkersObstacles();
     }
 
     handleAirfieldClick(airfield: Airfield) {
@@ -280,100 +280,103 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
 
     drawLineBetweenAirfields() {
         setTimeout(() => {
-            this.flightPath?.setMap(null);
+            if (this.map && this.map.getSource('flightPath')) {
+                this.map.removeLayer('flightPath');
+                this.map.removeSource('flightPath');
+            }
 
-            let path: LatLngLiteral[] = [];
+            const path = this.currentFlight?.steps?.map(step => [step.airfield.longitude, step.airfield.latitude]) || [];
 
-            this.currentFlight?.steps?.forEach(step => {
-                path.push({lat: step.airfield.latitude, lng: step.airfield.longitude});
+            this.map?.addSource('flightPath', {
+                type: 'geojson',
+                data: {
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: path
+                    }
+                }
             });
 
-            this.flightPath = new google.maps.Polyline({
-                map: this.map,
-                path: path,
-                geodesic: false,
-                strokeColor: '#f59e0b',
-                strokeOpacity: 1.0,
-                strokeWeight: 6
+            this.map?.addLayer({
+                id: 'flightPath',
+                type: 'line',
+                source: 'flightPath',
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color': '#facc15',
+                    'line-width': 6
+                }
             });
             const midpoint = this.computeMidpoint(this.currentFlight?.steps!);
             this.centerMapOnCurrentFlight(midpoint, this.currentFlight?.steps!);
             this.addAirfieldsMarker(this.currentFlight?.steps);
         }, 1000);
-
     }
 
     addAirfieldsMarker(steps: Step[] | undefined) {
-        this.markerDepartureAirfield?.setMap(null);
-        this.markerArrivalAirfield?.setMap(null);
-        this.markersSteps?.forEach(marker => marker.setMap(null));
+        this.markerDepartureAirfield?.remove();
+        this.markerArrivalAirfield?.remove();
+        this.markersSteps?.forEach(marker => marker.remove());
         this.markersSteps = [];
-        let rotationDeparture = -23;
-        let rotationArrival = 23;
+        let rotationDeparture = 23;
+        let rotationArrival = -23;
+        let flipArrival = false;
+        let marginArrival = '-10px';
 
-        if(steps?.at(0)!.airfield.code === steps?.at(steps?.length-1)!.airfield.code && steps!.length === 0){
-            return;
+        if (steps?.at(0)!.airfield.code === steps?.at(steps.length - 1)!.airfield.code) {
+            flipArrival = true;
         }
 
-        if(steps?.at(0)!.airfield.code != steps?.at(steps?.length-1)!.airfield.code){
+        if (steps?.at(0)!.airfield.code != steps?.at(steps.length - 1)!.airfield.code) {
             rotationDeparture = 0;
             rotationArrival = 0;
+            marginArrival = '8px';
         }
 
-        this.markerDepartureAirfield = new google.maps.Marker({
-            position: {lat: steps!.at(0)!.airfield.latitude, lng: steps!.at(0)!.airfield.longitude},
-            icon: {
-                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                scale: 6,
-                fillColor: '#22c55e',
-                fillOpacity: 1,
-                strokeColor: '#22c55e',
-                strokeOpacity: 1,
-                strokeWeight: 1,
-                rotation: rotationDeparture,
-            },
-            zIndex: 10,
-            clickable: false,
-        });
-        this.markerDepartureAirfield.setMap(this.map!);
+        const createMarker = (lng: number, lat: number, color: string, rotation: number, flip: boolean, margin: string) => {
+            const el = document.createElement('div');
+            el.className = 'marker';
+            el.style.width = '30px';
+            el.style.height = '30px';
+            el.style.zIndex = '10';
+            el.style.marginLeft = margin;
+            el.style.marginTop = '5px';
 
-        steps!.forEach(step => {
-            if(step != steps!.at(0) && step != steps!.at(steps!.length-1)){
-                const marker = new google.maps.Marker({
-                    position: {lat: step.airfield.latitude, lng: step.airfield.longitude},
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 6,
-                        fillColor: '#facc15',
-                        fillOpacity: 0,
-                        strokeColor: '#facc15',
-                        strokeOpacity: 0,
-                        strokeWeight: 1,
-                    },
-                    zIndex: 10,
-                    clickable: false,
-                });
-                this.markersSteps?.push(marker);
-            }
-        });
-        this.markersSteps?.forEach(marker => marker.setMap(this.map!));
+            const transformStyle = flip ? `rotate(${rotation}deg) scaleX(-1)` : `rotate(${rotation}deg)`;
 
-        this.markerArrivalAirfield = new google.maps.Marker({
-            position: {lat: steps!.at(steps!.length-1)!.airfield.latitude, lng: steps!.at(steps!.length-1)!.airfield.longitude},
-            icon: {
-                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                scale: 6,
-                fillColor: '#ef4444',
-                fillOpacity: 1,
-                strokeColor: '#ef4444',
-                strokeOpacity: 1,
-                strokeWeight: 1,
-                rotation: rotationArrival,
-            },
-            zIndex: 10,
-            clickable: false,
-        });
-        this.markerArrivalAirfield.setMap(this.map!);
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="${color}" style="transform: ${transformStyle};">
+                    <path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Z"/>
+                </svg>
+            `;
+            el.innerHTML = svg;
+            return new mapboxgl.Marker(el, { anchor: 'bottom' })
+                .setLngLat([lng, lat])
+                .addTo(this.map!);
+        };
+
+        this.markerDepartureAirfield = createMarker(
+            steps!.at(0)!.airfield.longitude,
+            steps!.at(0)!.airfield.latitude,
+            '#22c55e',
+            rotationDeparture,
+            false,
+            '8px'
+        );
+
+        this.markerArrivalAirfield = createMarker(
+            steps!.at(steps!.length - 1)!.airfield.longitude,
+            steps!.at(steps!.length - 1)!.airfield.latitude,
+            '#ef4444',
+            rotationArrival,
+            flipArrival,
+            marginArrival
+        );
     }
 
     computeMidpoint(steps: Step[]){
@@ -387,18 +390,19 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         return {lat: latSum/steps.length, lng: lngSum/steps.length};
     }
 
-    centerMapOnCurrentFlight(midpoint: {lat: number, lng: number}, steps: Step[]){
-        if(steps.at(0)!.airfield.code === steps.at(steps.length-1)?.airfield.code && steps.length === 2){
+    centerMapOnCurrentFlight(midpoint: {lat: number, lng: number}, steps: Step[]) {
+        if (steps.at(0)!.airfield.code === steps.at(steps.length - 1)?.airfield.code && steps.length === 2) {
             this.map!.setZoom(10);
-            this.map!.setCenter({lat: steps.at(0)!.airfield.latitude, lng: steps.at(steps.length-1)!.airfield.longitude});
-        }else{
+            this.map!.setCenter([steps.at(0)!.airfield.longitude, steps.at(0)!.airfield.latitude]);
+        } else {
+            this.map!.setCenter([midpoint.lng, midpoint.lat]);
 
-            this.map!.setCenter(midpoint);
-
-            const bounds = new google.maps.LatLngBounds();
+            const bounds = new mapboxgl.LngLatBounds();
+            const margin = 0.05;
 
             steps.forEach(step => {
-                bounds.extend({lat: step.airfield.latitude, lng: step.airfield.longitude});
+                bounds.extend([step.airfield.longitude - margin, step.airfield.latitude - margin]);
+                bounds.extend([step.airfield.longitude + margin, step.airfield.latitude + margin]);
             });
 
             this.map!.fitBounds(bounds);

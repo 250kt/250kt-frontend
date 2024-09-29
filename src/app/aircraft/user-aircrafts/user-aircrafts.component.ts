@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AircraftService} from "../../service/aircraft.service";
 import {Aircraft} from "../../shared/model/aircraft";
 import {FuelType} from "../../shared/model/fuelType";
