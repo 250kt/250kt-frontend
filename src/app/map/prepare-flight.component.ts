@@ -355,7 +355,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             el.className = 'marker';
             el.style.width = '30px';
             el.style.height = '30px';
-            el.style.zIndex = '10';
+            el.style.zIndex = '2';
             el.style.marginLeft = margin;
             el.style.marginTop = '5px';
 
