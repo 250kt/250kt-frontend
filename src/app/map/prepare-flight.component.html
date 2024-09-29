@@ -4,8 +4,7 @@
     </div>
 } @else {
     <div class="h-full w-full">
-        <google-map height="100%" width="100%" class="border-none overflow-hidden" mapId="mapId" [options]="options" (mapInitialized)="handleMapLoad($event)">
-        </google-map>
+        <div id="map" class="w-full h-full overflow-hidden"></div>
 
         <div class="fixed flex flex-row top-16 sm:top-20 left-0 py-4 border-0 border-red-500 gap-2 w-fit">
             <div class="flex flex-col left-0 py-4 px-4 bg-white sm:rounded-r-xl border-0 border-blue-A700 h-fit z-30">

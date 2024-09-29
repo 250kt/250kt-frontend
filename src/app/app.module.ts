@@ -3,10 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {CoreModule} from "./core/core.module";
-import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
-import {environment} from '../environments/environment';
-import {getAuth, provideAuth} from '@angular/fire/auth';
-import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {MaterialModule} from "./shared/material.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ApplicationAuthLoginComponent} from "./application-auth/application-auth-login/application-auth-login.component";
@@ -26,13 +22,12 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { ApplicationAuthComponent } from './application-auth/application-auth.component';
 import {MatTabsModule} from "@angular/material/tabs";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {
     UserAircraftsComponent
 } from "./aircraft/user-aircrafts/user-aircrafts.component";
 import {MatActionList, MatList, MatListItem, MatNavList} from "@angular/material/list";
-import {MatLine, MatRipple} from "@angular/material/core";
+import {MatLine, MatOption, MatRipple} from "@angular/material/core";
 import {TokenInterceptorService} from "./service/token-interceptor.service";
 import {NgOptimizedImage, registerLocaleData} from "@angular/common";
 import {MatBadge} from "@angular/material/badge";
@@ -42,7 +37,6 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {MatDivider} from "@angular/material/divider";
 import {MatPaginator} from "@angular/material/paginator";
 import {MapElementSelectionPanelComponent} from "./map/map-element-selection-panel/map-element-selection-panel.component";
-import {GoogleMap} from "@angular/google-maps";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
 import {PrepareFlightComponent} from "./map/prepare-flight.component";
 import {MapAirfieldInfoComponent} from "./map/map-airfield-info-component/map-airfield-info.component";
@@ -50,6 +44,7 @@ import {MatCheckbox} from "@angular/material/checkbox";
 import {DurationToHoursMinutesPipe} from "./duration-to-hours-minutes.pipe";
 import localeFr from '@angular/common/locales/fr';
 import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
+import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -76,9 +71,6 @@ registerLocaleData(localeFr);
         AppRoutingModule,
         MaterialModule,
         CoreModule,
-        provideFirebaseApp(() => initializeApp(environment.firebase)),
-        provideAuth(() => getAuth()),
-        provideFirestore(() => getFirestore()),
         BrowserAnimationsModule,
         MatFormFieldModule,
         MatInputModule,
@@ -111,7 +103,6 @@ registerLocaleData(localeFr);
         MatTooltip,
         MatDivider,
         MatPaginator,
-        GoogleMap,
         MatSlideToggle,
         MatNavList,
         FormsModule,
@@ -119,7 +110,8 @@ registerLocaleData(localeFr);
         DurationToHoursMinutesPipe,
         MatRipple,
         CdkDropList,
-        CdkDrag
+        CdkDrag,
+        MatAutocompleteTrigger
     ],
     providers: [
         {
