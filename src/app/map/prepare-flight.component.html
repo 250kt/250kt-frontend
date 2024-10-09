@@ -68,59 +68,66 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col gap-1 overflow-y-auto max-h-80" cdkDropList (cdkDropListDropped)="drop($event)">
-                                @for(step of currentFlight.steps; track $index){
-                                    <div class="flex flex-row gap-2 items-center relative" cdkDrag>
-                                        <div class="relative">
-                                            <button type="button" (click)="toggleStepChoice(step)" class="relative w-60 min-w-60 h-9 rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-A700 sm:text-sm sm:leading-6"
-                                                    matTooltip="LF{{ step.airfield?.code }} - {{ step.airfield?.fullName }}" matTooltipPosition="after">
-                                                @if(step.order === 0){
-                                                    <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
-                                                        <mat-icon class="text-green-500">flag</mat-icon>
-                                                    </span>
-                                                } @else if (step.order+1 === currentFlight.steps?.length){
-                                                    <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
-                                                        <mat-icon class="text-red-500">flag</mat-icon>
-                                                    </span>
-                                                } @else {
-                                                    <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#6b7280"><path d="M480-240 240-480l240-240 240 240-240 240Zm0-102 138-138-138-138-138 138 138 138Zm0-138Z"/></svg>
-                                                    </span>
-                                                }
-                                                <span class="flex items-center ml-6">
-                                                    <span class="block truncate">LF{{ step.airfield?.code }} - {{ step.airfield?.fullName }} </span>
-                                                </span>
-                                                <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                                    <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            @if(isStepChoiceOpen[step.order-1]){
-                                                <ul class="absolute z-10 h-60 mt-1 w-full rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto" tabindex="-1" role="listbox" @slideInOut>
-                                                    <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900">
-                                                        <input id="step-{{ step.order }}" type="text" [(ngModel)]="searchTermAirfield" (input)="filterAirfields()" placeholder="{{ 'create-flight.placeholder.search-airfield' | translate }}" class="outline-none border-none ring-0 w-full">
-                                                    </li>
-                                                    @for(airfield of filteredAirfields; track $index){
-                                                        <li class="relative cursor-pointer select-none py-2 pl-3 hover:text-white hover:bg-blue-A700"
-                                                            [ngClass]="{'bg-blue-A700 text-white' : step.airfield?.id === airfield.id}"
-                                                            (click)="selectStepAirfield(step, airfield, true)"
-                                                            id="{{ airfield.code }}" role="option">
-                                                            <div class="flex items-center">
-                                        <span class="mx-2 block font-normal"
-                                              [ngClass]="{'font-semibold' : step.airfield?.id === airfield.id}"
-                                        >LF{{ airfield?.code }} - {{ airfield?.fullName }}</span>
-                                                            </div>
-                                                        </li>
+                            <div class="flex flex-col" cdkDropList (cdkDropListDropped)="drop($event)">
+                                <div class="flex flex-col overflow-y-auto max-h-80 gap-1">
+                                    @for(step of currentFlight.steps; track $index){
+                                        <div class="flex flex-row gap-2 items-center relative" cdkDrag>
+                                            <div class="relative">
+                                                <button type="button" (click)="toggleStepChoice(step, $event)" class="relative w-60 min-w-60 h-9 rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-A700 sm:text-sm sm:leading-6"
+                                                        matTooltip="LF{{ step.airfield?.code }} - {{ step.airfield?.fullName }}" matTooltipPosition="after">
+                                                    @if(step.order === 0){
+                                                        <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
+                                                            <mat-icon class="text-green-500">flag</mat-icon>
+                                                        </span>
+                                                    } @else if (step.order+1 === currentFlight.steps?.length){
+                                                        <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
+                                                            <mat-icon class="text-red-500">flag</mat-icon>
+                                                        </span>
+                                                    } @else {
+                                                        <span class="pointer-events-none absolute inset-y-0 left-0 mr-3 flex items-center pl-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#6b7280"><path d="M480-240 240-480l240-240 240 240-240 240Zm0-102 138-138-138-138-138 138 138 138Zm0-138Z"/></svg>
+                                                        </span>
                                                     }
-                                                </ul>
+                                                    <span class="flex items-center ml-6">
+                                                        <span class="block truncate">LF{{ step.airfield?.code }} - {{ step.airfield?.fullName }} </span>
+                                                    </span>
+                                                    <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                                                        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </span>
+                                                </button>
+
+                                            </div>
+                                            @if (currentFlight.steps!.length > 2){
+                                                <mat-icon (click)="removeStep(step)" class="text-red-500 text-sm cursor-pointer">close</mat-icon>
                                             }
                                         </div>
-                                        @if (currentFlight.steps!.length > 2){
-                                            <mat-icon (click)="removeStep(step)" class="text-red-500 text-sm cursor-pointer">close</mat-icon>
-                                        }
-                                    </div>
+                                    }
+                                </div>
+                                @for(step of currentFlight.steps; track $index){
+
+                                    @if(isStepChoiceOpen[step.order-1]){
+                                        <ul id="selector-step-{{ step.order }}" class="absolute z-10 w-60 min-w-60 h-60 mt-1 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto" tabindex="-1" role="listbox" @slideInOut>
+                                            <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900">
+                                                <input id="input-step-{{ step.order }}" type="text" [(ngModel)]="searchTermAirfield" (input)="filterAirfields()" placeholder="{{ 'create-flight.placeholder.search-airfield' | translate }}" class="outline-none border-none ring-0 w-full">
+                                            </li>
+                                            @for(airfield of filteredAirfields; track $index){
+                                                <li class="relative cursor-pointer select-none py-2 pl-3 hover:text-white hover:bg-blue-A700"
+                                                    [ngClass]="{'bg-blue-A700 text-white' : step.airfield?.id === airfield.id}"
+                                                    (click)="selectStepAirfield(step, airfield, true)"
+                                                    id="{{ airfield.code }}" role="option">
+                                                    <div class="flex items-center">
+                                                <span class="mx-2 block font-normal"
+                                                      [ngClass]="{'font-semibold' : step.airfield?.id === airfield.id}"
+                                                >LF{{ airfield?.code }} - {{ airfield?.fullName }}</span>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
                                 }
+
                             </div>
 
                             <div class="flex flex-row gap-2 py-1.5">

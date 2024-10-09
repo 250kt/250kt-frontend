@@ -87,6 +87,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     markersSteps?: mapboxgl.Marker[] = [];
 
     isLoading: boolean = true;
+    isMapObjetsLoaded: boolean = false;
     isObstacleShown = true;
 
     isAircraftChoiceOpen: boolean = false;
@@ -135,12 +136,12 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             });
 
             this.handleMapLoad();
+
         }, 5);
 
         this.getUserAircrafts();
         this.getAirfields();
         this.getFlights();
-
         this.loadCurrentFlight()
 
     }
@@ -170,6 +171,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     }
 
     loadCurrentFlight() {
+        console.log('loadCurrentFlight')
         this.isLoading = false;
         const subscription = this.flightService.getCurrentUserFlight().pipe(take(1000)).subscribe(
             (flight: Flight) => {
@@ -233,7 +235,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             this.updateMarkersObstacles();
             this.updateMarkersAirfields();
         });
-
+        this.isMapObjetsLoaded = true;
     }
 
     updateMarkersAirfields() {
@@ -355,7 +357,6 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             el.className = 'marker';
             el.style.width = '30px';
             el.style.height = '30px';
-            el.style.zIndex = '2';
             el.style.marginLeft = margin;
             el.style.marginTop = '5px';
 
@@ -515,7 +516,8 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         this.cdr.detectChanges();
     }
 
-    toggleStepChoice(step: Step) {
+    toggleStepChoice(step: Step, $event?: MouseEvent) {
+
         this.isStepChoiceOpen[step.order-1] = !this.isStepChoiceOpen[step.order-1];
         this.resetStepChoiceOpen(step.order-1);
         this.searchTermAirfield = '';
@@ -523,7 +525,12 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
 
         if (this.isStepChoiceOpen[step.order-1]) {
             setTimeout(() => {
-                document.getElementById('step-'+step.order)!.focus()
+                if($event){
+                    const target = $event?.target as HTMLElement;
+                    const rect = target.getBoundingClientRect();
+                    document.getElementById('selector-step-'+step.order)!.style.top = `${rect.bottom - 74 }px`;
+                }
+                document.getElementById('input-step-'+step.order)!.focus()
                 this.cdr.detectChanges();
             }, 0);
         }
