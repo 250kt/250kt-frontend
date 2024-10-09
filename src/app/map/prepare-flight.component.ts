@@ -171,7 +171,6 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     }
 
     loadCurrentFlight() {
-        console.log('loadCurrentFlight')
         this.isLoading = false;
         const subscription = this.flightService.getCurrentUserFlight().pipe(take(1000)).subscribe(
             (flight: Flight) => {
@@ -359,6 +358,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             el.style.height = '30px';
             el.style.marginLeft = margin;
             el.style.marginTop = '5px';
+            el.style.zIndex = '1';
 
             const transformStyle = flip ? `rotate(${rotation}deg) scaleX(-1)` : `rotate(${rotation}deg)`;
 

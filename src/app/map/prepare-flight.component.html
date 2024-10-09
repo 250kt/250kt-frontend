@@ -6,18 +6,20 @@
     <div class="h-full w-full">
         <div id="map" class="w-full h-full overflow-hidden"></div>
 
-        <div class="fixed flex flex-row top-16 sm:top-20 left-0 py-4 border-0 border-red-500 gap-2 w-fit">
+        <div class="fixed flex flex-row top-16 sm:top-20 left-0 py-4 border-0 border-red-500 gap-2 w-fit z-10">
             <div class="flex flex-col left-0 py-4 px-4 bg-white sm:rounded-r-xl border-0 border-blue-A700 h-fit z-30">
                 @if(aircrafts | async; as aircrafts){
                     @if(aircrafts.length > 0){
                         <div class="flex flex-col">
                             <div class="flex flex-row w-full">
-                                <button (click)="createNewFlight()" matRipple class="items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-1/2 rounded-tl-2xl hover:bg-blue-600" [ngClass]="{'rounded-bl-2xl' : !currentFlight}">
+                                <button (click)="createNewFlight()" matRipple class="items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-1/2 rounded-tl-2xl hover:bg-blue-600" [ngClass]="{'rounded-2xl w-full' : !currentFlight}">
                                     <span>{{ 'create-flight.create' | translate }}</span>
                                 </button>
-                                <button (click)="addStep()" matRipple class="items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-1/2 rounded-tr-2xl hover:bg-blue-600" [ngClass]="{'rounded-br-2xl' : !currentFlight}">
-                                    <span>Ajouter une étape</span>
-                                </button>
+                                @if(currentFlight){
+                                    <button (click)="addStep()" matRipple class="items-center flex flex-row justify-center text-white bg-blue-A700 py-2 px-4 w-1/2 rounded-tr-2xl hover:bg-blue-600" [ngClass]="{'rounded-br-2xl' : !currentFlight}">
+                                        <span>Ajouter une étape</span>
+                                    </button>
+                                }
                             </div>
                             <div class="flex flex-row w-full">
                                 @if(currentFlight){
