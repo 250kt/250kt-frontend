@@ -77,7 +77,8 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     @ViewChild('stepsAirfieldSearchInput') stepsAirfieldSearchInput!: QueryList<ElementRef>
 
     map: mapboxgl.Map | undefined;
-    style = 'mapbox://styles/mapbox/standard'//'mapbox://styles/mapbox/outdoors-v12';
+    //style = 'mapbox://styles/mapbox/standard';
+    style = 'mapbox://styles/mapbox/outdoors-v12';
 
     markersObstacles: mapboxgl.Marker[] = [];
     markersAirfields: mapboxgl.Marker[] = [];
@@ -134,6 +135,12 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
                     }
                 }
             });
+
+            this.map?.loadImage('assets/arrow.png',
+                (error, image) => {
+                    if (error) throw error;
+                    this.map?.addImage('arrow', image!);
+                });
 
             this.handleMapLoad();
 
@@ -294,6 +301,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     drawLineBetweenAirfields() {
         setTimeout(() => {
             if (this.map && this.map.getSource('flightPath')) {
+                this.map.removeLayer('directions');
                 this.map.removeLayer('flightPath');
                 this.map.removeSource('flightPath');
             }
@@ -321,10 +329,27 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
                     'line-cap': 'round'
                 },
                 paint: {
-                    'line-color': '#facc15',
+                    'line-color': '#2962FF',
                     'line-width': 6
                 }
             });
+
+            this.map?.addLayer({
+                id: 'directions',
+                type: 'symbol',
+                source: 'flightPath',
+                layout: {
+                    'symbol-placement': 'line',
+                    'icon-image': 'arrow',
+                    'icon-size': 0.06,
+                    'icon-rotate': 0,
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true,
+                    "symbol-spacing": 1,
+                    "symbol-avoid-edges": true,
+                }
+            });
+
             const midpoint = this.computeMidpoint(this.currentFlight?.steps!);
             this.centerMapOnCurrentFlight(midpoint, this.currentFlight?.steps!);
             this.addAirfieldsMarker(this.currentFlight?.steps);
