@@ -1,4 +1,4 @@
-import { DurationToHoursMinutesPipe } from './duration-to-hours-minutes.pipe';
+import { DurationToHoursMinutesPipe } from '../app/duration-to-hours-minutes.pipe';
 
 describe('DurationToHoursMinutesPipe', () => {
     let pipe: DurationToHoursMinutesPipe;
