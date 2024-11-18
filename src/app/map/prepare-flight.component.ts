@@ -15,6 +15,7 @@ import {take} from "rxjs/operators";
 import {Step} from "../shared/model/step";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import * as mapboxgl from "mapbox-gl";
+import {environment} from "../../environments/environment";
 
 @Component({
     selector: 'prepare-flight',
@@ -78,7 +79,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
 
     map: mapboxgl.Map | undefined;
     //style = 'mapbox://styles/mapbox/standard';
-    style = 'mapbox://styles/mapbox/outdoors-v12';
+    style = environment.mapboxStyle;
 
     markersObstacles: mapboxgl.Marker[] = [];
     markersAirfields: mapboxgl.Marker[] = [];
@@ -116,7 +117,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     ngOnInit() {
         setTimeout(() => {
             this.map = new mapboxgl.Map({
-                accessToken: 'pk.eyJ1IjoiYXVndXN0aW5kZSIsImEiOiJjbTFtYmppMG4wbDluMnBxdHd6ZmZlZ2trIn0.G_2JKIF8CRtts5JRa9zsSA',
+                accessToken: environment.mapboxToken,
                 container: "map",
                 style: this.style,
                 zoom: 10,
