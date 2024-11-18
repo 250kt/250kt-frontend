@@ -8,7 +8,7 @@ import {AuthService} from "../service/auth.service";
 export class ApplicationAdminComponent implements OnInit {
 
     constructor(
-       private authService: AuthService,
+       private readonly authService: AuthService,
     ) {}
 
     ngOnInit(): void {

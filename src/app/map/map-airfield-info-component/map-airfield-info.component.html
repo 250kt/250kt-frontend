@@ -24,7 +24,7 @@
 }
 
 @if(isShowWeather){
-    <div class="relative z-40" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <dialog class="relative z-40" aria-labelledby="modal-title" aria-modal="true">
         <div class="fixed inset-0 z-10 w-3/6 h-fit top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2">
             <div class="flex items-end justify-center p-4 text-center sm:items-center h-full">
                 <div class="relative transform rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 w-full h-full" @slideInOut>
@@ -52,5 +52,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </dialog>
 }

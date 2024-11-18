@@ -13,7 +13,7 @@ export class ObstacleService {
         private readonly http: HttpClient,
     ) {}
 
-    private url = environment.backendUrl + '/obstacle';
+    private readonly url = environment.backendUrl + '/obstacle';
 
     retrieveObstacles(): Observable<Obstacle[]> {
         return this.http.get<Obstacle[]>(`${this.url}/all`);

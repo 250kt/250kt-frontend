@@ -19,11 +19,11 @@ export class ApplicationAuthRegisterComponent implements OnInit {
 
     constructor(
        private readonly authService: AuthService,
-       private snackBarService: SnackbarService,
-       private routerService: RouterService,
-       private translate: TranslateService,
-       private regexService: RegexService,
-       private airfieldService: AirfieldService,
+       private readonly snackBarService: SnackbarService,
+       private readonly routerService: RouterService,
+       private readonly translate: TranslateService,
+       private readonly regexService: RegexService,
+       private readonly airfieldService: AirfieldService,
        protected readonly airfieldUtils: AirfieldUtils
     ) {}
 

@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component} from "@angular/core";
 import {AuthService} from "../../../service/auth.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {RouterService} from "../../../service/router.service";
@@ -24,7 +24,7 @@ import {RouterService} from "../../../service/router.service";
 export class NavbarComponent {
 
     constructor(
-        public authService: AuthService,
+        public readonly authService: AuthService,
         private readonly routerService: RouterService
     ) {}
 

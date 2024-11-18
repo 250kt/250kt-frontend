@@ -38,8 +38,8 @@ import {environment} from "../../../environments/environment";
 export class MapAirfieldInfoComponent implements OnDestroy{
 
     constructor(
-        private cdr: ChangeDetectorRef,
-        private weatherService: WeatherService,
+        private readonly cdr: ChangeDetectorRef,
+        private readonly weatherService: WeatherService,
     ) {}
 
     ngOnDestroy(): void {

@@ -13,7 +13,7 @@ export class WeatherService {
         private readonly http: HttpClient,
     ) {}
 
-    private url = environment.backendUrl + '/weather';
+    private readonly url = environment.backendUrl + '/weather';
 
     getAirfieldWeather(airfieldCode: string): Observable<AirfieldWeather> {
         return this.http.get<AirfieldWeather>(this.url + '/' + airfieldCode);
