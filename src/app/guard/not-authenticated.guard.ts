@@ -9,10 +9,9 @@ import {RouterService} from "../service/router.service";
 export class NotAuthenticatedGuard  {
 
     constructor(
-        private authService: AuthService,
-        private routerService: RouterService
-    ) {
-    }
+        private readonly authService: AuthService,
+        private readonly routerService: RouterService
+    ) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         if(!this.authService.isAuthenticated()){
@@ -23,10 +22,6 @@ export class NotAuthenticatedGuard  {
     }
 
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        if(!this.authService.isAuthenticated()){
-            return true;
-        }
-        this.routerService.navigateTo('home');
-        return false;
+        return this.canActivate(childRoute, state);
     }
 }

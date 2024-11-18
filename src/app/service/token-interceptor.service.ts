@@ -8,9 +8,9 @@ import {AuthService} from "./auth.service";
 export class TokenInterceptorService implements HttpInterceptor {
 
     private isRefreshing = false;
-    private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+    private readonly refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-    constructor(private authService: AuthService) {}
+    constructor(private readonly authService: AuthService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (!request.url.includes('auth/refresh-token') && !request.url.includes('auth/authenticate') && !request.url.includes('airfield/all-accept-vfr') && !request.url.includes('user/confirm-email')) {

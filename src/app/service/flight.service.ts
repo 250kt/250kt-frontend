@@ -16,7 +16,7 @@ export class FlightService {
         private readonly http: HttpClient,
     ) {}
 
-    private url = environment.backendUrl + '/flight';
+    private readonly url = environment.backendUrl + '/flight';
 
     createFlight(): Observable<Flight>{
         return this.http.post(this.url,{});
@@ -38,14 +38,6 @@ export class FlightService {
         return this.http.put(`${this.url}/aircraft`, aircraft);
     }
 
-    changeDepartureAirfield(airfield: Airfield): Observable<Flight>{
-        return this.http.put(`${this.url}/airfield/departure`, airfield);
-    }
-
-    changeArrivalAirfield(airfield: Airfield): Observable<Flight>{
-        return this.http.put(`${this.url}/airfield/arrival`, airfield);
-    }
-
     changeStepAirfield(step: Step, airfield: Airfield) : Observable<Flight>{
         return this.http.put(`${this.url}/step/${step.id}/airfield`, airfield);
     }
@@ -58,8 +50,8 @@ export class FlightService {
         return this.http.delete(`${this.url}/step/${step.id}`);
     }
 
-    changeStepOrder(previousOrder: number, currentOrder: number, flightId: number) {
-        return this.http.put(`${this.url}/step/order/${flightId}/${previousOrder}/${currentOrder}`, {});
+    changeStepOrder(previousOrder: number, currentOrder: number) {
+        return this.http.put(`${this.url}/step/order/${previousOrder}/${currentOrder}`, {});
     }
 
     deleteFlight(flightId: number) {

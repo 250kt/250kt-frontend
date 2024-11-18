@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
-import {Airfield, AirfieldShort} from "../shared/model/airfield";
+import {AirfieldShort} from "../shared/model/airfield";
 import { User } from "../shared/model/user";
 
 @Injectable({
@@ -14,7 +14,7 @@ export class UserService {
         private readonly http: HttpClient,
     ) {}
 
-    private url = environment.backendUrl + '/user';
+    private readonly url = environment.backendUrl + '/user';
 
     retrieveFavoriteAirfield(): Observable<AirfieldShort> {
         return this.http.get<AirfieldShort>(`${this.url}/favorite-airfield`);

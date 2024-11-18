@@ -16,8 +16,8 @@ export class AuthService {
 
     constructor(
         private readonly http: HttpClient,
-        private jwtService: JwtService,
-        private routerService: RouterService
+        private readonly jwtService: JwtService,
+        private readonly routerService: RouterService
     ) {}
 
     login(user: User): Observable<Authenticate> {

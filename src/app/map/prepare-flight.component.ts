@@ -66,7 +66,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         private readonly obstacleService: ObstacleService,
         private readonly userService: UserService,
         private readonly airfieldService: AirfieldService,
-        private cdr: ChangeDetectorRef,
+        private readonly cdr: ChangeDetectorRef,
         private readonly flightService: FlightService,
         private readonly aircraftService: AircraftService,
         private readonly routerService: RouterService,
@@ -139,8 +139,10 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
 
             this.map?.loadImage('assets/arrow.png',
                 (error, image) => {
-                    if (error) throw error;
-                    this.map?.addImage('arrow', image!);
+                    if(error) throw error;
+                    if(image){
+                        this.map?.addImage('arrow', image);
+                    }
                 });
 
             this.handleMapLoad();
@@ -253,17 +255,15 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
             this.markersAirfields.forEach(marker => {
                 marker.addTo(this.map!);
             });
-        }else {
-            if(bounds) {
-                this.markersAirfields.forEach(marker => {
-                    const lngLat = marker.getLngLat();
-                    if (lngLat && bounds.contains([lngLat.lng, lngLat.lat])) {
-                        marker.addTo(this.map!);
-                    } else {
-                        marker.remove();
-                    }
-                });
-            }
+        }else if(bounds){
+            this.markersAirfields.forEach(marker => {
+                const lngLat = marker.getLngLat();
+                if (lngLat && bounds.contains([lngLat.lng, lngLat.lat])) {
+                    marker.addTo(this.map!);
+                } else {
+                    marker.remove();
+                }
+            });
         }
     }
 
@@ -272,7 +272,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
         const zoom = this.map!.getZoom();
 
         this.markersObstacles.forEach(marker => {
-            if (this.isObstacleShown && zoom && zoom >= 10 && bounds && bounds.contains(marker.getLngLat())) {
+            if (this.isObstacleShown && zoom >= 10 && bounds && bounds.contains(marker.getLngLat())) {
                 marker.addTo(this.map!);
             } else {
                 marker.remove();
@@ -301,10 +301,10 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
 
     drawLineBetweenAirfields() {
         setTimeout(() => {
-            if (this.map && this.map.getSource('flightPath')) {
-                this.map.removeLayer('directions');
-                this.map.removeLayer('flightPath');
-                this.map.removeSource('flightPath');
+            if (this.map!.getSource('flightPath')) {
+                this.map!.removeLayer('directions');
+                this.map!.removeLayer('flightPath');
+                this.map!.removeSource('flightPath');
             }
 
             const path = this.currentFlight?.steps?.map(step => [step.airfield.longitude, step.airfield.latitude]) || [];
@@ -604,7 +604,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     }
 
     updateStepOrder(previousOrder: number, currentOrder: number) {
-        const sub = this.flightService.changeStepOrder(previousOrder, currentOrder, this.currentFlight!.id!).subscribe(
+        const sub = this.flightService.changeStepOrder(previousOrder, currentOrder).subscribe(
             (flight: Flight) => {
                 this.currentFlight = flight;
                 this.drawLineBetweenAirfields();

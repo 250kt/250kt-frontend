@@ -1,10 +1,8 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Aircraft} from "../shared/model/aircraft";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
-import {JwtService} from "./jwt.service";
-import {AuthService} from "./auth.service";
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +13,7 @@ export class AircraftService {
         private readonly http: HttpClient,
     ) {}
 
-    private url = environment.backendUrl + '/aircraft';
+    private readonly url = environment.backendUrl + '/aircraft';
 
     createAircraft(aircraft: Aircraft) {
         return this.http.post(this.url, aircraft);

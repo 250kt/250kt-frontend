@@ -5,27 +5,6 @@ import {Injectable} from "@angular/core";
 })
 export class JwtService {
 
-    getExpirationDate(): any {
-        const token = this.getToken();
-        if(token){
-            const exp = JSON.parse(atob(token.split('.')[1])).exp;
-            return new Date(exp * 1000); // Convert to milliseconds
-        }
-        return null;
-    }
-
-    isTokenValid(): boolean {
-        const token = this.getToken();
-        if (!token) {
-            return false;
-        }
-        const expirationDate = this.getExpirationDate();
-        if (!expirationDate) {
-            return false;
-        }
-        return expirationDate.getTime() > new Date().getTime();
-    }
-
     getToken(): any {
       return sessionStorage.getItem('token');
     }

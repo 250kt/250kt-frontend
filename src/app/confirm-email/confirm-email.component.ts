@@ -9,7 +9,7 @@ import {delay} from "rxjs";
 })
 export class ConfirmEmailComponent implements OnInit{
     constructor(
-        private route: ActivatedRoute,
+        private readonly route: ActivatedRoute,
         private readonly userService: UserService,
     ) {}
 

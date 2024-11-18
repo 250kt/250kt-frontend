@@ -9,8 +9,8 @@ import {SnackbarService} from "./snackbar.service";
 export class RegexService {
 
     constructor(
-        private translate: TranslateService,
-        private snackBarService: SnackbarService,
+        private readonly translate: TranslateService,
+        private readonly snackBarService: SnackbarService,
     ) {}
 
     validatePasswordLive(password: string): string {
@@ -48,7 +48,7 @@ export class RegexService {
     }
 
     isStringHasNumber(password: string): boolean {
-        const regexHasNumber = new RegExp('^(?=.*[0-9])');
+        const regexHasNumber = new RegExp('\\d');
         return regexHasNumber.test(password);
     }
 
@@ -64,7 +64,7 @@ export class RegexService {
 
     checkPassword(password: string): boolean {
 
-        const regexPassword = new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-]).{8,}$');
+        const regexPassword = new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[#?!@$%^&*-]).{8,}$');
 
         if(!regexPassword.test(password)){
             this.snackBarService.openSnackBar(
@@ -78,7 +78,7 @@ export class RegexService {
     }
 
     checkEmail(email: string): boolean {
-        const regexEmail = new RegExp('^((?:[A-Za-z0-9!#$%&\'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$');
+        const regexEmail = new RegExp('^((?:[A-Za-z0-9!#$%&\'*+\\-/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)([A-Za-z0-9.\\-]*[A-Za-z0-9]\\.[A-Za-z0-9]{2,})$');
 
         if(!regexEmail.test(email)){
             this.snackBarService.openSnackBar(

@@ -15,9 +15,9 @@ export class ApplicationAuthLoginComponent {
 
     constructor(
         private readonly authService: AuthService,
-        private snackBarService: SnackbarService,
-        private routerService: RouterService,
-        private translateService: TranslateService,
+        private readonly snackBarService: SnackbarService,
+        private readonly routerService: RouterService,
+        private readonly translateService: TranslateService,
     ) {}
 
     form: FormGroup = new FormGroup({
@@ -55,7 +55,7 @@ export class ApplicationAuthLoginComponent {
     }
 
     constructUser(): User {
-        const regexEmail = new RegExp('^((?:[A-Za-z0-9!#$%&\'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$');
+        const regexEmail = new RegExp('^((?:[A-Za-z0-9!#$%&\'*+\\-/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)([A-Za-z0-9.\\-]*[A-Za-z0-9]\\.[A-Za-z0-9]{2,})$');
 
         const user: User = {
             password: this.form.value.password

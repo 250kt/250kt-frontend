@@ -7,7 +7,7 @@ import {SnackbarTiming} from "../shared/model/snackbarTiming";
 })
 export class SnackbarService {
     constructor(
-        private snackBar: MatSnackBar,
+        private readonly snackBar: MatSnackBar,
     ) {}
 
     openSnackBar(message: string, action: string, duration: SnackbarTiming) {
