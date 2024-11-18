@@ -4,6 +4,7 @@ import {Airfield} from "../../shared/model/airfield";
 import {Subscription} from "rxjs";
 import {WeatherService} from "../../service/weather.service";
 import { AirfieldWeather } from 'src/app/shared/model/weather';
+import {environment} from "../../../environments/environment";
 
 @Component({
     selector: 'map-airfield-info-component',
@@ -63,7 +64,7 @@ export class MapAirfieldInfoComponent implements OnDestroy{
     }
 
     openPdf(code: string) {
-        const pdfUrl = 'https://storage.cloud.google.com/avian-foundry-384513.appspot.com/AD/AD-2.LF' + code + '.pdf';
+        const pdfUrl = environment.pdfUrl + '/AD/AD-2.LF' + code + '.pdf';
         window.open(pdfUrl, '_blank');
     }
 

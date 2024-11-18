@@ -1,5 +1,5 @@
 export const environment = {
-    production: true,
+    production: false,
     backendUrl: process.env["BACKEND_URL"],
     pdfUrl: process.env["PDF_URL"],
     mapboxStyle: process.env["MAPBOX_STYLE"],
