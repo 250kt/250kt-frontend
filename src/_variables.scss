@@ -1,10 +1,10 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-$gofly-primary: mat.define-palette(mat.$blue-palette, A700);
-$gofly-accent: mat.define-palette(mat.$pink-palette, 500);
-$gofly-warn: mat.define-palette(mat.$red-palette, 500);
-$gofly-theme: mat.define-light-theme((
+$gofly-primary: mat.m2-define-palette(mat.$m2-blue-palette, A700);
+$gofly-accent: mat.m2-define-palette(mat.$m2-pink-palette, 500);
+$gofly-warn: mat.m2-define-palette(mat.$m2-red-palette, 500);
+$gofly-theme: mat.m2-define-light-theme((
     color: (
         primary: $gofly-primary,
         accent: $gofly-accent,
