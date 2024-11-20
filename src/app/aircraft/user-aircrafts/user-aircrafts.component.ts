@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AircraftService} from "../../service/aircraft.service";
 import {Aircraft} from "../../shared/model/aircraft";
 import {FuelType} from "../../shared/model/fuelType";
@@ -7,7 +7,7 @@ import {SnackbarService} from "../../service/snackbar.service";
 import {SnackbarTiming} from "../../shared/model/snackbarTiming";
 import {TranslateService} from "@ngx-translate/core";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {PageEvent} from "@angular/material/paginator";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'user-aircrafts',
@@ -28,6 +28,8 @@ export class UserAircraftsComponent implements OnInit{
         private readonly snackbarService: SnackbarService,
         private readonly translateService: TranslateService,
     ) {}
+
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     aircrafts: Aircraft[] = [];
     aircraftsPage!: Aircraft[];
@@ -150,6 +152,7 @@ export class UserAircraftsComponent implements OnInit{
         this.aircraftService.updateFavoriteAircraft(aircraft).subscribe({
             next: () => {
                 this.getUserAircrafts();
+                this.paginator.firstPage();
                 this.snackbarService.openSnackBar(this.translateService.instant('aircraft.favorite-success'), this.translateService.instant('general.close'), SnackbarTiming.LONG);
             },
             error: () => {
