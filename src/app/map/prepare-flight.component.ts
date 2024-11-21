@@ -125,6 +125,7 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
                 maxZoom: 13,
                 dragRotate: false,
                 keyboard: false,
+                projection: 'mercator',
                 logoPosition: 'bottom-right',
                 config: {
                     basemap: {
