@@ -13,10 +13,12 @@
                         <button mat-flat-button color="primary">{{ 'map.airfield-info.notam' | translate }}</button>
                         <button mat-flat-button color="primary" (click)="getWeather('LF'+airfield.code)">{{ 'map.airfield-info.meteo' | translate }}</button>
                     </div>
-                    <div class="flex flex-row gap-2">
-                        <button (click)="selectAirfieldDeparture()" class="font-semibold bg-green-500 rounded-3xl text-white py-2 px-4 w-fit">Définir le départ</button>
-                        <button (click)="selectAirfieldArrival()" class="font-semibold bg-red-500 rounded-3xl text-white py-2 px-4 w-fit">Définir l'arrivée</button>
-                    </div>
+                    @if (isCurrentFlight){
+                        <div class="flex flex-row gap-2">
+                            <button (click)="selectAirfieldDeparture()" class="font-semibold bg-green-500 rounded-3xl text-white py-2 px-4 w-fit">Définir le départ</button>
+                            <button (click)="selectAirfieldArrival()" class="font-semibold bg-red-500 rounded-3xl text-white py-2 px-4 w-fit">Définir l'arrivée</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
