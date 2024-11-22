@@ -1,4 +1,5 @@
 import {Territory} from "./territory";
+import {Runway} from "./runway";
 
 export interface Airfield {
     id: number;
@@ -9,6 +10,7 @@ export interface Airfield {
     longitude: number;
     territory: Territory;
     type: AirfieldType;
+    runway: Runway;
 }
 
 export interface AirfieldShort {
