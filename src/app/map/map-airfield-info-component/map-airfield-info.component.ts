@@ -47,6 +47,7 @@ export class MapAirfieldInfoComponent implements OnDestroy{
     }
 
     @Input() airfield?: Airfield;
+    @Input() isCurrentFlight?: boolean;
     @Output() closeEvent = new EventEmitter<void>();
     @Output() selectDepartureEvent = new EventEmitter<Airfield>();
     @Output() selectArrivalEvent = new EventEmitter<Airfield>();

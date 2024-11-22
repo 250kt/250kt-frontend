@@ -342,6 +342,7 @@
             (changeObstacleVisibilityEvent)="toggleObstacleVisibility()">
         </map-element-selection-panel>
         <map-airfield-info-component
+            [isCurrentFlight]="!!currentFlight"
             [airfield]="selectedAirfield"
             (closeEvent)="closeAirfieldInfo()"
             (selectDepartureEvent)="selectStepAirfield(currentFlight?.steps![0], $event, false)"
