@@ -216,6 +216,10 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
                 const marker = new mapboxgl.Marker(elt)
                     .setLngLat([airfield.longitude, airfield.latitude])
 
+                if(airfield.type === AirfieldType.CIVIL_PAVED || airfield.type === AirfieldType.MILITARY_PAVED || airfield.type === AirfieldType.MILITARY_CIVIL_PAVED){
+                    marker.setRotation(airfield.runway.orientation);
+                }
+
                 if(airfield.type === AirfieldType.CIVIL_PAVED || airfield.type === AirfieldType.CIVIL_UNPAVED){
                     elt.addEventListener('click', () => this.handleAirfieldClick(airfield));
                 }
@@ -287,6 +291,9 @@ export class PrepareFlightComponent implements OnInit, OnDestroy{
     }
 
     handleAirfieldClick(airfield: Airfield) {
+
+        console.log(airfield)
+
         if (this.selectedAirfield === airfield) {
             this.selectedAirfield = undefined;
         } else {
